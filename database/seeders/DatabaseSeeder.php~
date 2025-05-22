@@ -27,7 +27,6 @@ class DatabaseSeeder extends Seeder
             AgendaSeeder::class,
             AlbumSeeder::class,
             GallerySeeder::class,
-            ClassSeeder::class,
             StudentSeeder::class,
             TeacherSeeder::class,
             AnnouncementSeeder::class,
