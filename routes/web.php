@@ -67,6 +67,7 @@ Route::prefix('dashboard')->group(function () {
     //Class Routes
     Route::prefix('class')->group(function () {
         Route::get('/', [ClassController::class, 'index'])->name('class.index');
+        Route::post('/', [ClassController::class, 'store'])->name('class.store');
     });
 
     //Comment Routes

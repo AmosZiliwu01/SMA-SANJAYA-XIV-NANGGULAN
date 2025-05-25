@@ -13,7 +13,8 @@ class ClassController extends Controller
      */
     public function index()
     {
-        return view('backend.class.index');
+        $classes = Classes::get();
+        return view('backend.class.index', compact('classes'));
     }
 
     /**
@@ -29,7 +30,11 @@ class ClassController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $class = new Classes();
+        $class->name = $request->name;
+        $class->save();
+
+       return redirect()->route('class.index')->with('success', "Data Class Berhasil di buat.");
     }
 
     /**
