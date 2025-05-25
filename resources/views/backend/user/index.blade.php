@@ -9,7 +9,7 @@
                         <h5 class="mb-0">Data Pengguna</h5>
                     </div>
                     <div class="mb-0 m-4 text-lg-start">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddPengguna">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddUsers">
                             <i class="bi bi-plus-circle me-1"></i> Add Pengguna
                         </button>
                     </div>
@@ -28,17 +28,21 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @php
+                                $no = 1;
+                                @endphp
+                                @foreach($users as $user)
                                 <tr class="text-center">
                                     <td class="text-center">
-                                        <img src="https://via.placeholder.com/50" class="rounded-circle" alt="Foto" width="50" height="50">
+                                        <img src="{{ $user->photo ? asset('storage/' . $user->photo) : 'https://via.placeholder.com/50' }}" class="rounded-circle" width="50" height="50">
                                     </td>
-                                    <td>Jonathan Doe</td>
-                                    <td>jonathan@example.com</td> <!-- Tambahan -->
-                                    <td>••••••••</td>
-                                    <td>0821-1234-5678</td>
-                                    <td>User</td>
+                                    <td>{{$user->username}}</td>
+                                    <td>{{$user->email}}</td>
+                                    <td>{{$user->password}}</td>
+                                    <td>{{$user->phone}}</td>
+                                    <td>{{$user->role}}</td>
                                     <td class="text-center">
-                                        <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditPengguna" title="Edit">
+                                        <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditUsers" title="Edit">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#modalResetPassword" title="Reset Password">
@@ -49,28 +53,7 @@
                                         </a>
                                     </td>
                                 </tr>
-                               <tr class="text-center">
-                                    <td class="text-center">
-                                        <img src="https://via.placeholder.com/50" class="rounded-circle" alt="Foto" width="50" height="50">
-                                    </td>
-                                    <td>Jonathan Doe</td>
-                                    <td>jonathan@example.com</td> <!-- Tambahan -->
-                                    <td>••••••••</td>
-                                    <td>0821-1234-5678</td>
-                                    <td>User</td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditPengguna" title="Edit">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#modalResetPassword" title="Reset Password">
-                                            <i class="bi bi-arrow-repeat"></i>
-                                        </button>
-                                        <a href="#" class="btn btn-sm btn-danger" title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <!-- Tambahkan baris lainnya sesuai kebutuhan -->
+                                @endforeach
                                 </tbody>
                             </table>
 
@@ -83,59 +66,59 @@
     </div>
 
     <!-- Modal Add Pengguna -->
-    <div class="modal fade" id="modalAddPengguna" tabindex="-1" aria-labelledby="modalAddPenggunaLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAddUsers" tabindex="-1" aria-labelledby="modalAddUsersLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="modalAddPenggunaLabel">Tambah Pengguna</h5>
+                    <h5 class="modal-title" id="modalAddUsersLabel">Tambah Pengguna</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
                         <!-- Nama -->
                         <div class="mb-3">
                             <label for="namaAdd" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="namaAdd" placeholder="Masukkan nama">
+                            <input type="text" name="name" class="form-control" id="namaAdd" placeholder="Masukkan nama" required>
                         </div>
 
                         <!-- Email -->
                         <div class="mb-3">
                             <label for="emailAdd" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="emailAdd" placeholder="Masukkan email">
+                            <input type="email" name="email" class="form-control" id="emailAdd" placeholder="Masukkan email" required>
                         </div>
 
                         <!-- Username -->
                         <div class="mb-3">
                             <label for="usernameAdd" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="usernameAdd" placeholder="Masukkan username">
+                            <input type="text" name="username" class="form-control" id="usernameAdd" placeholder="Masukkan username" required>
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="passwordAdd" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="passwordAdd" placeholder="Masukkan password">
+                            <input type="password" name="password" class="form-control" id="passwordAdd" placeholder="Masukkan password" required>
                         </div>
 
                         <!-- Kontak -->
                         <div class="mb-3">
                             <label for="kontakAdd" class="form-label">Kontak</label>
-                            <input type="text" class="form-control" id="kontakAdd" placeholder="Masukkan kontak">
+                            <input type="text" name="phone" class="form-control" id="kontakAdd" placeholder="Masukkan kontak">
                         </div>
 
                         <!-- Role -->
-                        <div class="mb-3">
-                            <label for="roleAdd" class="form-label">Role</label>
-                            <select class="form-select" id="roleAdd">
-                                <option selected disabled>Pilih role</option>
-                                <option value="Admin">Admin</option>
-                                <option value="User">User</option>
-                            </select>
-                        </div>
+                        <select name="role" class="form-select" id="roleAdd" required>
+                            <option selected disabled>Pilih role</option>
+                            <option value="administrator">Administrator</option>
+                            <option value="author">Author</option>
+                        </select>
+
 
                         <!-- Foto -->
                         <div class="mb-3">
                             <label for="fotoAdd" class="form-label">Foto</label>
-                            <input type="file" class="form-control" id="fotoAdd">
+                            <input type="file" name="photo" class="form-control" id="fotoAdd" accept="image/*">
                         </div>
 
                         <!-- Tombol Simpan -->
@@ -144,17 +127,18 @@
                             <button type="submit" class="btn btn-success">Simpan</button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Edit Pengguna -->
-    <div class="modal fade" id="modalEditPengguna" tabindex="-1" aria-labelledby="modalEditPenggunaLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEditUsers" tabindex="-1" aria-labelledby="modalEditUsersLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="modalEditPenggunaLabel">Edit Pengguna</h5>
+                    <h5 class="modal-title" id="modalEditUsersLabel">Edit Pengguna</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">

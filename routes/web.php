@@ -42,6 +42,7 @@ Route::prefix('dashboard')->group(function () {
     //User Routes
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::post('/store', [UserController::class, 'store'])->name('user.store');
     });
 
     //Activity Log Routes
