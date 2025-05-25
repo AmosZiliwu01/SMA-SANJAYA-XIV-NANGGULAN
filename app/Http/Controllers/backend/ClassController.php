@@ -13,7 +13,7 @@ class ClassController extends Controller
      */
     public function index()
     {
-        //
+        return view('backend.class.index');
     }
 
     /**

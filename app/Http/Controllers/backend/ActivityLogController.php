@@ -13,7 +13,7 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        //
+        return view('backend.activity_log.index');
     }
 
     /**

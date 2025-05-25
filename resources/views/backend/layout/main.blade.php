@@ -18,8 +18,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/img/apple-icon.png')}}">
+  <link rel="icon" type="image/png" href="{{asset('assets/img/favicon.png')}}">
   <title>
     Argon Dashboard 3 by Creative Tim
   </title>
@@ -31,8 +31,8 @@
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- CSS Files -->
-  <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link id="pagestyle" href="{{(asset('assets/css/argon-dashboard.css?v=2.1.0'))}}" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -46,7 +46,11 @@
         border: 1px solid #dee2e6 !important;
     }
 
-
+    .ck-editor__editable_inline {
+        min-height: 250px !important;
+        padding: 15px !important;
+        border: 1px solid #ddd !important;
+    }
 </style>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -55,144 +59,151 @@
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html " target="_blank">
-        <img src="../assets/img/logo-ct-dark.png" width="26px" height="26px" class="navbar-brand-img h-100" alt="main_logo">
+        <img src="{{asset('assets/img/logo-ct-dark.png')}}" width="26px" height="26px" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold">Creative Tim</span>
       </a>
     </div>
     <hr class="horizontal dark mt-0">
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" href="{{route('dashboard')}}">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-tv-2 text-dark text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Dashboard</span>
-          </a>
-        </li>
+      <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
+          <ul class="navbar-nav">
+              <!-- Dashboard -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : '' }}" href="{{ route('dashboard.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-tv-2 text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Dashboard</span>
+                  </a>
+              </li>
 
-      <li class="nav-item">
-          <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#submenuBerita" role="button" aria-expanded="false" aria-controls="submenuBerita">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="ni ni-single-copy-04 text-dark text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text">Berita</span>
-          </a>
-          <div class="collapse ps-3" id="submenuBerita">
-              <ul class="nav flex-column mt-1">
-                  <li class="nav-item">
-                      <a class="nav-link d-flex align-items-center" href="{{ route('list-berita') }}">
-                          <i class="ni ni-bullet-list-67 text-sm me-2"></i>
-                          <span>List Berita</span>
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link d-flex align-items-center" href="{{ route('post-berita') }}">
-                          <i class="ni ni-send text-sm me-2"></i>
-                          <span>Post Berita</span>
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link d-flex align-items-center" href="{{ route('kategori-berita') }}">
-                          <i class="ni ni-tag text-sm me-2"></i>
-                          <span>Kategori</span>
-                      </a>
-                  </li>
-              </ul>
-          </div>
-      </li>
+              <!-- Berita (Collapsible) -->
+              <li class="nav-item">
+                  <a class="nav-link d-flex align-items-center {{ request()->routeIs(['post.*', 'category.*']) ? 'active' : '' }}"
+                     data-bs-toggle="collapse"
+                     href="#submenuBerita"
+                     role="button"
+                     aria-expanded="{{ request()->routeIs(['post.*', 'category.*']) ? 'true' : 'false' }}"
+                     aria-controls="submenuBerita">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-single-copy-04 text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text">Berita</span>
+                  </a>
+                  <div class="collapse ps-3 {{ request()->routeIs(['post.*', 'category.*']) ? 'show' : '' }}" id="submenuBerita">
+                      <ul class="nav flex-column mt-1">
+                          <li class="nav-item">
+                              <a class="nav-link d-flex align-items-center {{ request()->routeIs('post.index') ? 'active' : '' }}" href="{{ route('post.index') }}">
+                                  <i class="ni ni-bullet-list-67 text-sm me-2"></i>
+                                  <span>List Berita</span>
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link d-flex align-items-center {{ request()->routeIs('post.create') ? 'active' : '' }}" href="{{ route('post.create') }}">
+                                  <i class="ni ni-send text-sm me-2"></i>
+                                  <span>Post Berita</span>
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link d-flex align-items-center {{ request()->routeIs('category.index') ? 'active' : '' }}" href="{{ route('category.index') }}">
+                                  <i class="ni ni-tag text-sm me-2"></i>
+                                  <span>Kategori</span>
+                              </a>
+                          </li>
+                      </ul>
+                  </div>
+              </li>
 
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('list-pengguna')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Pengguna</span>
-      </a>
-      </li>
+              <!-- Pengguna -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}" href="{{ route('user.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Pengguna</span>
+                  </a>
+              </li>
 
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('list-agenda')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Agenda</span>
-      </a>
-      </li>
+              <!-- Agenda -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('agenda.index') ? 'active' : '' }}" href="{{ route('agenda.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Agenda</span>
+                  </a>
+              </li>
 
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('list-pengumuman')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Pengumuman</span>
-      </a>
-      </li>
+              <!-- Pengumuman -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('announcement.index') ? 'active' : '' }}" href="{{ route('announcement.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-notification-70 text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Pengumuman</span>
+                  </a>
+              </li>
 
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('list-download')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Downloand</span>
-      </a>
-      </li>
+              <!-- File -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('file.index') ? 'active' : '' }}" href="{{ route('file.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-folder-17 text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">File</span>
+                  </a>
+              </li>
 
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('list-gallery')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Gallery</span>
-      </a>
-      </li>
+              <!-- Gallery -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('gallery.index') ? 'active' : '' }}" href="{{ route('gallery.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-image text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Gallery</span>
+                  </a>
+              </li>
 
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('list-data-guru')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Data Guru</span>
-      </a>
-      </li>
+              <!-- Data Guru -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('teacher.index') ? 'active' : '' }}" href="{{ route('teacher.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-hat-3 text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Data Guru</span>
+                  </a>
+              </li>
 
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('list-data-siswa')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Data Siswa</span>
-      </a>
-      </li>
+              <!-- Data Siswa -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('student.index') ? 'active' : '' }}" href="{{ route('student.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-badge text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Data Siswa</span>
+                  </a>
+              </li>
 
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('list-inbox')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Inbox</span>
-      </a>
-      </li>
+              <!-- Message -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('message.index') ? 'active' : '' }}" href="{{ route('message.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-email-83 text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Message</span>
+                  </a>
+              </li>
 
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('list-komentar')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Komentar</span>
-      </a>
-      </li>
-
-      <li class="nav-item">
-      <a class="nav-link " href="{{route('sign-up')}}">
-        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-          <i class="ni ni-collection text-dark text-sm opacity-10"></i>
-        </div>
-        <span class="nav-link-text ms-1">Sign Up</span>
-      </a>
-      </li>
-    </ul>
-  </div>
+              <!-- Comment -->
+              <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('comment.index') ? 'active' : '' }}" href="{{ route('comment.index') }}">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-chat-round text-dark text-sm opacity-10"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Comment</span>
+                  </a>
+              </li>
+          </ul>
+      </div>
 
   </aside>
   <main class="main-content position-relative border-radius-lg ">
@@ -243,7 +254,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+                        <img src="{{asset('assets/img/team-2.jpg')}}" class="avatar avatar-sm  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -261,7 +272,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                        <img src="{{asset('assets/img/small-logos/logo-spotify.svg')}}" class="avatar avatar-sm bg-gradient-dark  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -318,11 +329,11 @@
   </main>
 
   <!--   Core JS Files   -->
-  <script src="../assets/js/core/popper.min.js"></script>
-  <script src="../assets/js/core/bootstrap.min.js"></script>
-  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script src="../assets/js/plugins/chartjs.min.js"></script>
+  <script src="{{asset('assets/js/core/popper.min.js')}}"></script>
+  <script src="{{asset('assets/js/core/bootstrap.min.js')}}"></script>
+  <script src="{{asset('assets/js/plugins/perfect-scrollbar.min.js')}}"></script>
+  <script src="{{asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>
+  <script src="{{asset('assets/js/plugins/chartjs.min.js')}}"></script>
   <script>
     var ctx1 = document.getElementById("chart-line").getContext("2d");
 
@@ -418,7 +429,7 @@
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example backend etc -->
-  <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
+  <script src="{{asset('assets/js/argon-dashboard.min.js?v=2.1.0')}}"></script>
   {{-- Delete  --}}
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
@@ -452,8 +463,6 @@
               console.error(error);
           });
   </script>
-
-
 </body>
 
 </html>

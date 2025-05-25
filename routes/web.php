@@ -1,5 +1,21 @@
 <?php
 
+use App\Http\Controllers\backend\ActivityLogController;
+use App\Http\Controllers\backend\AgendaController;
+use App\Http\Controllers\backend\AnnouncementController;
+use App\Http\Controllers\backend\CategoryController;
+use App\Http\Controllers\backend\ClassController;
+use App\Http\Controllers\backend\CommentController;
+use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\backend\FileController;
+use App\Http\Controllers\backend\GalleryController;
+use App\Http\Controllers\backend\MessageController;
+use App\Http\Controllers\backend\PostController;
+use App\Http\Controllers\backend\StudentController;
+use App\Http\Controllers\backend\TeacherController;
+use App\Http\Controllers\backend\TestimonialController;
+use App\Http\Controllers\backend\UserController;
+use App\Http\Controllers\backend\VisitorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,77 +29,101 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('backend/layout/main');
+/*Frontend Routes*/
+Route::prefix('/')->group(function () {
+
 });
 
-Route::get('/dashboard', function (){
-    return view('backend/dashboard');
-})-> name('dashboard');
+/*Backend Routes*/
+Route::prefix('dashboard')->group(function () {
+    //Dashboard Routes
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
-Route::get('/table', function (){
-    return view('backend/tables');
-})->name('tables');
+    //User Routes
+    Route::prefix('user')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+    });
 
-// List berita
-Route::get('/list-berita', function (){
-    return view('backend/berita/list-berita/list');
-})->name('list-berita');
+    //Activity Log Routes
+    Route::prefix('activity-log')->group(function () {
+        Route::get('/', [ActivityLogController::class, 'index'])->name('activity-log.index');
+    });
 
-Route::get('/edit-berita', function (){
-    return view('backend/berita/list-berita/edit');
-})->name('edit-berita');
+    //Agenda Routes
+    Route::prefix('agenda')->group(function () {
+        Route::get('/', [AgendaController::class, 'index'])->name('agenda.index');
+    });
 
-Route::get('/post-berita', function (){
-    return view('backend/berita/list-berita/post');
-})->name('post-berita');
-// End List berita
+    //Announcement
+    Route::prefix('announcement')->group(function () {
+        Route::get('/', [AnnouncementController::class, 'index'])->name('announcement.index');
+    });
 
-// Kategori Berita
-Route::get('/kategori-berita', function (){
-    return view('backend/berita/kategori-berita/list');
-})->name('kategori-berita');
-// End Kategori Berita
+    //Category Routes
+    Route::prefix('category')->group(function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+    });
 
-// Pengguna Berita
-Route::get('/list-pengguna', function (){
-    return view('backend/pengguna/list');
-})->name('list-pengguna');
-// END Pengguna Berita
+    //Class Routes
+    Route::prefix('class')->group(function () {
+        Route::get('/', [ClassController::class, 'index'])->name('class.index');
+    });
 
-Route::get('/list-agenda', function (){
-    return view('backend/agenda/list');
-})->name('list-agenda');
+    //Comment Routes
+    Route::prefix('comment')->group(function () {
+        Route::get('/', [CommentController::class, 'index'])->name('comment.index');
+    });
 
-Route::get('/list-pengumuman', function (){
-    return view('backend/pengumuman/list');
-})->name('list-pengumuman');
+    //File Routes
+    Route::prefix('file')->group(function () {
+        Route::get('/', [FileController::class, 'index'])->name('file.index');
+    });
 
-Route::get('/list-download', function (){
-    return view('backend/download/list');
-})->name('list-download');
+    //Gallery Routes
+    Route::prefix('gallery')->group(function () {
+        Route::get('/', [GalleryController::class, 'index'])->name('gallery.index');
+    });
 
-Route::get('/list-gallery', function (){
-    return view('backend/gallery/list');
-})->name('list-gallery');
+    //Message Routes
+    Route::prefix('message')->group(function () {
+        Route::get('/', [MessageController::class, 'index'])->name('message.index');
+    });
 
-Route::get('/list-data-guru', function (){
-    return view('backend/data-guru/list');
-})->name('list-data-guru');
+    //Post Routes
+    Route::prefix('post')->group(function () {
+        Route::get('/', [PostController::class, 'index'])->name('post.index');
+        Route::get('/create', [PostController::class, 'create'])->name('post.create');
+    });
 
-Route::get('/list-data-siswa', function (){
-    return view('backend/data-siswa/list');
-})->name('list-data-siswa');
+    //Student Routes
+    Route::prefix('student')->group(function () {
+        Route::get('/', [StudentController::class, 'index'])->name('student.index');
+    });
 
-Route::get('/list-inbox', function (){
-    return view('backend/inbox/list');
-})->name('list-inbox');
+    //Teacher Routes
+    Route::prefix('teacher')->group(function () {
+        Route::get('/', [TeacherController::class, 'index'])->name('teacher.index');
+    });
 
-Route::get('/list-komentar', function (){
-    return view('backend/komentar/list');
-})->name('list-komentar');
+    //Testimonial Routes
+    Route::prefix('testimonial')->group(function () {
+        Route::get('/', [TestimonialController::class, 'index'])->name('testimonial.index');
+    });
 
-Route::get('/sign-up', function (){
-    return view('backend/auth/sign-up');
-})->name('sign-up');
+    //Visitor Routes
+    Route::prefix('visitor')->group(function () {
+        Route::get('/', [VisitorController::class, 'index'])->name('visitor.index');
+    });
+});
 
+/*Auth Routes*/
+Route::prefix('auth')->group(function () {
+    //Login Routes
+
+    //Logout Routes
+
+    //Password Reset Routes
+
+});
+
+/*Storage Routes*/

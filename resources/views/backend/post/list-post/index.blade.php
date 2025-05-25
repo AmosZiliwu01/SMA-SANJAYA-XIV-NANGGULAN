@@ -9,7 +9,7 @@
                         <h5 class="mb-0">Data Berita</h5>
                     </div>
                     <div class="mb-0  m-4 text-lg-start">
-                        <a href="{{ route('post-berita') }}" class="btn btn-success">
+                        <a href="#" class="btn btn-success">
                             <i class="bi bi-plus-circle me-1"></i> Post Berita
                         </a>
                     </div>
@@ -39,7 +39,7 @@
                                     <td>150x</td>
                                     <td>Teknologi</td>
                                     <td>
-                                        <a href="{{route('edit-berita')}}" class="btn btn-sm btn-info me-1" title="Edit">
+                                        <a href="#" class="btn btn-sm btn-info me-1" title="Edit">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <a href="#" onclick="showDeleteAlert()" class="btn btn-sm btn-danger" title="Hapus">

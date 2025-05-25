@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Agenda;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
-class AgendaController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('backend.agenda.index');
+        return view('backend.post.list-post.index');
     }
 
     /**
@@ -21,7 +21,7 @@ class AgendaController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.post.list-post.post');
     }
 
     /**
@@ -35,7 +35,7 @@ class AgendaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Agenda $agenda)
+    public function show(Post $post)
     {
         //
     }
@@ -43,15 +43,15 @@ class AgendaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Agenda $agenda)
+    public function edit()
     {
-        //
+        return view('backend.post.list-post.post');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Agenda $agenda)
+    public function update(Request $request, Post $post)
     {
         //
     }
@@ -59,7 +59,7 @@ class AgendaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Agenda $agenda)
+    public function destroy(Post $post)
     {
         //
     }
