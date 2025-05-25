@@ -9,9 +9,15 @@
                         <h5 class="mb-0">Data Guru</h5>
                     </div>
                     <div class="mb-0 m-4 text-lg-start">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddTeacher">
+                        <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalAddTeacher">
                             <i class="bi bi-plus-circle me-1"></i> Add Guru
                         </button>
+                        <a href="{{ route('teacher.export') }}" class="btn btn-primary me-2">
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Export Excel
+                        </a>
+                        <a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#importExcelModal">
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Import Excel
+                        </a>
                     </div>
                     <div class="card-body p-4">
                         <div class="table-responsive">
@@ -23,55 +29,51 @@
                                         <th>Foto</th>
                                         <th>NIP</th>
                                         <th>Nama</th>
+                                        <th>No.HP</th>
                                         <th>Tempat/Tgl Lahir</th>
-                                        <th>Jenis Kelamin</th>
+                                        <th>JK</th>
                                         <th>Mata Pelajaran</th>
                                         <th>Aksi</th>
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    @foreach ($teachers as $row)
                                     <tr>
-                                        <td>1</td>
+                                        <td>{{ ($teachers->currentPage() - 1) * $teachers->perPage() + $loop->iteration }}</td>
                                         <td>
-                                            <img src="https://via.placeholder.com/50" alt="Foto Guru" width="50" height="50" class="rounded-circle">
+                                            <img src="{{ asset('images/teacher/' . $row->photo) }}"
+                                                 alt="Foto Guru"
+                                                 width="50"
+                                                 height="50"
+                                                 class="rounded-circle"
+                                                 onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
                                         </td>
-                                        <td>1978121201</td>
-                                        <td>Siti Aminah</td>
-                                        <td>Bandung, 12-12-1978</td>
-                                        <td>Perempuan</td>
-                                        <td>Matematika</td>
+                                        <td>{{$row->nip}}</td>
+                                        <td>{{$row->name}}</td>
+                                        <td>{{$row->phone ?? '-'}}</td>
+                                        <td>{{$row->address ?? '-'}} / {{$row->date_of_birth ?? '-'}}</td>
+                                        <td>{{$row->gender}}</td>
+                                        <td>{{$row->mapel}}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-info me-1">
+                                            <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditTeacher{{ $row->id }}">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-danger">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </button>
+                                            <form id="delete-teacher-{{$row->id}}" action="{{route('teacher.destroy', $row->id)}}" method="post" style="display:none;">
+                                                @csrf
+                                            </form>
+                                            <a href="#" onclick="confirmDelete({{$row->id}})" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>
-                                            <img src="https://via.placeholder.com/50" alt="Foto Guru" width="50" height="50" class="rounded-circle">
-                                        </td>
-                                        <td>1980011502</td>
-                                        <td>Ahmad Fauzi</td>
-                                        <td>Yogyakarta, 15-01-1980</td>
-                                        <td>Laki-laki</td>
-                                        <td>Bahasa Indonesia</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditTeacher" title="Edit">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
-
+                            <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                                <p class="text-muted small mb-0">
+                                    Menampilkan {{ $teachers->firstItem() }} - {{ $teachers->lastItem() }} dari total {{ $teachers->total() }} guru
+                                </p>
+                                {{ $teachers->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,44 +89,51 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="{{ route('teacher.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="nip" class="form-label">NIP</label>
-                                <input type="text" class="form-control" id="nip" placeholder="Masukkan NIP">
+                                <input type="text" name="nip" class="form-control" id="nip" placeholder="Masukkan NIP">
                             </div>
                             <div class="col-md-6">
                                 <label for="nama" class="form-label">Nama</label>
-                                <input type="text" class="form-control" id="nama" placeholder="Masukkan Nama">
+                                <input type="text" name="name" class="form-control" id="nama" placeholder="Masukkan Nama">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
-                                <input type="text" class="form-control" id="tempat_lahir" placeholder="Masukkan Tempat Lahir">
+                                <input type="text" name="address" class="form-control" id="tempat_lahir" placeholder="Masukkan Tempat Lahir">
                             </div>
                             <div class="col-md-6">
                                 <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                                <input type="date" class="form-control" id="tanggal_lahir">
+                                <input type="date" name="date_of_birth" class="form-control" id="tanggal_lahir">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                                <select class="form-select" id="jenis_kelamin">
+                                <select name="gender" class="form-select" id="jenis_kelamin">
                                     <option selected disabled>Pilih Jenis Kelamin</option>
-                                    <option value="Laki-laki">Laki-laki</option>
-                                    <option value="Perempuan">Perempuan</option>
+                                    <option value="L">Laki-laki</option>
+                                    <option value="P">Perempuan</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="mata_pelajaran" class="form-label">Mata Pelajaran</label>
-                                <input type="text" class="form-control" id="mata_pelajaran" placeholder="Masukkan Mata Pelajaran">
+                                <input type="text" name="mapel" class="form-control" id="mata_pelajaran" placeholder="Masukkan Mata Pelajaran">
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="foto" class="form-label">Foto</label>
-                            <input type="file" class="form-control" id="foto">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="no_hp" class="form-label">No. HP</label>
+                                <input type="text" name="phone" class="form-control" id="no_hp" placeholder="Masukkan No. HP">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="foto" class="form-label">Foto</label>
+                                <input type="file" name="photo" class="form-control" id="foto">
+                            </div>
                         </div>
                         <div class="text-end">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -135,8 +144,10 @@
             </div>
         </div>
     </div>
+
     <!-- Modal Edit Guru -->
-    <div class="modal fade" id="modalEditTeacher" tabindex="-1" aria-labelledby="modalEditTeacherLabel" aria-hidden="true">
+    @forEach ($teachers as $row)
+    <div class="modal fade" id="modalEditTeacher{{ $row->id }}" tabindex="-1" aria-labelledby="modalEditTeacherLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-warning">
@@ -144,44 +155,51 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <!-- Sama persis seperti modal tambah, hanya isinya bisa kamu ubah nanti -->
+                    <form action="{{ route('teacher.update', $row->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="edit_nip" class="form-label">NIP</label>
-                                <input type="text" class="form-control" id="edit_nip" value="1978121201">
+                                <input type="text" name="nip" class="form-control" id="edit_nip" value="{{ $row->nip }}">
                             </div>
                             <div class="col-md-6">
                                 <label for="edit_nama" class="form-label">Nama</label>
-                                <input type="text" class="form-control" id="edit_nama" value="Siti Aminah">
+                                <input type="text" name="name" class="form-control" id="edit_nama" value="{{ $row->name }}">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="edit_tempat_lahir" class="form-label">Tempat Lahir</label>
-                                <input type="text" class="form-control" id="edit_tempat_lahir" value="Bandung">
+                                <input type="text" name="address" class="form-control" id="edit_tempat_lahir" value="{{ $row->address }}">
                             </div>
                             <div class="col-md-6">
                                 <label for="edit_tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                                <input type="date" class="form-control" id="edit_tanggal_lahir" value="1978-12-12">
+                                <input type="date" name="date_of_birth" class="form-control" id="edit_tanggal_lahir" value="{{ $row->date_of_birth }}">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="edit_jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                                <select class="form-select" id="edit_jenis_kelamin">
-                                    <option value="Laki-laki">Laki-laki</option>
-                                    <option value="Perempuan" selected>Perempuan</option>
+                                <select class="form-select" name="gender" id="edit_jenis_kelamin">
+                                    <option value="L" {{ $row->gender == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                    <option value="P" {{ $row->gender == 'P' ? 'selected' : '' }}>Perempuan</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="edit_mata_pelajaran" class="form-label">Mata Pelajaran</label>
-                                <input type="text" class="form-control" id="edit_mata_pelajaran" value="Matematika">
+                                <input type="text" name="mapel" class="form-control" id="edit_mata_pelajaran" value="{{ $row->mapel }}">
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="edit_foto" class="form-label">Foto</label>
-                            <input type="file" class="form-control" id="edit_foto">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="edit_no_hp" class="form-label">No. HP</label>
+                                <input type="text" name="phone" class="form-control" id="edit_no_hp" value="{{ $row->phone }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit_foto" class="form-label">Foto</label>
+                                <input type="file" name="photo" class="form-control" id="edit_foto">
+                                <input type="hidden" name="old_photo" value="{{ $row->photo }}">
+                            </div>
                         </div>
                         <div class="text-end">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -192,6 +210,54 @@
             </div>
         </div>
     </div>
+    @endforeach
 
+    <!-- Modal Import Excel -->
+    <div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Import Data Guru</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('teacher.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="importFile" class="form-label">Pilih File Excel</label>
+                            <input type="file" name="file-import" class="form-control" id="importFile" required>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">Import</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmDelete(id){
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    }).then(()=>{
+                        document.getElementById('delete-teacher-' + id).submit();
+                    });
+                }
+            });
+        }
+    </script>
 @endsection
 

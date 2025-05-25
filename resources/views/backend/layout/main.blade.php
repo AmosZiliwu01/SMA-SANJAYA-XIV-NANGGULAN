@@ -464,6 +464,32 @@
       }
   </script>
 
+  <script>
+      @if(session('success'))
+      Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "{{ session('success') }}",
+          showConfirmButton: false,
+          timer: 2500,
+          toast: true,
+          width: '30rem'
+      });
+      @endif
+
+      @if(session('error'))
+      Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "{{ session('error') }}",
+          showConfirmButton: false,
+          timer: 3000,
+          toast: true,
+          width: '30rem'
+      });
+      @endif
+  </script>
+
   {{-- CKEditor --}}
   <script src="https://cdn.ckeditor.com/ckeditor5/41.3.0/classic/ckeditor.js "></script>
   <script>
