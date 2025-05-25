@@ -23,6 +23,8 @@ class TeacherFactory extends Factory
             'mapel' => $this->faker->randomElement(['Matematika', 'Bahasa Inggris', 'IPA', 'IPS']),
             'photo' => $this->faker->imageUrl(640, 480, 'people', true),
             'phone' => $this->faker->unique()->phoneNumber(),
+            'address' => $this->faker->address(),
+            'date_of_birth' => $this->faker->date(),
         ];
     }
 }

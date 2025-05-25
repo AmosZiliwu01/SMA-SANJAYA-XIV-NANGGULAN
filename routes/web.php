@@ -104,6 +104,11 @@ Route::prefix('dashboard')->group(function () {
     //Teacher Routes
     Route::prefix('teacher')->group(function () {
         Route::get('/', [TeacherController::class, 'index'])->name('teacher.index');
+        Route::post('/store', [TeacherController::class, 'store'])->name('teacher.store');
+        Route::post('/update/{teacher}', [TeacherController::class, 'update'])->name('teacher.update');
+        Route::post('/destroy/{teacher}', [TeacherController::class, 'destroy'])->name('teacher.destroy');
+        Route::get('/export', [TeacherController::class, 'export'])->name('teacher.export');
+        Route::post('/import', [TeacherController::class, 'import'])->name('teacher.import');
     });
 
     //Testimonial Routes

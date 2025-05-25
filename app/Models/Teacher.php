@@ -11,5 +11,6 @@ class Teacher extends Model
 
     protected $table = 'teachers';
 
-    protected $fillable = ['name', 'gender', 'nip', 'mapel', 'photo'];
+    protected $fillable = ['name', 'gender', 'nip', 'mapel', 'photo',
+                           'phone', 'address', 'date_of_birth'];
 }
