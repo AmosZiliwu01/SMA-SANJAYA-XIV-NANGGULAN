@@ -1,4 +1,5 @@
 @extends('backend.layout.main')
+
 @section('content')
 
     <div class="container-fluid py-4">
@@ -13,6 +14,21 @@
                             <i class="bi bi-plus-circle me-1"></i> Add Pengguna
                         </button>
                     </div>
+                    @if ($errors->has('email') || $errors->has('username'))
+                        <div class="alert alert-danger alert-dismissible fade show mt-3 mx-3" role="alert">
+                            <strong>Gagal menambahkan pengguna:</strong>
+                            <ul class="mb-0">
+                                @if ($errors->has('email'))
+                                    <li>{{ $errors->first('email') }}</li>
+                                @endif
+                                @if ($errors->has('username'))
+                                    <li>{{ $errors->first('username') }}</li>
+                                @endif
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
                     <div class="card-body p-4">
                         <div class="table-responsive">
                             <table class="table table-bordered align-middle mb-0">
@@ -28,13 +44,10 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @php
-                                $no = 1;
-                                @endphp
                                 @foreach($users as $user)
                                 <tr class="text-center">
                                     <td class="text-center">
-                                        <img src="{{ $user->photo ? asset('storage/' . $user->photo) : 'https://via.placeholder.com/50' }}" class="rounded-circle" width="50" height="50">
+                                        <img src="{{ Str::startsWith($user->photo, 'http') ? $user->photo : asset('storage/' . $user->photo) }}" class="rounded-circle" width="50" height="50">
                                     </td>
                                     <td>{{$user->username}}</td>
                                     <td>{{$user->email}}</td>
@@ -42,13 +55,18 @@
                                     <td>{{$user->phone}}</td>
                                     <td>{{$user->role}}</td>
                                     <td class="text-center">
-                                        <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditUsers" title="Edit">
+                                        <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditUsers{{ $user->id }}">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#modalResetPassword" title="Reset Password">
+                                        <button type="button" class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#modalResetPassword{{ $user->id }}" title="Reset Password">
                                             <i class="bi bi-arrow-repeat"></i>
                                         </button>
-                                        <a href="#" class="btn btn-sm btn-danger" title="Hapus">
+                                        <form id="delete-users-{{$user->id}}" action="{{ route('user.destroy', $user->id) }}" method="POST" style="display:none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+
+                                        <a href="#" onclick="confirmDelete({{ $user->id }})" class="btn btn-sm btn-danger">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     </td>
@@ -56,7 +74,9 @@
                                 @endforeach
                                 </tbody>
                             </table>
-
+                            <div class="card-footer bg-white d-flex justify-content-end">
+                                {{ $users->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -86,13 +106,23 @@
                         <!-- Email -->
                         <div class="mb-3">
                             <label for="emailAdd" class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" id="emailAdd" placeholder="Masukkan email" required>
+                            <input name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Masukkan email">
+                            @error('email')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
 
                         <!-- Username -->
                         <div class="mb-3">
                             <label for="usernameAdd" class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control" id="usernameAdd" placeholder="Masukkan username" required>
+                            <input name="username" class="form-control @error('username') is-invalid @enderror" value="{{ old('username') }}" placeholder="Masukkan username">
+                            @error('username')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
 
                         <!-- Password -->
@@ -134,56 +164,60 @@
     </div>
 
     <!-- Modal Edit Pengguna -->
-    <div class="modal fade" id="modalEditUsers" tabindex="-1" aria-labelledby="modalEditUsersLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="modalEditUsersLabel">Edit Pengguna</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- Nama -->
-                        <div class="mb-3">
-                            <label for="namaEdit" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="namaEdit" placeholder="Masukkan nama">
+    @foreach($users as $user)
+        <div class="modal fade" id="modalEditUsers{{ $user->id }}" tabindex="-1" aria-labelledby="modalEditUsersLabel{{ $user->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title" id="modalEditUsersLabel{{ $user->id }}">Edit Pengguna</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                         </div>
+                        <div class="modal-body">
+                            <!-- Nama -->
+                            <div class="mb-3">
+                                <label for="nameEdit{{ $user->id }}" class="form-label">Nama</label>
+                                <input type="text" name="name" id="nameEdit{{ $user->id }}" class="form-control" value="{{ $user->name }}" required>
+                            </div>
 
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label for="emailEdit" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="emailEdit" placeholder="Masukkan email">
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="emailEdit{{ $user->id }}" class="form-label">Email</label>
+                                <input type="email" name="email" id="emailEdit{{ $user->id }}" class="form-control" value="{{ $user->email }}" required>
+                            </div>
+
+                            <!-- Username -->
+                            <div class="mb-3">
+                                <label for="usernameEdit{{ $user->id }}" class="form-label">Username</label>
+                                <input type="text" name="username" id="usernameEdit{{ $user->id }}" class="form-control" value="{{ $user->username }}" required>
+                            </div>
+
+                            <!-- Kontak -->
+                            <div class="mb-3">
+                                <label for="phoneEdit{{ $user->id }}" class="form-label">Kontak</label>
+                                <input type="text" name="phone" id="phoneEdit{{ $user->id }}" class="form-control" value="{{ $user->phone }}">
+                            </div>
+
+                            <!-- Role -->
+                            <div class="mb-3">
+                                <label for="roleEdit{{ $user->id }}" class="form-label">Role</label>
+                                <select name="role" id="roleEdit{{ $user->id }}" class="form-select" required>
+                                    <option value="administrator" {{ $user->role == 'administrator' ? 'selected' : '' }}>Administrator</option>
+                                    <option value="author" {{ $user->role == 'author' ? 'selected' : '' }}>Author</option>
+                                </select>
+                            </div>
+
+                            <!-- Foto -->
+                            <div class="mb-3">
+                                <label for="photoEdit{{ $user->id }}" class="form-label">Foto</label>
+                                <input type="file" name="photo" id="photoEdit{{ $user->id }}" class="form-control">
+                                @if($user->photo)
+                                    <small>Foto saat ini: <img src="{{ asset('storage/' . $user->photo) }}" width="30"></small>
+                                @endif
+                            </div>
                         </div>
-
-                        <!-- Username -->
-                        <div class="mb-3">
-                            <label for="usernameEdit" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="usernameEdit" placeholder="Masukkan username">
-                        </div>
-
-                        <!-- Kontak -->
-                        <div class="mb-3">
-                            <label for="kontakEdit" class="form-label">Kontak</label>
-                            <input type="text" class="form-control" id="kontakEdit" placeholder="Masukkan kontak">
-                        </div>
-
-                        <!-- Role -->
-                        <div class="mb-3">
-                            <label for="roleEdit" class="form-label">Role</label>
-                            <select class="form-select" id="roleEdit">
-                                <option selected disabled>Pilih role</option>
-                                <option value="Admin">Admin</option>
-                                <option value="User">User</option>
-                            </select>
-                        </div>
-
-                        <!-- Foto -->
-                        <div class="mb-3">
-                            <label for="fotoEdit" class="form-label">Foto</label>
-                            <input type="file" class="form-control" id="fotoEdit">
-                        </div>
-
-                        <!-- Tombol Update -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-info">Update</button>
@@ -192,36 +226,73 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    @endforeach
 
     <!-- Modal Reset Password -->
-    <div class="modal fade" id="modalResetPassword" tabindex="-1" aria-labelledby="modalResetPasswordLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form>
-                    <div class="modal-header bg-warning">
-                        <h5 class="modal-title" id="modalResetPasswordLabel">Reset Password</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Apakah kamu yakin ingin mereset password pengguna ini?</p>
-                        <div class="mb-3">
-                            <label for="newPassword" class="form-label">Password Baru</label>
-                            <input type="password" class="form-control" id="newPassword" placeholder="Masukkan password baru">
+    @foreach ($users as $user)
+        <!-- Modal Reset Password Per User -->
+        <div class="modal fade" id="modalResetPassword{{ $user->id }}" tabindex="-1" aria-labelledby="modalResetPasswordLabel{{ $user->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form action="{{ route('user.resetPassword', $user->id) }}" method="POST">
+                        @csrf
+                        @method('PUT') {{-- Gunakan PUT karena ini update data --}}
+
+                        <div class="modal-header bg-warning">
+                            <h5 class="modal-title" id="modalResetPasswordLabel{{ $user->id }}">Reset Password</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                         </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="Konfirmasi password">
+                        <div class="modal-body">
+                            <p>Apakah kamu yakin ingin mereset password untuk <strong>{{ $user->username }}</strong>?</p>
+
+                            <div class="mb-3">
+                                <label for="newPassword{{ $user->id }}" class="form-label">Password Baru</label>
+                                <input type="password" name="password" id="newPassword{{ $user->id }}" class="form-control @error('password') is-invalid @enderror" required minlength="6">
+                                @error('password')
+                                <div class="text-danger mt-1 small">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="confirmPassword{{ $user->id }}" class="form-label">Konfirmasi Password</label>
+                                <input type="password" name="new_password_confirmation" id="confirmPassword{{ $user->id }}" class="form-control @error('new_password_confirmation') is-invalid @enderror" required minlength="6">
+                                @error('new_password_confirmation')
+                                <div class="text-danger mt-1 small">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-warning">Reset</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-warning">Reset</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    @endforeach
+
+    <script>
+        function confirmDelete(id){
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    }).then(()=>{
+                        document.getElementById('delete-users-' + id).submit();
+                    });
+                }
+            });
+        }
+    </script>
 
 @endsection

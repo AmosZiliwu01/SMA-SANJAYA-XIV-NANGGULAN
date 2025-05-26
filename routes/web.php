@@ -43,6 +43,9 @@ Route::prefix('dashboard')->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
         Route::post('/store', [UserController::class, 'store'])->name('user.store');
+        Route::put('/update/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::put('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('user.resetPassword');
+        Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('user.destroy');
     });
 
     //Activity Log Routes
@@ -63,6 +66,9 @@ Route::prefix('dashboard')->group(function () {
     //Category Routes
     Route::prefix('category')->group(function () {
         Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+        Route::post('/store', [CategoryController::class, 'store'])->name('category.store');
+        Route::put('/update/{id}', [CategoryController::class, 'update'])->name('category.update');
+        Route::delete('/destroy/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
     });
 
     //Class Routes
