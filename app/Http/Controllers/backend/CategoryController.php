@@ -13,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories  = Category::paginate(5);
+        $categories = Category::paginate(5);
         return view('backend.post.category-post.index', compact('categories'));
     }
 
@@ -30,20 +30,22 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|unique:categories,name'
-        ], [
-            'name.required' => 'Nama kategori wajib diisi.',
-            'name.unique' => 'Nama kategori sudah ada, silakan gunakan nama lain.'
+        try {
+            $request->validate([
+                'name' => 'required|unique:categories,name'
+            ], [
+                'name.required' => 'Nama kategori wajib diisi.',
+                'name.unique' => 'Nama kategori sudah ada, silakan gunakan nama lain.'
+            ]);
 
-        ]);
+            Category::create([
+                'name' => $request->name
+            ]);
 
-        Category::create([
-            'name' => $request->name
-        ]);
-
-        return redirect()->route('category.index')->with('success', 'Kategori berhasil ditambahkan.');
-
+            return redirect()->route('category.index')->with('success', 'Kategori berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan kategori: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -67,19 +69,23 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|unique:categories,name,' . $id
-        ], [
-            'name.required' => 'Nama kategori wajib diisi.',
-            'name.unique' => 'Nama kategori sudah ada.'
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|unique:categories,name,' . $id
+            ], [
+                'name.required' => 'Nama kategori wajib diisi.',
+                'name.unique' => 'Nama kategori sudah ada.'
+            ]);
 
-        $category = Category::findOrFail($id);
-        $category->update([
-            'name' => $request->name
-        ]);
+            $category = Category::findOrFail($id);
+            $category->update([
+                'name' => $request->name
+            ]);
 
-        return redirect()->route('category.index')->with('success', 'Kategori berhasil diperbarui.');
+            return redirect()->route('category.index')->with('success', 'Kategori berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui kategori: ' . $e->getMessage());
+        }
     }
 
 
@@ -88,10 +94,14 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $categories = Category::findOrFail($id);
-        $categories->delete();
+        try {
+            $category = Category::findOrFail($id);
+            $category->delete();
 
-        return redirect()->route('category.index')->with('success', 'Kategori berhasil dihapus.');
+            return redirect()->route('category.index')->with('success', 'Kategori berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus kategori: ' . $e->getMessage());
+        }
     }
-
 }
+

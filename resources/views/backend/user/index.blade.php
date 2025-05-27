@@ -14,26 +14,13 @@
                             <i class="bi bi-plus-circle me-1"></i> Add Pengguna
                         </button>
                     </div>
-                    @if ($errors->has('email') || $errors->has('username'))
-                        <div class="alert alert-danger alert-dismissible fade show mt-3 mx-3" role="alert">
-                            <strong>Gagal menambahkan pengguna:</strong>
-                            <ul class="mb-0">
-                                @if ($errors->has('email'))
-                                    <li>{{ $errors->first('email') }}</li>
-                                @endif
-                                @if ($errors->has('username'))
-                                    <li>{{ $errors->first('username') }}</li>
-                                @endif
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
 
                     <div class="card-body p-4">
                         <div class="table-responsive">
                             <table class="table table-bordered align-middle mb-0">
                                 <thead class="table-light">
                                 <tr class="text-center">
+                                    <th>No</th>
                                     <th style="width: 100px;">Foto</th>
                                     <th>Nama</th>
                                     <th>Email</th> <!-- Tambahan -->
@@ -46,6 +33,7 @@
                                 <tbody>
                                 @foreach($users as $user)
                                 <tr class="text-center">
+                                    <td>{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
                                     <td class="text-center">
                                         <img src="{{ Str::startsWith($user->photo, 'http') ? $user->photo : asset('storage/' . $user->photo) }}" class="rounded-circle" width="50" height="50">
                                     </td>
@@ -74,13 +62,16 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            <div class="card-footer bg-white d-flex justify-content-end">
-                                {{ $users->links() }}
-                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                            <p class="text-muted small mb-0">
+                                Menampilkan {{ $users->firstItem() }} - {{ $users->lastItem() }} dari total {{ $users->total() }} user
+                            </p>
+                            {{ $users->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -230,13 +221,12 @@
 
     <!-- Modal Reset Password -->
     @foreach ($users as $user)
-        <!-- Modal Reset Password Per User -->
         <div class="modal fade" id="modalResetPassword{{ $user->id }}" tabindex="-1" aria-labelledby="modalResetPasswordLabel{{ $user->id }}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <form action="{{ route('user.resetPassword', $user->id) }}" method="POST">
                         @csrf
-                        @method('PUT') {{-- Gunakan PUT karena ini update data --}}
+                        @method('PUT')
 
                         <div class="modal-header bg-warning">
                             <h5 class="modal-title" id="modalResetPasswordLabel{{ $user->id }}">Reset Password</h5>
@@ -248,23 +238,18 @@
                             <div class="mb-3">
                                 <label for="newPassword{{ $user->id }}" class="form-label">Password Baru</label>
                                 <input type="password" name="password" id="newPassword{{ $user->id }}" class="form-control @error('password') is-invalid @enderror" required minlength="6">
-                                @error('password')
-                                <div class="text-danger mt-1 small">{{ $message }}</div>
-                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="confirmPassword{{ $user->id }}" class="form-label">Konfirmasi Password</label>
-                                <input type="password" name="new_password_confirmation" id="confirmPassword{{ $user->id }}" class="form-control @error('new_password_confirmation') is-invalid @enderror" required minlength="6">
-                                @error('new_password_confirmation')
-                                <div class="text-danger mt-1 small">{{ $message }}</div>
-                                @enderror
+                                <input type="password" name="password_confirmation" id="confirmPassword{{ $user->id }}" class="form-control @error('password_confirmation') is-invalid @enderror" required minlength="6">
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-warning">Reset</button>
                         </div>
+
                     </form>
                 </div>
             </div>
