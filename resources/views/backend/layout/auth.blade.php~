@@ -74,10 +74,20 @@
     Swal.fire({
         position: "top-end",
         icon: "error",
-        title: "{{ session('error')['message'] }}",
+        title: "{{ is_array(session('error')) ? session('error')['message'] : session('error') }}",
         showConfirmButton: false,
         timer: 3000,
         toast: true,
+        width: '30rem'
+    });
+    @endif
+
+    @if($errors->any())
+    Swal.fire({
+        icon: 'error',
+        title: 'Validasi Gagal',
+        html: `{!! implode('<br>', $errors->all()) !!}`,
+        confirmButtonText: 'Tutup',
         width: '30rem'
     });
     @endif

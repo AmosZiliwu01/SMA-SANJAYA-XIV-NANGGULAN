@@ -114,6 +114,7 @@
                   </div>
               </li>
 
+              @can('admin')
               <!-- Pengguna -->
               <li class="nav-item">
                   <a class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}" href="{{ route('user.index') }}">
@@ -123,6 +124,7 @@
                       <span class="nav-link-text ms-1">Pengguna</span>
                   </a>
               </li>
+              @endcan
 
               <!-- Agenda -->
               <li class="nav-item">
@@ -227,7 +229,7 @@
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a href="{{ route('login') }}" class="nav-link text-white font-weight-bold px-0">
+              <a href="{{ route('auth.logout') }}" class="nav-link text-white font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
                 <span class="d-sm-inline d-none">Logout</span>
               </a>
