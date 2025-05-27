@@ -25,38 +25,28 @@
 
 
 <!-- Modal Edit Download -->
-<div class="modal fade" id="modalEditDownload" tabindex="-1" aria-labelledby="modalEditDownloadLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="modalEditClass{{ $class->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title" id="modalEditDownloadLabel">Edit Download</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form enctype="multipart/form-data">
+            <form action="{{ route('class.update', $class->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Class</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
                     <div class="mb-3">
-                        <label for="fileUpload" class="form-label">File</label>
-                        <input type="file" class="form-control" id="fileUpload"
-                               accept=".pdf,.doc,.docx,.ppt,.pptx,.zip">
-                        <small class="text-muted">File yang diizinkan:pdf, doc, docx, ppt, pptx, zip</small>
+                        <label>Nama Kelas</label>
+                        <input type="text" name="name" value="{{ $class->name }}" class="form-control" required>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="editDescription" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" id="editDescription"
-                                  rows="3">Laporan tahunan perusahaan</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editAuthor" class="form-label">Oleh</label>
-                        <input type="text" class="form-control" id="editAuthor" value="Enjelina">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-info">Update</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+

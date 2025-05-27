@@ -205,12 +205,28 @@
 
               <!-- Class -->
               <li class="nav-item">
-                  <a class="nav-link {{ request()->routeIs('class.*') ? 'active' : '' }}" href="{{ route('class.index') }}">
+                  <a class="nav-link {{ request()->routeIs('class.*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#submenu-class" role="button" aria-expanded="{{ request()->routeIs('class.*') ? 'true' : 'false' }}" aria-controls="submenu-class">
                       <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                          <i class="ni ni-chat-round text-dark text-sm opacity-10"></i>
+                          <i class="bi bi-people text-dark text-sm opacity-10"></i>
                       </div>
-                      <span class="nav-link-text ms-1">Class</span>
+                      <span class="nav-link-text ms-1">Kesiswaan</span>
                   </a>
+                  <div class="collapse {{ request()->routeIs('class.*') ? 'show' : '' }}" id="submenu-class">
+                      <ul class="nav ms-4">
+                          <li class="nav-item">
+                              <a class="nav-link {{ request()->routeIs('class.index') ? 'active' : '' }}" href="{{ route('class.index') }}">
+                                  <i class="bi bi-building text-xs me-2" ></i>
+                                  Class
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modal-add-class">
+                                  <i class="bi bi-person-lines-fill text-xs me-2"></i>
+                                  Data Siswa
+                              </a>
+                          </li>
+                      </ul>
+                  </div>
               </li>
           </ul>
       </div>

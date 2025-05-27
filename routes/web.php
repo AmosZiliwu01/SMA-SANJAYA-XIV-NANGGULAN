@@ -67,8 +67,11 @@ Route::prefix('dashboard')->group(function () {
     //Class Routes
     Route::prefix('class')->group(function () {
         Route::get('/', [ClassController::class, 'index'])->name('class.index');
-        Route::post('/', [ClassController::class, 'store'])->name('class.store');
+        Route::post('/store', [ClassController::class, 'store'])->name('class.store');
+        Route::put('/update/{class}', [ClassController::class, 'update'])->name('class.update');
+        Route::delete('/destroy/{class}', [ClassController::class, 'destroy'])->name('class.destroy');
     });
+
 
     //Comment Routes
     Route::prefix('comment')->group(function () {
