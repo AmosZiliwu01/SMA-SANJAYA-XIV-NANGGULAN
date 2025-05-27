@@ -13,7 +13,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('backend.post.category-post.index');
+        $categories  = Category::paginate(5);
+        return view('backend.post.category-post.index', compact('categories'));
     }
 
     /**
@@ -29,7 +30,20 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:categories,name'
+        ], [
+            'name.required' => 'Nama kategori wajib diisi.',
+            'name.unique' => 'Nama kategori sudah ada, silakan gunakan nama lain.'
+
+        ]);
+
+        Category::create([
+            'name' => $request->name
+        ]);
+
+        return redirect()->route('category.index')->with('success', 'Kategori berhasil ditambahkan.');
+
     }
 
     /**
@@ -51,16 +65,33 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:categories,name,' . $id
+        ], [
+            'name.required' => 'Nama kategori wajib diisi.',
+            'name.unique' => 'Nama kategori sudah ada.'
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->update([
+            'name' => $request->name
+        ]);
+
+        return redirect()->route('category.index')->with('success', 'Kategori berhasil diperbarui.');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $categories = Category::findOrFail($id);
+        $categories->delete();
+
+        return redirect()->route('category.index')->with('success', 'Kategori berhasil dihapus.');
     }
+
 }

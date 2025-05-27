@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -13,15 +14,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('backend.user.index');
+        $users = User::paginate(5);
+        return view('backend.user.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        //
+        return view('backend.user.index');
     }
 
     /**
@@ -29,7 +29,40 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'username' => 'required|string|unique:users,username',
+            'password' => 'required|string|min:6',
+            'phone' => 'nullable|string',
+            'role' => 'required|in:administrator,author',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ], [
+            'email.unique' => 'Email sudah digunakan.',
+            'username.unique' => 'Username sudah digunakan.',
+
+        ]);
+
+        // Simpan foto jika diunggah
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('photos', 'public');
+        }
+
+        // Simpan user ke database
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'role' => $request->role,
+            'photo' => $photoPath,
+        ]);
+
+        // Redirect kembali ke index dengan pesan sukses
+        return redirect()->route('user.index')->with('success', 'Pengguna berhasil ditambahkan.')->withErrors($validator)->withInput();;
     }
 
     /**
@@ -51,16 +84,77 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'username' => 'required|string|unique:users,username,' . $id,
+            'phone' => 'nullable|string',
+            'role' => 'required|in:administrator,author',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Email tidak valid.',
+            'email.unique' => 'Email sudah digunakan.',
+            'username.unique' => 'Username sudah digunakan.',
+        ]);
+
+        // Cek apakah user upload foto baru
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('photos', 'public');
+            $user->photo = $photoPath;
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'username' => $request->username,
+            'phone' => $request->phone,
+            'role' => $request->role,
+            'photo' => $user->photo,
+        ]);
+
+        return redirect()->route('user.index')->with('success', 'Pengguna berhasil diperbarui.');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(User $user)
     {
-        //
+        try {
+            if ($user->photo && file_exists(storage_path('app/public/' . $user->photo))) {
+                unlink(storage_path('app/public/' . $user->photo));
+            }
+
+            $user->delete();
+
+            return redirect()->route('user.index')->with('success', 'Data user berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage());
+        }
     }
+
+
+
+    public function resetPassword(Request $request, $id)
+    {
+        $request->validate([
+            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'password.confirmed' => 'Konfirmasi bidang kata sandi tidak cocok.',
+
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->back()->with('success', 'Password berhasil direset.');
+    }
+
 }

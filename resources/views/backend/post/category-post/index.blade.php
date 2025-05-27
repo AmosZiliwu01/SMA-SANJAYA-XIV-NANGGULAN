@@ -9,98 +9,86 @@
                         <h5 class="mb-0">Data Kategori</h5>
                     </div>
                     <div class="mb-0 m-4 text-lg-start">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddKategori">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddCategory">
                             <i class="bi bi-plus-circle me-1"></i> Add Kategori
                         </button>
                     </div>
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show mt-3 mx-3" role="alert">
+                            <strong>Terjadi kesalahan:</strong>
+                            <ul class="mb-0 mt-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+                        </div>
+                    @endif
+
                     <div class="card-body p-4">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover align-middle table-kategori">
+                            <table class="table table-bordered table-hover align-middle table-Category">
                                 <thead class="table-light">
                                 <tr>
                                     <th class="text-center" style="width: 80px;">No</th>
-                                    <th>Kategori</th>
+                                    <th>Nama Kategori</th>
                                     <th class="text-center" style="width: 200px;">Aksi</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td class="text-center">
-                                        <span tabindex="0" role="button" class="me-2 text-primary"></span> 1
-                                    </td>
-                                    <td style="padding-left: 25px">Politik</td>
-                                    <td class="text-center">
-                                        <a href="#"
-                                           class="btn btn-sm btn-info me-1"
-                                           title="Edit"
-                                           data-bs-toggle="modal"
-                                           data-bs-target="#modalEditKategori"
-                                           data-nama="Politik">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <a href="#" onclick="showDeleteAlert()" class="btn btn-sm btn-danger" title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                               <tr>
-                              <tr>
-                                    <td class="text-center">
-                                        <span tabindex="0" role="button" class="me-2 text-primary"></span> 1
-                                    </td>
-                                    <td style="padding-left: 25px">Politik</td>
-                                    <td class="text-center">
-                                        <a href="#" class="btn btn-sm btn-info me-1" title="Edit">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <a href="#" onclick="showDeleteAlert()" class="btn btn-sm btn-danger" title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                               <tr>
-                              <tr>
-                                    <td class="text-center">
-                                        <span tabindex="0" role="button" class="me-2 text-primary"></span> 1
-                                    </td>
-                                    <td style="padding-left: 25px">Politik</td>
-                                    <td class="text-center">
-                                        <a href="#" class="btn btn-sm btn-info me-1" title="Edit">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <a href="#"  onclick="showDeleteAlert()" class="btn btn-sm btn-danger" title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                               <tr>
-
-                                <!-- Tambahkan baris lainnya jika perlu -->
+                                @foreach($categories as $index => $category)
+                                    <tr>
+                                        <td class="text-center">{{ $index + 1 }}</td>
+                                        <td style="padding-left: 25px">{{ $category->name }}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditCategory{{ $category->id }}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <form id="delete-category-{{$category->id}}" action="{{ route('category.destroy', $category->id) }}" method="POST" style="display:none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                            <a href="#" onclick="confirmDelete({{ $category->id }})" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
+                            <div class="card-footer bg-white d-flex justify-content-end">
+                                {{ $categories->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-    <!-- Modal Tambah Kategori -->
-    <div class="modal fade" id="modalAddKategori" tabindex="-1" aria-labelledby="modalAddKategoriLabel" aria-hidden="true">
+    <!-- Modal Add Kategori -->
+    <div class="modal fade" id="modalAddCategory" tabindex="-1" aria-labelledby="modalAddCategoryLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <form id="kategoriForm">
+                <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalAddKategoriLabel">Tambah Kategori</h5>
+                        <h5 class="modal-title" id="modalAddCategoryLabel">Tambah Kategori</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
                     <div class="modal-body">
+                        <!-- Nama -->
                         <div class="mb-3">
                             <label for="namaKategori" class="form-label fs-6">Nama Kategori</label>
-                            <input type="text" class="form-control" id="namaKategori" placeholder="Masukkan nama kategori" required>
+                            <input name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Masukkan Nama Kategori">
+                            @error('name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
                     </div>
+                    <!-- Tombol Simpan -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -109,19 +97,32 @@
             </div>
         </div>
     </div>
+
+
     <!-- Modal Edit Kategori -->
-    <div class="modal fade" id="modalEditKategori" tabindex="-1" aria-labelledby="modalEditKategoriLabel" aria-hidden="true">
+    @foreach($categories as $category)
+        <div class="modal fade" id="modalEditCategory{{ $category->id }}" tabindex="-1" aria-labelledby="modalEditCategoryLabel{{ $category->id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <form id="formEditKategori">
+                <form action="{{ route('category.update', $category->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalEditKategoriLabel">Edit Kategori</h5>
+                        <h5 class="modal-title" id="modalEditCategoryLabel{{ $category->id }}">Edit Kategori</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="editNamaKategori" class="form-label fs-6">Nama Kategori</label>
-                            <input type="text" class="form-control" id="editNamaKategori" placeholder="Masukkan nama kategori" required>
+                            <label for="editNamaKategori{{ $category->id }}" class="form-label fs-6">Nama Kategori</label>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                   id="editNamaKategori{{ $category->id }}"
+                                   value="{{ old('name', $category->name) }}"
+                                   placeholder="Masukkan nama kategori" required>
+                            @error('name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -132,5 +133,29 @@
             </div>
         </div>
     </div>
+    @endforeach
 
+    <script>
+        function confirmDelete(id){
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    }).then(()=>{
+                        document.getElementById('delete-category-' + id).submit();
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

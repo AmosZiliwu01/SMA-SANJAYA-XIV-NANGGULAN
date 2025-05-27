@@ -75,11 +75,7 @@ Route::prefix('dashboard')->group(function () {
     //Class Routes
     Route::prefix('class')->group(function () {
         Route::get('/', [ClassController::class, 'index'])->name('class.index');
-        Route::post('/store', [ClassController::class, 'store'])->name('class.store');
-        Route::put('/update/{class}', [ClassController::class, 'update'])->name('class.update');
-        Route::delete('/destroy/{class}', [ClassController::class, 'destroy'])->name('class.destroy');
     });
-
 
     //Comment Routes
     Route::prefix('comment')->group(function () {
@@ -143,8 +139,8 @@ Route::prefix('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     // Forgot Password (Request Reset Link)
-    Route::get('/forgot-password', [AuthController::class, 'forgot_password'])->name('forgot.password');
-    Route::post('/forgot-password', [AuthController::class, 'send_reset_link'])->name('send.reset.link');
+    Route::get('/forgot-password', [AuthController::class, 'forgot_password'])->name('auth.forgot-password');
+    Route::post('/forgot-password', [AuthController::class, 'send_reset_link'])->name('auth.send-reset-link');
 
     // Reset Password
     Route::get('/reset-password/{token}', [AuthController::class, 'password_reset'])->name('password.reset');
