@@ -36,7 +36,7 @@ Route::prefix('/')->group(function () {
 });
 
 /*Backend Routes*/
-Route::prefix('dashboard')->group(function () {
+Route::prefix('dashboard')->middleware('auth')->group(function () {
     //Dashboard Routes
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -139,8 +139,8 @@ Route::prefix('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     // Forgot Password (Request Reset Link)
-    Route::get('/forgot-password', [AuthController::class, 'forgot_password'])->name('auth.forgot-password');
-    Route::post('/forgot-password', [AuthController::class, 'send_reset_link'])->name('auth.send-reset-link');
+    Route::get('/forgot-password', [AuthController::class, 'forgot_password'])->name('forgot.password');
+    Route::post('/forgot-password', [AuthController::class, 'send_reset_link'])->name('send.reset.link');
 
     // Reset Password
     Route::get('/reset-password/{token}', [AuthController::class, 'password_reset'])->name('password.reset');

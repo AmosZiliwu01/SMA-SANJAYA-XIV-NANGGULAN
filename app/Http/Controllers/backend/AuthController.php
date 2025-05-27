@@ -12,48 +12,53 @@ class AuthController extends Controller
 {
     public function index()
     {
-        if (auth()->guard('user')->check()) {
+        if (auth()->check()) {
             return redirect()->route('dashboard.index');
         }
+
         return view('backend.auth.login');
     }
 
     public function login(Request $request)
     {
-        $request -> validate([
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
         $remember = $request->has('remember');
-        if (auth()->guard('user')->attempt([
+
+        if (auth()->attempt([
             'email' => $request->email,
             'password' => $request->password,
             'status' => true
-            ], $remember)) {
+        ], $remember)) {
             return redirect()->route('dashboard.index');
         } else {
-            return redirect()->route('auth.login')->with('error', 'Pastikan email dan password yang Anda masukkan benar.');
+            return redirect()->route('auth.login')
+                ->with('error', 'Pastikan email dan password yang Anda masukkan benar.');
         }
     }
 
     public function logout()
     {
-        auth()->guard('user')->logout();
+        auth()->logout();
         return redirect()->route('auth.login');
     }
 
     public function forgot_password()
     {
-        if (auth()->guard('user')->check()) {
+        if (auth()->check()) {
             return redirect()->route('dashboard.index');
         }
+
         return view('backend.auth.forgot-password');
     }
 
     public function send_reset_link(Request $request)
     {
         $request->validate(['email' => 'required|email']);
+
         $status = Password::sendResetLink($request->only('email'));
 
         if ($status === Password::RESET_LINK_SENT) {
@@ -65,10 +70,12 @@ class AuthController extends Controller
 
     public function password_reset($token, Request $request)
     {
-        if (auth()->guard('user')->check()) {
+        if (auth()->check()) {
             return redirect()->route('dashboard.index');
         }
+
         $email = $request->email;
+
         return view('backend.auth.reset-password', ['token' => $token, 'email' => $email]);
     }
 
@@ -80,7 +87,7 @@ class AuthController extends Controller
             $messages[] = 'Password minimal 8 karakter.';
         }
 
-        if (strlen($request->password) >= 8 && $request->password !== $request->password_confirmation) {
+        if ($request->password !== $request->password_confirmation) {
             $messages[] = 'Konfirmasi password tidak sesuai.';
         }
 
@@ -93,7 +100,7 @@ class AuthController extends Controller
             function ($user, $password) {
                 $user->forceFill([
                     'password' => Hash::make($password),
-                    'remember_token' => Str::random(1),
+                    'remember_token' => Str::random(60),
                 ])->save();
             }
         );
