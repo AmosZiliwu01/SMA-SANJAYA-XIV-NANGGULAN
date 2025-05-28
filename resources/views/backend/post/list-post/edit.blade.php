@@ -9,13 +9,16 @@
                         <h5 class="mb-0">Edit Berita</h5>
                     </div>
                     <div class="card-body px-4 pt-4 pb-2">
-                        <form>
+                        <form action="{{ route('post.update', $post->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+
                             <div class="row mb-3">
                                 <div class="col-md-9">
-                                    <input type="text" name="judul" class="form-control" placeholder="Judul berita">
+                                    <input type="text" name="title" class="form-control" placeholder="Judul berita" value="{{ old('title', $post->title) }}" required>
                                 </div>
                                 <div class="col-md-3">
-                                    <button type="button" class="btn btn-primary w-100" disabled>Publish</button>
+                                    <button type="submit" class="btn btn-primary w-100">Update</button>
                                 </div>
                             </div>
 
@@ -26,7 +29,7 @@
                                             <strong>Isi Berita</strong>
                                         </div>
                                         <div class="card-body pt-1">
-                                            <textarea name="isi" id="editor" rows="10" class="form-control"></textarea>
+                                            <textarea name="content" id="editor" rows="10" class="form-control">{{ old('content', $post->content) }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -39,17 +42,28 @@
                                         <div class="card-body pt-1">
                                             <div class="mb-3">
                                                 <label for="kategori" class="form-label">Kategori</label>
-                                                <select name="kategori" class="form-control">
+                                                <select name="category_id" class="form-control" required>
                                                     <option value="">- Pilih -</option>
-                                                    <option value="politik">Politik</option>
-                                                    <option value="olahraga">Olahraga</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}" {{ $category->id == $post->category_id ? 'selected' : '' }}>
+                                                            {{ $category->name }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="gambar" class="form-label">Gambar</label>
-                                                <input type="file" name="gambar" class="form-control" disabled>
-                                                <small class="text-muted">* Upload tidak aktif, hanya demo tampilan.</small>
+                                                <label for="image" class="form-label">Gambar</label>
+                                                <input type="file" name="image" class="form-control">
+                                                @if($post->image)
+                                                    <small class="text-muted">Gambar saat ini: {{ $post->image }}</small>
+                                                @endif
+                                            </div>
+
+                                            <div class="mb-3 form-check">
+                                                <input type="checkbox" class="form-check-input" id="is_slider" name="is_slider" value="1"
+                                                    {{ old('is_slider', $post->is_slider) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="is_slider">Tampilkan di Slider</label>
                                             </div>
 
                                         </div>
