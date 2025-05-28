@@ -8,59 +8,56 @@ use Illuminate\Http\Request;
 
 class ClassController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return view('backend.class.index');
+        $classes = Classes::all();
+        return view('backend.class.index', compact('classes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        Classes::create([
+            'name' => $request->name,
+        ]);
+
+        return redirect()->route('class.index')->with('success', "Data Class berhasil dibuat.");
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Classes $classes)
+    public function edit(Classes $class)
     {
-        //
+        return view('class.edit', compact('class'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Classes $classes)
+    public function update(Request $request, Classes $class)
     {
-        //
+        try {
+            // Validasi data dari form
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+
+            // Update data kelas
+            $class->update([
+                'name' => $validated['name'],
+            ]);
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('class.index')->with('success', 'Data Class berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            // Jika terjadi error, kembalikan ke halaman sebelumnya dengan pesan error
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.'])->withInput();
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Classes $classes)
+    public function destroy(Classes $class)
     {
-        //
-    }
+        $class->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Classes $classes)
-    {
-        //
+        return redirect()->route('class.index')->with('success', 'Data Class berhasil dihapus.');
     }
 }

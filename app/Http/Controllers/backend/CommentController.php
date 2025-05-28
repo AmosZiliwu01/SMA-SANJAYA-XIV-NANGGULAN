@@ -13,7 +13,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        return view('backend.comment.index');
+        return view('backend.komentar.index');
     }
 
     /**
