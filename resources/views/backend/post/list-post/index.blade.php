@@ -34,7 +34,7 @@
                                     <tr class="text-center">
                                         <td>{{ ($post->currentPage() - 1) * $post->perPage() + $loop->iteration }}</td>
                                         <td class="text-center">
-                                            <img src="{{ Str::startsWith($row->image, 'http') ? $row->image : asset('storage/' . $row->image) }}" class="rounded-circle" width="50" height="50">
+                                            <img src="{{ Str::startsWith($row->image, 'http') ? $row->image : asset('storage/' . $row->image) }}"  width="80" height="80">
                                         </td>
                                         <td class="text-start">{{ $row->title }}</td>
                                         <td>{{ $row->created_at ? $row->created_at->format('d M Y') : '-' }}</td>
