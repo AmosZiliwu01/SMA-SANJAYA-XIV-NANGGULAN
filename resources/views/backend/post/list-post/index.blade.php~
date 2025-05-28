@@ -1,0 +1,69 @@
+@extends('backend.layout.main')
+@section('content')
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Data Berita</h5>
+                    </div>
+                    <div class="mb-0  m-4 text-lg-start">
+                        <a href="{{ route('post.create') }}" class="btn btn-success">
+                            <i class="bi bi-plus-circle me-1"></i> Post Berita
+                        </a>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover text-center align-middle" style="table-layout: fixed;">
+                                <thead class="table-light">
+                                <tr>
+                                    <th scope="col" style="width: 100px;">Gambar</th>
+                                    <th scope="col" style="width: 250px;">Judul</th>
+                                    <th scope="col">Tanggal</th>
+                                    <th scope="col">Author</th>
+                                    <th scope="col">Baca</th>
+                                    <th scope="col">Kategori</th>
+                                    <th scope="col">Aksi</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @forelse ($posts as $post)
+                                    <tr>
+                                        <td>
+                                            <img src="{{ $post->image_url ?? 'https://via.placeholder.com/100' }}" alt="gambar" class="img-thumbnail" style="width: 100px;">
+                                        </td>
+                                        <td>{{ $post->title }}</td>
+                                        <td>{{ $post->created_at->format('d M Y') }}</td>
+                                        <td>{{ $post->user->name ?? 'Unknown' }}</td>
+                                        <td>{{ $post->views ?? 0 }}x</td>
+                                        <td>{{ $post->category->name ?? '-' }}</td>
+                                        <td>
+                                            <a href="#" class="btn btn-sm btn-info me-1" title="Edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Yakin mau hapus post ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">Data post tidak ditemukan.</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection

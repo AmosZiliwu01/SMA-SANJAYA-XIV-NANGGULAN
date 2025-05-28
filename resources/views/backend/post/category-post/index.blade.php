@@ -13,17 +13,6 @@
                             <i class="bi bi-plus-circle me-1"></i> Add Kategori
                         </button>
                     </div>
-                    @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show mt-3 mx-3" role="alert">
-                            <strong>Terjadi kesalahan:</strong>
-                            <ul class="mb-0 mt-1">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
-                        </div>
-                    @endif
 
                     <div class="card-body p-4">
                         <div class="table-responsive">
@@ -36,9 +25,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($categories as $index => $category)
+                                @foreach($categories as  $category)
                                     <tr>
-                                        <td class="text-center">{{ $index + 1 }}</td>
+                                        <td class="text-center">{{ ($categories->currentPage() - 1) * $categories->perPage() + $loop->iteration }}</td>
                                         <td style="padding-left: 25px">{{ $category->name }}</td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditCategory{{ $category->id }}">
@@ -56,10 +45,13 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            <div class="card-footer bg-white d-flex justify-content-end">
-                                {{ $categories->links() }}
-                            </div>
                         </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                            <p class="text-muted small mb-0">
+                                Menampilkan {{ $categories->firstItem() }} - {{ $categories->lastItem() }} dari total {{ $categories->total() }} user
+                            </p>
+                            {{ $categories->links('pagination::bootstrap-5') }}
+                            </div>
                     </div>
                 </div>
             </div>
@@ -72,7 +64,7 @@
             <div class="modal-content">
                 <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-header">
+                    <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="modalAddCategoryLabel">Tambah Kategori</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
@@ -107,7 +99,7 @@
                 <form action="{{ route('category.update', $category->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="modal-header">
+                    <div class="modal-header bg-info text-white">
                         <h5 class="modal-title" id="modalEditCategoryLabel{{ $category->id }}">Edit Kategori</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
