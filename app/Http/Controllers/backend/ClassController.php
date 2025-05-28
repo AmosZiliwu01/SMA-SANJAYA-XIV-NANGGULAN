@@ -29,20 +29,29 @@ class ClassController extends Controller
 
     public function edit(Classes $class)
     {
-        return response()->json($class); // untuk edit via AJAX (optional)
+        return view('class.edit', compact('class'));
     }
 
     public function update(Request $request, Classes $class)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        try {
+            // Validasi data dari form
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
 
-        $class->update([
-            'name' => $request->name,
-        ]);
+            // Update data kelas
+            $class->update([
+                'name' => $validated['name'],
+            ]);
 
-        return redirect()->route('class.index')->with('success', 'Data Class berhasil diperbarui.');
+            // Redirect dengan pesan sukses
+            return redirect()->route('class.index')->with('success', 'Data Class berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            // Jika terjadi error, kembalikan ke halaman sebelumnya dengan pesan error
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.'])->withInput();
+        }
     }
 
     public function destroy(Classes $class)

@@ -24,7 +24,7 @@
 </div>
 
 
-<!-- Modal Edit Download -->
+<!-- Modal Edit -->
 <div class="modal fade" id="modalEditClass{{ $class->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

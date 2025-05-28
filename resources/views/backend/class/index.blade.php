@@ -33,11 +33,11 @@
                                             {{-- Tombol Edit --}}
                                             <button class="btn btn-sm btn-info me-1"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#modalEditClasses{{ $class->id }}">
+                                                    data-bs-target="#modalEditClass{{ $class->id }}">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </button>
 
-                                            {{-- Form Delete --}}
+                                            {{-- Tombol Delete --}}
                                             <form id="delete-classes-{{ $class->id }}"
                                                   action="{{ route('class.destroy', $class->id) }}"
                                                   method="POST"
@@ -45,10 +45,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
-
-                                            {{-- Tombol Delete --}}
-                                            <a href="#"
-                                               onclick="confirmDelete({{ $class->id }})"
+                                            <a href="#" onclick="confirmDelete({{ $class->id }})"
                                                class="btn btn-sm btn-danger">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a>
@@ -59,7 +56,6 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
