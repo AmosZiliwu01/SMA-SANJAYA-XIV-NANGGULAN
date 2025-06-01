@@ -115,6 +115,8 @@ Route::prefix('dashboard')->group(function () {
         Route::post('/{student}', [StudentController::class, 'update'])->name('student.update');
         Route::delete('/{student}', [StudentController::class, 'destroy'])->name('student.destroy');
         Route::get('/export', [StudentController::class, 'export'])->name('student.export');
+        Route::post('/student/import', [StudentController::class, 'import'])->name('student.import');
+
     });
 
     //Teacher Routes

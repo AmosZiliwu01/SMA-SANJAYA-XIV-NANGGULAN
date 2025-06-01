@@ -1,4 +1,5 @@
 @extends('backend.layout.main')
+
 @section('content')
     <div class="container-fluid py-4">
         <div class="row">
@@ -14,63 +15,67 @@
                         <a href="{{ route('student.export') }}" target="_blank" class="btn btn-primary me-2">
                             <i class="bi bi-file-earmark-spreadsheet"></i> Export Excel
                         </a>
-                        <a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#importExcelModal">
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                           data-bs-target="#importExcelModal">
                             <i class="bi bi-file-earmark-spreadsheet"></i> Import Excel
-                        </a>
+                        </button>
                     </div>
                     <div class="card-body p-4">
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover align-middle">
                                 <thead class="table-light">
-                                    <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Foto</th>
-                                        <th scope="col">NIS</th>
-                                        <th scope="col">Nama</th>
-                                        <th scope="col">Jenis Kelamin</th>
-                                        <th scope="col">Kelas</th>
-                                        <th scope="col">Aksi</th>
-                                    </tr>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Foto</th>
+                                    <th scope="col">NIS</th>
+                                    <th scope="col">Nama</th>
+                                    <th scope="col">Jenis Kelamin</th>
+                                    <th scope="col">Kelas</th>
+                                    <th scope="col">Aksi</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($students as $key => $item)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>
-                                                <img src="{{ asset('public/storage/photos/students/' . $item->photo) }}"
-                                                 alt="Foto siswa"
-                                                 width="50"
-                                                 height="50"
-                                                 class="rounded-circle"
+                                @foreach ($students as $key => $item)
+                                    <tr>
+                                        <td>{{ ($students->currentPage() - 1) * $students->perPage() + $loop->iteration }}
+                                        </td>
+                                        <td>
+                                            <img src="{{ asset('public/storage/photos/students/' . $item->photo) }}"
+                                                 alt="Foto siswa" width="50" height="50" class="rounded-circle"
                                                  onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
-                                            </td>
-                                            <td>{{ $item->nis }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->gender }}</td>
-                                            <td>{{ $item->class->name ?? '-' }}</td>
-                                            <td class="text-center">
-                                                {{-- Tombol Edit --}}
-                                                <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal"
+                                        </td>
+                                        <td>{{ $item->nis }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->gender }}</td>
+                                        <td>{{ $item->class->name ?? '-' }}</td>
+                                        <td class="text-center">
+                                            {{-- Tombol Edit --}}
+                                            <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal"
                                                     data-bs-target="#modalEditStudent{{ $item->id }}">
-                                                    <i class="bi bi-pencil-fill"></i>
-                                                </button>
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </button>
 
-                                                {{-- Tombol Delete --}}
-                                                <form id="delete-student-{{ $item->id }}"
-                                                    action="{{ route('student.destroy', $item->id) }}" method="POST"
-                                                    style="display: none;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                </form>
-                                                <button type="button" onclick="confirmDelete({{ $item->id }})"
+                                            {{-- Tombol Delete --}}
+                                            <form id="delete-student-{{ $item->id }}"
+                                                  action="{{ route('student.destroy', $item->id) }}" method="POST"
+                                                  style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                            <button type="button" onclick="confirmDelete({{ $item->id }})"
                                                     class="btn btn-sm btn-danger">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
+                        </div>
+
+                        {{-- Pagination --}}
+                        <div class="d-flex justify-content-end mt-3">
+                            {!! $students->links('pagination::bootstrap-5') !!}
                         </div>
                     </div>
                 </div>
@@ -80,6 +85,7 @@
 
     @include('backend.student.modal')
 @endsection
+
 @push('scripts')
     <script>
         function confirmDelete(id) {
