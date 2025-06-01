@@ -12,6 +12,11 @@ class Agenda extends Model
     protected $table = 'agendas';
 
     protected $fillable = [
-        'name', 'description', 'start_date', 'end_date', 'place', 'time', 'note', 'author'
+        'name', 'description', 'start_date', 'end_date', 'place', 'time', 'note', 'author', 'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

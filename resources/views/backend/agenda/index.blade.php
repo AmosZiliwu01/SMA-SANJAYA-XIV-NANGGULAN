@@ -1,5 +1,4 @@
 @extends('backend.layout.main')
-@php use Illuminate\Support\Str; @endphp
 
 @section('content')
 
@@ -22,49 +21,55 @@
                                 <thead class="table-light text-center">
                                 <tr>
                                     <th style="width: 50px;">No</th>
-                                    <th>Tanggal</th>
+                                    <th>Tanggal Dibuat</th>
+                                    <th>Judul Agenda</th>
                                     <th>Deskripsi Agenda</th>
+                                    <th>Mulai/Selesai</th>
+                                    <th>Tempat</th>
+                                    <th>Waktu</th>
                                     <th>Author</th>
                                     <th style="width: 150px;">Aksi</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!-- Contoh data dummy -->
+                                @foreach($agendas as  $agenda)
                                 <tr class="text-center">
-                                    <td>1</td>
-                                    <td>2025-05-23</td>
+                                    <td>{{ ($agendas->currentPage() - 1) * $agendas->perPage() + $loop->iteration }}</td>
+                                    <td>{{ $agenda->created_at->format('Y-m-d') }}</td>
+                                    <td>{{ $agenda->name }}</td>
                                     <td class="align-middle text-start">
-                                        <span title="Upacara khusus memperingati Hari Pendidikan Nasional akan dilaksanakan di lapangan sekolah. Semua siswa wajib hadir dengan seragam lengkap.">
-                                            {{ Str::limit('Upacara khusus memperingati Hari Pendidikan Nasional akan dilaksanakan di lapangan sekolah. Semua siswa wajib hadir dengan seragam lengkap.', 50, '...') }}
+                                        <span title="{{ $agenda->description }}">
+                                            {{ Str::limit($agenda->description, 50, '...') }}
                                         </span>
                                     </td>
-                                    <td>Enjelina</td>
                                     <td>
-                                        <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditAgenda" title="Edit">
+                                        {{ $agenda->start_date }} s/d {{ $agenda->end_date }}
+                                    </td>
+                                    <td>{{ $agenda->place }}</td>
+                                    <td>{{ $agenda->time }}</td>
+                                    <td>{{ $agenda->user->role ?? ''}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalEditAgenda{{ $agenda->id }}">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-danger" title="Hapus">
+                                        <form id="delete-agenda-{{$agenda->id}}" action="{{ route('agenda.destroy', $agenda->id) }}" method="POST" style="display:none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                        <a href="#" onclick="confirmDelete({{ $agenda->id }})" class="btn btn-sm btn-danger">
                                             <i class="bi bi-trash"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
-                                <tr class="text-center">
-                                    <td>2</td>
-                                    <td>2025-05-28</td>
-                                    <td class="align-middle text-start">Workshop Pengembangan Website Gereja</td>
-                                    <td>Jonathan</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditAgenda" title="Edit">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                @endforeach
                                 </tbody>
                             </table>
-
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                            <p class="text-muted small mb-0">
+                                Menampilkan {{ $agendas->firstItem() }} - {{ $agendas->lastItem() }} dari total {{ $agendas->total() }} Gallery
+                            </p>
+                            {{ $agendas->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -80,62 +85,115 @@
                     <h5 class="modal-title" id="modalAddAgendaLabel">Tambah Agenda</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form>
+                <form action="{{ route('agenda.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="author" class="form-label">Judul Agenda</label>
-                            <input type="text" class="form-control" id="judulagenda">
+                            <label for="judulagenda" class="form-label">Judul Agenda</label>
+                            <input type="text" name="name" class="form-control" id="judulagenda" required>
                         </div>
                         <div class="mb-3">
-                            <label for="tanggal" class="form-label">Tanggal</label>
-                            <input type="date" class="form-control" id="tanggal">
+                            <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
+                            <input type="date" name="start_date" class="form-control" id="tanggal_mulai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggal_selesai" class="form-label">Tanggal Selesai</label>
+                            <input type="date" name="end_date" class="form-control" id="tanggal_selesai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tempat" class="form-label">Tempat</label>
+                            <input type="text" name="place" class="form-control" id="tempat" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="waktu" class="form-label">Waktu</label>
+                            <input type="text" name="time" class="form-control" id="waktu" placeholder="Misal: 09:00 - 11:00" required>
                         </div>
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label">Deskripsi Agenda</label>
-                            <textarea class="form-control" id="deskripsi" rows="3"></textarea>
+                            <textarea class="form-control" name="description" id="deskripsi" rows="3" required></textarea>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-success">Simpan</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <!-- Modal Edit Agenda -->
-    <div class="modal fade" id="modalEditAgenda" tabindex="-1" aria-labelledby="modalEditAgendaLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="modalEditAgendaLabel">Edit Agenda</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="editAuthor" class="form-label">Judul Agenda</label>
-                            <input type="text" class="form-control" id="editJudulAgenda" value="">
+    @foreach ($agendas as $agenda)
+        <div class="modal fade" id="modalEditAgenda{{ $agenda->id }}" tabindex="-1" aria-labelledby="modalEditAgendaLabel{{ $agenda->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title" id="modalEditAgendaLabel{{ $agenda->id }}">Edit Agenda</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <form action="{{ route('agenda.update', $agenda->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="editJudulAgenda{{ $agenda->id }}" class="form-label">Judul Agenda</label>
+                                <input type="text" name="author" class="form-control" id="editJudulAgenda{{ $agenda->id }}" value="{{ $agenda->name }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editStartDate{{ $agenda->id }}" class="form-label">Tanggal Mulai</label>
+                                <input type="date" name="start_date" class="form-control" id="editStartDate{{ $agenda->id }}" value="{{ $agenda->start_date }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editEndDate{{ $agenda->id }}" class="form-label">Tanggal Selesai</label>
+                                <input type="date" name="end_date" class="form-control" id="editEndDate{{ $agenda->id }}" value="{{ $agenda->end_date }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editTempat{{ $agenda->id }}" class="form-label">Tempat</label>
+                                <input type="text" name="place" class="form-control" id="editTempat{{ $agenda->id }}" value="{{ $agenda->place }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editWaktu{{ $agenda->id }}" class="form-label">Waktu</label>
+                                <input type="text" name="time" class="form-control" id="editWaktu{{ $agenda->id }}" value="{{ $agenda->time }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editDeskripsi{{ $agenda->id }}" class="form-label">Deskripsi Agenda</label>
+                                <textarea name="description" class="form-control" id="editDeskripsi{{ $agenda->id }}" rows="3" required>{{ $agenda->description }}</textarea>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="editTanggal" class="form-label">Tanggal</label>
-                            <input type="date" class="form-control" id="editTanggal" value="2025-05-23">
-                        </div>
-                        <div class="mb-3">
-                            <label for="editDeskripsi" class="form-label">Deskripsi Agenda</label>
-                            <textarea class="form-control" id="editDeskripsi" rows="3">Rapat Koordinasi</textarea>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-info">Update</button>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-info">Update</button>
-                </div>
             </div>
         </div>
-    </div>
+    @endforeach
 
+    <script>
+        function confirmDelete(id){
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    }).then(()=>{
+                        document.getElementById('delete-agenda-' + id).submit();
+                    });
+                }
+            });
+        }
+    </script>
 @endsection
 
 

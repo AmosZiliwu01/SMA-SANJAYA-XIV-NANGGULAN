@@ -9,13 +9,14 @@
                         <h5 class="mb-0">Post Berita</h5>
                     </div>
                     <div class="card-body px-4 pt-4 pb-2">
-                        <form>
+                        <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
                             <div class="row mb-3">
                                 <div class="col-md-9">
-                                    <input type="text" name="judul" class="form-control" placeholder="Judul berita">
+                                    <input type="text" name="title" class="form-control" placeholder="Judul berita" required>
                                 </div>
                                 <div class="col-md-3">
-                                    <button type="button" class="btn btn-primary w-100" disabled>Publish</button>
+                                    <button type="submit" class="btn btn-primary w-100">Publish</button>
                                 </div>
                             </div>
 
@@ -26,7 +27,7 @@
                                             <strong>Isi Berita</strong>
                                         </div>
                                         <div class="card-body pt-1">
-                                            <textarea name="isi" id="editor" rows="10" class="form-control"></textarea>
+                                            <textarea name="content" id="editor" rows="10" class="form-control"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -39,16 +40,45 @@
                                         <div class="card-body pt-1">
                                             <div class="mb-3">
                                                 <label for="kategori" class="form-label">Kategori</label>
-                                                <select name="kategori" class="form-control">
+                                                <select name="category_id" class="form-control" required>
                                                     <option value="">- Pilih -</option>
-                                                    <option value="politik">Politik</option>
-                                                    <option value="olahraga">Olahraga</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
 
+                                            <!-- Input Gambar -->
                                             <div class="mb-3">
-                                                <label for="fotoEdit" class="form-label">Foto</label>
-                                                <input type="file" class="form-control" id="fotoEdit">
+                                                <label for="image" class="form-label">Gambar</label>
+                                                <input
+                                                    type="file"
+                                                    class="form-control"
+                                                    id="image"
+                                                    name="image"
+                                                    accept="image/*"
+                                                    onchange="previewImage(event)"
+                                                    data-preview="#preview-image"
+                                                    required
+                                                >
+                                                <small class="form-text text-muted">Format: jpeg, png, jpg, gif, svg. Maksimal ukuran: 2MB.</small>
+                                            </div>
+
+                                            <!-- Preview Gambar -->
+                                            <div class="mb-3">
+                                                <label for="image" class="form-label d-block">Preview Image</label>
+                                                <img
+                                                    id="preview-image"
+                                                    src="#"
+                                                    alt="Preview Gambar"
+                                                    class="img-fluid mt-2 d-none"
+                                                    style="max-height: 150px;"
+                                                >
+                                            </div>
+
+                                            <div class="mb-3 form-check">
+                                                <input type="checkbox" class="form-check-input" id="is_slider" name="is_slider" value="1">
+                                                <label class="form-check-label" for="is_slider">Tampilkan di Slider</label>
                                             </div>
 
                                         </div>
@@ -56,6 +86,7 @@
                                 </div>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
