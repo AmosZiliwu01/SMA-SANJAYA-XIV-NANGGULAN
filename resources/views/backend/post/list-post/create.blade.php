@@ -48,9 +48,32 @@
                                                 </select>
                                             </div>
 
+                                            <!-- Input Gambar -->
                                             <div class="mb-3">
-                                                <label for="image" class="form-label">Foto</label>
-                                                <input type="file" class="form-control" name="image">
+                                                <label for="image" class="form-label">Gambar</label>
+                                                <input
+                                                    type="file"
+                                                    class="form-control"
+                                                    id="image"
+                                                    name="image"
+                                                    accept="image/*"
+                                                    onchange="previewImage(event)"
+                                                    data-preview="#preview-image"
+                                                    required
+                                                >
+                                                <small class="form-text text-muted">Format: jpeg, png, jpg, gif, svg. Maksimal ukuran: 2MB.</small>
+                                            </div>
+
+                                            <!-- Preview Gambar -->
+                                            <div class="mb-3">
+                                                <label for="image" class="form-label d-block">Preview Image</label>
+                                                <img
+                                                    id="preview-image"
+                                                    src="#"
+                                                    alt="Preview Gambar"
+                                                    class="img-fluid mt-2 d-none"
+                                                    style="max-height: 150px;"
+                                                >
                                             </div>
 
                                             <div class="mb-3 form-check">

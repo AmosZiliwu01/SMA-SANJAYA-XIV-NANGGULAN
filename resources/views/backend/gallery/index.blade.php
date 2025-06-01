@@ -8,69 +8,68 @@
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Data Gallery</h5>
                     </div>
-                    <div class="mb-0 m-4 text-lg-start">
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddGallery">
-                        <i class="bi bi-plus-circle me-1"></i> Add Gallery
-                    </button>
+                    <div class="m-4 text-lg-start mb-0">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddGallery">
+                            <i class="bi bi-plus-circle me-1"></i> Tambah Gallery
+                        </button>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body mt-0">
                         <div class="table-responsive">
                             <table class="table table-bordered align-middle mb-0">
                                 <thead class="table-light text-center">
                                 <tr>
-                                    <th style="width: 50px;">No</th>
-                                    <th style="width: 300px;">Gambar</th>
+                                    <th>No</th>
+                                    <th>Gambar</th>
                                     <th>Nama Kegiatan</th>
-                                    <th>Tanggal</th>
                                     <th>Author</th>
-                                    <th style="width: 150px;">Aksi</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="text-center">
-                                    <td>1</td>
-                                    <td>
-                                        <img src="/path/to/image1.jpg" alt="Gambar Kegiatan" class="img-thumbnail" style="width: 80px;">
-                                    </td>
-                                    <td class="align-middle text-start">Pentas Seni Sekolah</td>
-                                    <td>2025-05-22</td>
-                                    <td>Enjelina</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditGallery" title="Edit">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="text-center">
-                                    <td>2</td>
-                                    <td>
-                                        <img src="/path/to/image2.jpg" alt="Gambar Kegiatan" class="img-thumbnail" style="width: 80px;">
-                                    </td>
-                                    <td class="align-middle text-start">Kegiatan Donor Darah</td>
-                                    <td>2025-05-21</td>
-                                    <td>Jonathan</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditGallery" title="Edit">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <!-- Tambahkan baris lainnya di sini -->
+                                @foreach ($galleries as  $gallery)
+                                    <tr class="text-center">
+                                        <td>{{ ($galleries->currentPage() - 1) * $galleries->perPage() + $loop->iteration }}</td>
+                                        <td class="text-center">
+                                            <img src="{{ Str::startsWith($gallery->image, 'http') ? $gallery->image : asset('storage/' . $gallery->image) }}"  width="80" height="80">
+                                        </td>
+                                        <td class="align-middle text-start">{{ $gallery->title }}</td>
+                                        <td>{{ $gallery->user->role ?? 'Unknown' }}</td>
+                                        <td>
+                                            {{ $gallery->updated_at != $gallery->created_at
+                                                ? $gallery->updated_at->format('d M Y')
+                                                : $gallery->created_at->format('d M Y') }}
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditGallery{{ $gallery->id }}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <a href="#" onclick="confirmDelete({{ $gallery->id }})" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                            <form id="delete-galleries-{{ $gallery->id }}" action="{{ route('gallery.destroy', $gallery->id) }}" method="POST" style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
-
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                            <p class="text-muted small mb-0">
+                                Menampilkan {{ $galleries->firstItem() }} - {{ $galleries->lastItem() }} dari total {{ $galleries->total() }} Gallery
+                            </p>
+                            {{ $galleries->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
 
     <!-- Modal Tambah Galeri -->
@@ -81,70 +80,135 @@
                     <h5 class="modal-title" id="modalAddGalleryLabel">Tambah Galeri</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
-                <div class="modal-body">
-                    <form>
+                <form action="{{ route('gallery.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <!-- Input Gambar -->
                         <div class="mb-3">
-                            <label for="gambar" class="form-label">Upload Gambar</label>
-                            <input type="file" class="form-control" id="gambar" accept="image/*">
+                            <label for="image" class="form-label">Gambar</label>
+                            <input
+                                type="file"
+                                class="form-control"
+                                id="image"
+                                name="image"
+                                accept="image/*"
+                                onchange="previewImage(event)"
+                                data-preview="#preview-image"
+                                required
+                            >
+                            <small class="form-text text-muted">Format: jpeg, png, jpg, gif, svg. Maksimal ukuran: 2MB.</small>
                         </div>
+
+
+                        <!-- Preview Gambar -->
                         <div class="mb-3">
-                            <label for="nama_kegiatan" class="form-label">Nama Kegiatan</label>
-                            <input type="text" class="form-control" id="nama_kegiatan">
+                            <label for="image" class="form-label d-block">Preview Image</label>
+                            <img
+                                id="preview-image"
+                                src="#"
+                                alt="Preview Gambar"
+                                class="img-fluid mt-2 d-none"
+                                style="max-height: 150px;"
+                            >
                         </div>
+
                         <div class="mb-3">
-                            <label for="tanggal" class="form-label">Tanggal</label>
-                            <input type="date" class="form-control" id="tanggal">
+                            <label for="title" class="form-label">Nama Kegiatan</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="author" class="form-label">Author</label>
-                            <input type="text" class="form-control" id="author">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-success">Simpan</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <!-- Modal Edit Galeri -->
-    <div class="modal fade" id="modalEditGallery" tabindex="-1" aria-labelledby="modalEditGalleryLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="modalEditGalleryLabel">Edit Galeri</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="edit_gambar" class="form-label">Ganti Gambar</label>
-                            <input type="file" class="form-control" id="edit_gambar" accept="image/*">
+    @foreach ($galleries as $gallery)
+        <div class="modal fade" id="modalEditGallery{{ $gallery->id }}" tabindex="-1" aria-labelledby="modalEditGalleryLabel{{ $gallery->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form action="{{ route('gallery.update', $gallery->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title" id="modalEditGalleryLabel{{ $gallery->id }}">Edit Galeri</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                         </div>
-                        <div class="mb-3">
-                            <label for="edit_nama_kegiatan" class="form-label">Nama Kegiatan</label>
-                            <input type="text" class="form-control" id="edit_nama_kegiatan" value="Pentas Seni Sekolah">
+                        <div class="modal-body">
+                            <label for="image" class="form-label">Choose Image</label>
+                            <input
+                                type="file"
+                                class="form-control"
+                                id="edit_gambar_{{ $gallery->id }}"
+                                name="image"
+                                accept="image/*"
+                                data-preview="#preview-edit-image-{{ $gallery->id }}"
+                                onchange="previewImage(event, '{{ $gallery->id }}')"
+                            >
+                            <small class="form-text text-muted">Format: jpeg, png, jpg, gif, svg. Maksimal ukuran: 2MB.</small>
+
+                            <!-- Gambar Lama -->
+                            <label for="image" class="form-label d-block mt-3 mb-2">Preview Image</label>
+                            <img
+                                src="{{ asset('storage/' . $gallery->image) }}"
+                                alt="Gambar Lama"
+                                width="100"
+                                class="mt-2 mb-4 d-block"
+                                id="preview-old-image-{{ $gallery->id }}"
+                            >
+
+                            <!-- Preview Gambar Baru -->
+                            <img
+                                id="preview-edit-image-{{ $gallery->id }}"
+                                src="#"
+                                alt="Preview Baru"
+                                class="img-fluid mt-2 mb-4 d-none"
+                                style="max-height: 150px;"
+                            >
+
+                            <div class="mb-3">
+                                <label for="edit_nama_kegiatan_{{ $gallery->id }}" class="form-label">Nama Kegiatan</label>
+                                <input type="text" class="form-control" id="edit_nama_kegiatan_{{ $gallery->id }}" name="title" value="{{ old('title', $gallery->title) }}" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="edit_tanggal" class="form-label">Tanggal</label>
-                            <input type="date" class="form-control" id="edit_tanggal" value="2025-05-22">
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_author" class="form-label">Author</label>
-                            <input type="text" class="form-control" id="edit_author" value="Enjelina">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-info">Update</button>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-info">Update</button>
-                </div>
             </div>
         </div>
-    </div>
+    @endforeach
 
+
+    <script>
+        function confirmDelete(id){
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    }).then(()=>{
+                        document.getElementById('delete-galleries-' + id).submit();
+                    });
+                }
+            });
+        }
+    </script>
 @endsection
 
 

@@ -53,11 +53,37 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="image" class="form-label">Gambar</label>
-                                                <input type="file" name="image" class="form-control">
-                                                @if($post->image)
-                                                    <small class="text-muted">Gambar saat ini: {{ $post->image }}</small>
-                                                @endif
+                                                <label for="image" class="form-label">Choose Image</label>
+                                                <input
+                                                    type="file"
+                                                    class="form-control"
+                                                    id="edit_gambar_{{ $post->id }}"
+                                                    name="image"
+                                                    accept="image/*"
+                                                    data-preview="#preview-edit-image-{{ $post->id }}"
+                                                    onchange="previewImage(event, '{{ $post->id }}')"
+                                                >
+                                                <small class="form-text text-muted">Format: jpeg, png, jpg, gif, svg. Maksimal ukuran: 2MB.</small>
+
+                                                <!-- Gambar Lama -->
+                                                <label for="image" class="form-label d-block mt-3 mb-2">Preview Image</label>
+                                                <img
+                                                    src="{{ asset('storage/' . $post->image) }}"
+                                                    alt="Gambar Lama"
+                                                    width="100"
+                                                    class="mt-2 mb-4 d-block"
+                                                    id="preview-old-image-{{ $post->id }}"
+                                                >
+
+                                                <!-- Preview Gambar Baru -->
+                                                <img
+                                                    id="preview-edit-image-{{ $post->id }}"
+                                                    src="#"
+                                                    alt="Preview Baru"
+                                                    class="img-fluid mt-2 mb-4 d-none"
+                                                    style="max-height: 150px;"
+                                                >
+
                                             </div>
 
                                             <div class="mb-3 form-check">

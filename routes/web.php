@@ -57,6 +57,9 @@ Route::prefix('dashboard')->group(function () {
     //Agenda Routes
     Route::prefix('agenda')->group(function () {
         Route::get('/', [AgendaController::class, 'index'])->name('agenda.index');
+        Route::post('/store', [AgendaController::class, 'store'])->name('agenda.store');
+        Route::put('/update/{id}', [AgendaController::class, 'update'])->name('agenda.update');
+        Route::delete('/destroy/{id}', [AgendaController::class, 'destroy'])->name('agenda.destroy');
     });
 
     //Announcement
@@ -94,7 +97,10 @@ Route::prefix('dashboard')->group(function () {
     //Gallery Routes
     Route::prefix('gallery')->group(function () {
         Route::get('/', [GalleryController::class, 'index'])->name('gallery.index');
-    });
+        Route::post('/store', [GalleryController::class, 'store'])->name('gallery.store');
+        Route::put('/update/{id}', [GalleryController::class, 'update'])->name('gallery.update');
+        Route::delete('/destroy/{id}', [GalleryController::class, 'destroy'])->name('gallery.destroy');
+        });
 
     //Message Routes
     Route::prefix('message')->group(function () {
@@ -109,6 +115,7 @@ Route::prefix('dashboard')->group(function () {
         Route::get('/edit/{id}', [PostController::class, 'edit'])->name('post.edit');
         Route::put('/update/{id}', [PostController::class, 'update'])->name('post.update');
         Route::delete('/destroy/{id}', [PostController::class, 'destroy'])->name('post.destroy');
+        Route::post('/ckeditor/upload', [PostController::class, 'uploadImage'])->name('ckeditor.upload');
     });
 
     //Student Routes

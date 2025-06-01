@@ -37,7 +37,11 @@
                                             <img src="{{ Str::startsWith($row->image, 'http') ? $row->image : asset('storage/' . $row->image) }}"  width="80" height="80">
                                         </td>
                                         <td class="text-start">{{ $row->title }}</td>
-                                        <td>{{ $row->created_at ? $row->created_at->format('d M Y') : '-' }}</td>
+                                        <td>
+                                            {{ $row->updated_at != $row->created_at
+                                                ? $row->updated_at->format('d M Y')
+                                                : $row->created_at->format('d M Y') }}
+                                        </td>
                                         <td>{{ $row->user->role ?? '' }}</td>
                                         <td>{{ $row->views ?? 0 }}x</td>
                                         <td>{{ $row->category->name ?? '' }}</td>

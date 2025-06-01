@@ -163,4 +163,24 @@ class PostController extends Controller
             return redirect()->route('post.index')->with('error', 'Terjadi kesalahan saat menghapus post.');
         }
    }
+
+
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $path = $file->storeAs('ckeditor', $filename, 'public');
+
+            $url = asset('storage/' . $path);
+
+            return response()->json([
+                'uploaded' => true,
+                'url' => $url
+            ]);
+        }
+
+        return response()->json(['uploaded' => false, 'error' => ['message' => 'Upload gagal']]);
+    }
+
 }

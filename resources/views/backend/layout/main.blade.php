@@ -546,13 +546,54 @@
     {{-- CKEditor --}}
     <script src="https://cdn.ckeditor.com/ckeditor5/41.3.0/classic/ckeditor.js "></script>
     <script>
-        ClassicEditor
-            .create(document.querySelector('#editor'))
-            .catch(error => {
-                console.error(error);
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            const editorElement = document.querySelector('#editor');
+            if (editorElement) {
+                ClassicEditor
+                    .create(editorElement, {
+                        ckfinder: {
+                            uploadUrl: "{{ route('ckeditor.upload') . '?_token=' . csrf_token() }}"
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        });
     </script>
     @stack('scripts')
+
+
+    <script>
+        function previewImage(event, id = null) {
+            const input = event.target;
+            const previewSelector = input.getAttribute('data-preview');
+            const preview = document.querySelector(previewSelector);
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+
+                    // Sembunyikan gambar lama jika ada ID
+                    if (id) {
+                        const oldImage = document.getElementById('preview-old-image-' + id);
+                        if (oldImage) {
+                            oldImage.classList.add('d-none');
+                        }
+                    }
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = "#";
+                preview.classList.add('d-none');
+            }
+        }
+    </script>
+
 </body>
 
 </html>
