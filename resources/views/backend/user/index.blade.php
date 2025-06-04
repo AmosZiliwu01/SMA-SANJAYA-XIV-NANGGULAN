@@ -1,5 +1,5 @@
 @extends('backend.layout.main')
-
+@section('title', 'Data Pengguna')
 @section('content')
 
     <div class="container-fluid py-4">
@@ -35,7 +35,7 @@
                                 <tr class="text-center">
                                     <td>{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
                                     <td class="text-center">
-                                        <img src="{{ Str::startsWith($user->photo, 'http') ? $user->photo : asset('storage/' . $user->photo) }}" class="rounded-circle" width="50" height="50">
+                                        <img src="{{ Str::startsWith($user->photo, 'http') ? $user->photo : asset('storage/' . $user->photo) }}" class="rounded-circle" width="50" height="50" onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
                                     </td>
                                     <td>{{$user->username}}</td>
                                     <td>{{$user->email}}</td>
@@ -270,7 +270,7 @@
                 if (result.isConfirmed) {
                     Swal.fire({
                         title: "Deleted!",
-                        text: "Your file has been deleted.",
+                        text: "User has been deleted.",
                         icon: "success"
                     }).then(()=>{
                         document.getElementById('delete-users-' + id).submit();

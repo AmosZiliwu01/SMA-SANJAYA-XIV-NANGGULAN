@@ -1,5 +1,5 @@
 @extends('backend.layout.main')
-
+@section('title', 'Data Agenda')
 @section('content')
 
     <div class="container-fluid py-4">

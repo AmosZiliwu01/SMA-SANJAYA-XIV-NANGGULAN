@@ -1,4 +1,5 @@
 @extends('backend.layout.main')
+@section('title', 'Edit Post')
 @section('content')
 
     <div class="container-fluid py-4">

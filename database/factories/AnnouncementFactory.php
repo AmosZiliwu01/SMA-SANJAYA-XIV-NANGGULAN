@@ -19,7 +19,7 @@ class AnnouncementFactory extends Factory
         return [
             'title' => $this->faker->sentence(),
             'content' => $this->faker->paragraph(),
-            'author' => $this->faker->name(),
+            'user_id' => \App\Models\User::inRandomOrder()->value('id') ?? \App\Models\User::factory()->create()->id,
         ];
     }
 }

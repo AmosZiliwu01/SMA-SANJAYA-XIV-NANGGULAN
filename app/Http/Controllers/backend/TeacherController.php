@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\TeacherImport;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TeacherController extends Controller
@@ -48,7 +49,7 @@ class TeacherController extends Controller
             $imageName = null;
             if ($request->hasFile('photo')) {
                 $imageName = time().'.'.$request->photo->extension();
-                $request->photo->move(public_path('images/teacher'), $imageName);
+                $request->file('photo')->storeAs('public/teachers', $imageName);
             }
 
             Teacher::create([
@@ -62,7 +63,9 @@ class TeacherController extends Controller
                 'photo' => $imageName,
             ]);
 
-            return redirect()->route('teacher.index')->with('success', 'Data guru berhasil disimpan');
+            $this->logActivity('Menambahkan guru baru: ' . $request->name);
+
+            return redirect()->route('teachers.index')->with('success', 'Data guru berhasil disimpan');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
         }
@@ -87,6 +90,7 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, Teacher $teacher)
     {
         try {
@@ -102,13 +106,13 @@ class TeacherController extends Controller
             ]);
 
             $imageName = $teacher->photo;
-            if ($request->hasFile('photo')) {
-                if ($teacher->photo && file_exists(public_path('images/teacher/' . $teacher->photo))) {
-                    unlink(public_path('images/teacher/' . $teacher->photo));
-                }
 
-                $imageName = time().'.'.$request->photo->extension();
-                $request->photo->move(public_path('images/teacher'), $imageName);
+            if ($request->hasFile('photo')) {
+                if ($teacher->photo && Storage::exists('public/teachers' . $teacher->photo)) {
+                    Storage::delete('public/teachers/' . $teacher->photo);
+                }
+                $imageName = time() . '.' . $request->photo->extension();
+                $request->file('photo')->storeAs('public/teachers', $imageName);
             }
 
             $teacher->update([
@@ -122,11 +126,14 @@ class TeacherController extends Controller
                 'photo' => $imageName,
             ]);
 
-            return redirect()->route('teacher.index')->with('success', 'Data guru berhasil diperbarui');
+            $this->logActivity('Memperbarui data guru: ' . $teacher->name);
+
+            return redirect()->route('teachers.index')->with('success', 'Data guru berhasil diperbarui');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data: ' . $e->getMessage());
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -134,13 +141,15 @@ class TeacherController extends Controller
     public function destroy(Teacher $teacher)
     {
         try {
-            if ($teacher->photo && file_exists(public_path('images/teacher/' . $teacher->photo))) {
-                unlink(public_path('images/teacher/' . $teacher->photo));
+            if ($teacher->photo) {
+                Storage::disk('public')->delete('teachers/' . $teacher->photo);
             }
 
             $teacher->delete();
 
-            return redirect()->route('teacher.index')->with('success', 'Data guru berhasil dihapus');
+            $this->logActivity('Menghapus data guru: ' . $teacher->name);
+
+            return redirect()->route('teachers.index')->with('success', 'Data guru berhasil dihapus');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage());
         }
@@ -149,7 +158,7 @@ class TeacherController extends Controller
     public function export()
     {
         try {
-            return Excel::download(new TeacherExport, 'teacher.xlsx');
+            return Excel::download(new TeacherExport, 'teachers.xlsx');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal mengekspor data: ' . $e->getMessage());
         }
@@ -163,6 +172,8 @@ class TeacherController extends Controller
             $file->move('Data Guru', $nameFile);
 
             Excel::import(new TeacherImport, public_path('/Data Guru/'.$nameFile));
+            // Log activity
+            $this->logActivity('Mengimpor data guru dari file: ' . $nameFile);
             return redirect()->back()->with('success', 'Data berhasil diimport');
 
         } catch (\Exception $e) {

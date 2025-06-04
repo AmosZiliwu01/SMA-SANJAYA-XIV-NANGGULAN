@@ -14,9 +14,15 @@ class AgendaController extends Controller
      */
     public function index()
     {
-        $agendas = Agenda::with(['user'])->latest()->paginate(5);
+        $query = Agenda::with('user')->latest();
+        if (auth()->user()->role !== 'administrator') {
+            $query->where('user_id', auth()->id());
+        }
+        $agendas = $query->paginate(5);
+
         return view('backend.agenda.index', compact('agendas'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -53,6 +59,8 @@ class AgendaController extends Controller
                 'author' => Auth::user()->name,
                 'user_id' => Auth::id(),
             ]);
+
+            $this->logActivity('Menambahkan agenda baru: ' . $request->name);
 
                 return redirect()->route('agenda.index')->with('success', 'Agenda berhasil ditambahkan.');
             } catch (\Exception $e) {
@@ -110,6 +118,8 @@ class AgendaController extends Controller
 
                 $agenda->save();
 
+                $this->logActivity('Memperbarui agenda: ' . $agenda->name);
+
                 // Redirect kembali dengan pesan sukses
                 return redirect()->back()->with('success', 'Agenda berhasil diperbarui.');
             } catch (\Exception $e) {
@@ -124,6 +134,8 @@ class AgendaController extends Controller
         try {
             $agenda = Agenda::findOrFail($id);
             $agenda->delete();
+
+            $this->logActivity('Menghapus agenda: ' . $agenda->name);
 
             return redirect()->route('agenda.index')->with('success', 'Agenda berhasil dihapus.');
         } catch (\Exception $e) {

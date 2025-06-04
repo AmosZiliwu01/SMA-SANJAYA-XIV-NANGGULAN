@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -16,9 +18,17 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::with(['category', 'user'])->latest()->paginate(5);
+        $query = Post::with(['category', 'user'])->latest();
+
+        if (auth()->user()->role !== 'administrator') {
+            $query->where('user_id', auth()->id());
+        }
+
+        $post = $query->paginate(5);
+
         return view('backend.post.list-post.index', compact('post'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,37 +45,36 @@ class PostController extends Controller
     public function store(Request $request)
     {
         try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'content' => 'required|string',
+                'category_id' => 'nullable|exists:categories,id',
+                'image' => 'nullable|image|max:2048',
+                'is_slider' => 'boolean',
+            ]);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'category_id' => 'nullable|exists:categories,id',
-            'image' => 'nullable|image|max:2048',
-            'is_slider' => 'boolean',
-        ]);
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('posts', 'public');
+            }
 
-        // Upload image jika ada
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('posts', 'public');
-        }
+            $data = $request->only(['title', 'content', 'category_id']);
+            $data['is_slider'] = $request->has('is_slider') ? 1 : 0;
+            $data['user_id'] = auth()->id();
+            $data['views'] = 0;
+            $data['image'] = $imagePath;
+            $data['slug'] = Str::slug($request->title);
 
-        // Siapkan data untuk disimpan
-        $data = $request->only(['title', 'content', 'category_id']);
-        $data['is_slider'] = $request->has('is_slider') ? 1 : 0;
-        $data['user_id'] = auth()->id();
-        $data['views'] = 0;
-        $data['image'] = $imagePath;
-        $data['slug'] = Str::slug($request->title);
+            $originalSlug = $data['slug'];
+            $counter = 1;
+            while (Post::where('slug', $data['slug'])->exists()) {
+                $data['slug'] = $originalSlug . '-' . $counter++;
+            }
 
-        // Pastikan slug unik
-        $originalSlug = $data['slug'];
-        $counter = 1;
-        while (Post::where('slug', $data['slug'])->exists()) {
-            $data['slug'] = $originalSlug . '-' . $counter++;
-        }
+            Post::create($data);
 
-        Post::create($data);
+            // Log aktivitas
+            $this->logActivity('Menambahkan post baru: ' . $data['title']);
 
             return redirect()->route('post.index')->with('success', 'Post berhasil ditambah.');
         } catch (\Exception $e) {
@@ -98,44 +107,42 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $post = Post::findOrFail($id);
 
-        $post = Post::findOrFail($id);
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'content' => 'required|string',
+                'category_id' => 'nullable|exists:categories,id',
+                'image' => 'nullable|image|max:2048',
+                'is_slider' => 'boolean',
+            ]);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'category_id' => 'nullable|exists:categories,id',
-            'image' => 'nullable|image|max:2048',
-            'is_slider' => 'boolean',
-        ]);
+            $data = $request->only(['title', 'content', 'category_id']);
+            $data['is_slider'] = $request->has('is_slider') ? 1 : 0;
+            $data['user_id'] = auth()->id();
 
-        $data = $request->only(['title', 'content', 'category_id']);
-        $data['is_slider'] = $request->has('is_slider') ? 1 : 0;
-        $data['user_id'] = auth()->id();
+            if ($request->hasFile('image')) {
+                if ($post->image && Storage::disk('public')->exists($post->image)) {
+                    Storage::disk('public')->delete($post->image);
+                }
 
-        // Jika ada file gambar baru
-        if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($post->image && \Storage::disk('public')->exists($post->image)) {
-                \Storage::disk('public')->delete($post->image);
+                $data['image'] = $request->file('image')->store('posts', 'public');
             }
 
-            // Simpan gambar baru
-            $data['image'] = $request->file('image')->store('posts', 'public');
-        }
-
-        // Update slug jika judul berubah
-        if ($post->title !== $request->title) {
-            $slug = Str::slug($request->title);
-            $originalSlug = $slug;
-            $counter = 1;
-            while (Post::where('slug', $slug)->where('id', '!=', $post->id)->exists()) {
-                $slug = $originalSlug . '-' . $counter++;
+            if ($post->title !== $request->title) {
+                $slug = Str::slug($request->title);
+                $originalSlug = $slug;
+                $counter = 1;
+                while (Post::where('slug', $slug)->where('id', '!=', $post->id)->exists()) {
+                    $slug = $originalSlug . '-' . $counter++;
+                }
+                $data['slug'] = $slug;
             }
-            $data['slug'] = $slug;
-        }
 
-        $post->update($data);
+            $post->update($data);
+
+            // Log aktivitas
+            $this->logActivity('Memperbarui post: ' . $post->title);
 
             return redirect()->route('post.index')->with('success', 'Post berhasil diperbarui.');
         } catch (\Exception $e) {
@@ -149,20 +156,23 @@ class PostController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
+            $post = Post::findOrFail($id);
 
-        $post = Post::findOrFail($id);
+            if ($post->image && Storage::disk('public')->exists($post->image)) {
+                Storage::disk('public')->delete($post->image);
+            }
 
-        if ($post->image && Storage::disk('public')->exists($post->image)) {
-            Storage::disk('public')->delete($post->image);
-        }
+            $title = $post->title;
+            $post->delete();
 
-        $post->delete();
+            // Log aktivitas
+            $this->logActivity('Menghapus post: ' . $title);
 
             return redirect()->route('post.index')->with('success', 'Post berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->route('post.index')->with('error', 'Terjadi kesalahan saat menghapus post.');
         }
-   }
+    }
 
 
     public function uploadImage(Request $request)
@@ -182,5 +192,4 @@ class PostController extends Controller
 
         return response()->json(['uploaded' => false, 'error' => ['message' => 'Upload gagal']]);
     }
-
 }

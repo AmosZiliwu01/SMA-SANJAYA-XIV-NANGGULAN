@@ -1,4 +1,5 @@
 @extends('backend.layout.main')
+@section('title', 'Data Gallery')
 @section('content')
 
     <div class="container-fluid py-4">
@@ -31,7 +32,8 @@
                                     <tr class="text-center">
                                         <td>{{ ($galleries->currentPage() - 1) * $galleries->perPage() + $loop->iteration }}</td>
                                         <td class="text-center">
-                                            <img src="{{ Str::startsWith($gallery->image, 'http') ? $gallery->image : asset('storage/' . $gallery->image) }}"  width="80" height="80">
+                                            <img src="{{ Str::startsWith($gallery->image, 'http') ? $gallery->image : asset('storage/' . $gallery->image) }}"
+                                                 width="50" height="50" onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
                                         </td>
                                         <td class="align-middle text-start">{{ $gallery->title }}</td>
                                         <td>{{ $gallery->user->role ?? 'Unknown' }}</td>

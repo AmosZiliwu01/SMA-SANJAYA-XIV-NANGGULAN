@@ -36,7 +36,7 @@
     }
 </style>
 
-<body class="g-sidenav-show   bg-gray-100">
+<body class="g-sidenav-show bg-gray-100">
     <div class="min-height-300 bg-dark position-absolute w-100"></div>
     <aside
         class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
@@ -168,8 +168,8 @@
 
                 <!-- Data Guru -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('teacher.index') ? 'active' : '' }}"
-                        href="{{ route('teacher.index') }}">
+                    <a class="nav-link {{ request()->routeIs('teachers.index') ? 'active' : '' }}"
+                        href="{{ route('teachers.index') }}">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-hat-3 text-dark text-sm opacity-10"></i>
@@ -177,16 +177,6 @@
                         <span class="nav-link-text ms-1">Data Guru</span>
                     </a>
                 </li>
-
-                <!-- Data Siswa -->
-                {{--              <li class="nav-item"> --}}
-                {{--                  <a class="nav-link {{ request()->routeIs('student.index') ? 'active' : '' }}" href="{{ route('student.index') }}"> --}}
-                {{--                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center"> --}}
-                {{--                          <i class="ni ni-badge text-dark text-sm opacity-10"></i> --}}
-                {{--                      </div> --}}
-                {{--                      <span class="nav-link-text ms-1">Data Siswa</span> --}}
-                {{--                  </a> --}}
-                {{--              </li> --}}
 
                 <!-- Message -->
                 <li class="nav-item">
@@ -212,9 +202,21 @@
                     </a>
                 </li>
 
+                <!-- Testimonial -->
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('testimonial.*') ? 'active' : '' }}"
+                       href="{{ route('testimonial.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-chat-left-quote text-dark text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Testimonial</span>
+                    </a>
+                </li>
+
                 <!-- Class -->
                 <li class="nav-item">
-                    <!-- Menu Utama: Kesiswaan -->
+                    <!-- Menu Utama: Data Siswa -->
                     <a class="nav-link {{ request()->routeIs('class.*') || request()->routeIs('student.*') ? '' : 'collapsed' }}"
                         data-bs-toggle="collapse" href="#submenu-class" role="button"
                         aria-expanded="{{ request()->routeIs('class.*') || request()->routeIs('student.*') ? 'true' : 'false' }}"
@@ -224,7 +226,7 @@
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="bi bi-person-badge text-dark text-sm opacity-10"></i>
                         </div>
-                        <span class="nav-link-text ms-1">Kesiswaan</span>
+                        <span class="nav-link-text ms-1">Data Siswa</span>
                     </a>
 
                     <!-- Submenu : -->
@@ -263,9 +265,9 @@
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white"
                                 href="javascript:;">Pages</a>
                         </li>
-                        <li class="breadcrumb-item text-sm text-white active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item text-sm text-white active" aria-current="page">@yield('title')</li>
                     </ol>
-                    <h6 class="font-weight-bolder text-white mb-0">Dashboard</h6>
+                    <h6 class="font-weight-bolder text-white mb-0">@yield('title')</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">

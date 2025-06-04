@@ -9,7 +9,22 @@ class Announcement extends Model
 {
     use HasFactory;
 
-    protected $table = 'announcements';
+    protected $fillable = [
+        'title',
+        'content',
+        'user_id',
+    ];
 
-    protected $fillable = ['title', 'content', 'author'];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    /**
+     * Get the user that owns the announcement.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

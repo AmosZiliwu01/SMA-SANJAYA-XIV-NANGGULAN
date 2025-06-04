@@ -1,4 +1,5 @@
 @extends('backend.layout.main')
+@section('title', 'Data File')
 @section('content')
 
     <div class="container-fluid py-4">
@@ -6,11 +7,11 @@
             <div class="col-12">
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Data Download</h5>
+                        <h5 class="mb-0">Data File</h5>
                     </div>
                     <div class="mb-0 m-4 text-lg-start">
                         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddDownload">
-                            <i class="bi bi-plus-circle me-1"></i> Add Download
+                            <i class="bi bi-plus-circle me-1"></i> Add File
                         </button>
                     </div>
 
@@ -70,7 +71,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="modalAddDownloadLabel">Tambah Download</h5>
+                    <h5 class="modal-title" id="modalAddDownloadLabel">Tambah File</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -105,7 +106,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="modalEditDownloadLabel">Edit Download</h5>
+                    <h5 class="modal-title" id="modalEditDownloadLabel">Edit File</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

@@ -1,5 +1,5 @@
 @extends('backend.layout.main')
-
+@section('title', 'Data Siswa')
 @section('content')
     <div class="container-fluid py-4">
         <div class="row">
@@ -9,7 +9,7 @@
                         <h5 class="mb-0">Data Siswa</h5>
                     </div>
                     <div class="mb-0 m-4 text-lg-start">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddStudent">
+                        <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalAddStudent">
                             <i class="bi bi-plus-circle me-1"></i> Add Siswa
                         </button>
                         <a href="{{ route('student.export') }}" target="_blank" class="btn btn-primary me-2">
@@ -22,7 +22,7 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover align-middle">
+                            <table class="table table-bordered table-hover align-middle text-center">
                                 <thead class="table-light">
                                 <tr>
                                     <th scope="col">No</th>
@@ -41,7 +41,7 @@
                                         </td>
                                         <td>
                                             <img src="{{ asset('public/storage/photos/students/' . $item->photo) }}"
-                                                 alt="Foto siswa" width="50" height="50" class="rounded-circle"
+                                                 alt="Foto siswa" width="50" height="50"
                                                  onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
                                         </td>
                                         <td>{{ $item->nis }}</td>
@@ -74,8 +74,11 @@
                         </div>
 
                         {{-- Pagination --}}
-                        <div class="d-flex justify-content-end mt-3">
-                            {!! $students->links('pagination::bootstrap-5') !!}
+                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                            <p class="text-muted small mb-0">
+                                Menampilkan {{ $students->firstItem() }} - {{ $students->lastItem() }} dari total {{ $students->total() }} siswa
+                            </p>
+                            {{ $students->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 @extends('backend.layout.main')
+@section('title', 'Data Class')
 @section('content')
     <div class="container-fluid py-4">
         <div class="row">
@@ -23,7 +24,7 @@
                                         <th width="15%">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-center">
                                     @foreach ($classes as $key => $class)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>

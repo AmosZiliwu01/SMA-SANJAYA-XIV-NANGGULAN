@@ -1,6 +1,5 @@
 @extends('backend.layout.main')
-@php use Illuminate\Support\Str; @endphp
-
+@section('title', 'Data Pengumuman')
 @section('content')
 
     <div class="container-fluid py-4">
@@ -30,46 +29,37 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!-- Contoh data dummy -->
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td>Hari Pendidikan Nasional</td>
-                                    <td class="align-middle text-start">
-                                        <span title="Upacara khusus memperingati Hari Pendidikan Nasional akan dilaksanakan di lapangan sekolah. Semua siswa wajib hadir dengan seragam lengkap.">
-                                            {{ Str::limit('Upacara khusus memperingati Hari Pendidikan Nasional akan dilaksanakan di lapangan sekolah. Semua siswa wajib hadir dengan seragam lengkap.', 50, '...') }}
+                                @foreach ($announcements as $row)
+                                    <tr>
+                                        <td class="text-center">{{ ($announcements->currentPage() - 1) * $announcements->perPage() + $loop->iteration }}</td>
+                                        <td>{{ $row->title }}</td>
+                                        <td class="align-middle text-start">
+                                        <span title="{{ $row->content }}">
+                                            {{ Str::limit($row->content, 50, '...') }}
                                         </span>
-                                    </td>
-                                    <td class="text-center">2025-05-02</td>
-                                    <td class="text-center">Enjelina</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditPengumuman">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">2</td>
-                                    <td>Libur Semester</td>
-                                    <td class="align-middle text-start">
-                                        <span title="Upacara khusus memperingati Hari Pendidikan Nasional akan dilaksanakan di lapangan sekolah. Semua siswa wajib hadir dengan seragam lengkap.">
-                                            {{ Str::limit('Upacara khusus memperingati Hari Pendidikan Nasional akan dilaksanakan di lapangan sekolah. Semua siswa wajib hadir dengan seragam lengkap.', 50, '...') }}
-                                        </span>
-                                    </td>                                    <td class="text-center">2025-05-22</td>
-                                    <td class="text-center">Jonathan</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditPengumuman">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td class="text-center">{{ $row->created_at->format('Y-m-d') }}</td>
+                                        <td class="text-center">{{ $row->user->name ?? 'Unknown' }}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditPengumuman{{ $row->id }}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <form id="delete-announcement-{{$row->id}}" action="{{route('announcement.destroy', $row->id)}}" method="post" style="display:none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                            <a href="#" onclick="confirmDelete({{$row->id}})" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                            <p class="text-muted small mb-0">
+                                Menampilkan {{ $announcements->firstItem() }} - {{ $announcements->lastItem() }} dari total {{ $announcements->total() }} pengumuman
+                            </p>
+                            {{ $announcements->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -77,74 +67,89 @@
         </div>
     </div>
 
-
     <!-- Modal Tambah Pengumuman -->
     <div class="modal fade" id="modalAddPengumuman" tabindex="-1" aria-labelledby="modalAddPengumumanLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
                     <h5 class="modal-title" id="modalAddPengumumanLabel">Tambah Pengumuman</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="{{ route('announcement.store') }}" method="POST">
+                        @csrf
                         <div class="mb-3">
-                            <label for="judul" class="form-label">Judul</label>
-                            <input type="text" class="form-control" id="judul" placeholder="Masukkan judul">
+                            <label for="title" class="form-label">Judul</label>
+                            <input type="text" name="title" class="form-control" id="title" placeholder="Masukkan judul" required>
                         </div>
                         <div class="mb-3">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" id="deskripsi" rows="3" placeholder="Isi pengumuman..."></textarea>
+                            <label for="content" class="form-label">Deskripsi</label>
+                            <textarea name="content" class="form-control" id="content" rows="5" placeholder="Isi pengumuman..." required></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="tanggalPost" class="form-label">Tanggal Post</label>
-                            <input type="date" class="form-control" id="tanggalPost">
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success">Simpan</button>
                         </div>
-
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-success">Simpan</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Edit Pengumuman -->
-    <div class="modal fade" id="modalEditPengumuman" tabindex="-1" aria-labelledby="modalEditPengumumanLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="modalEditPengumumanLabel">Edit Pengumuman</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="editJudul" class="form-label">Judul</label>
-                            <input type="text" class="form-control" id="editJudul" value="Hari Pendidikan Nasional">
-                        </div>
-                        <div class="mb-3">
-                            <label for="editDeskripsi" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" id="editDeskripsi" rows="3">Upacara khusus memperingati Hari Pendidikan Nasional akan dilaksanakan di lapangan sekolah.</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editTanggalPost" class="form-label">Tanggal Post</label>
-                            <input type="date" class="form-control" id="editTanggalPost" value="2025-05-02">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-info">Update</button>
+    @foreach ($announcements as $row)
+        <div class="modal fade" id="modalEditPengumuman{{ $row->id }}" tabindex="-1" aria-labelledby="modalEditPengumumanLabel{{ $row->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="modalEditPengumumanLabel{{ $row->id }}">Edit Pengumuman</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('announcement.update', $row->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="mb-3">
+                                <label for="edit_title{{ $row->id }}" class="form-label">Judul</label>
+                                <input type="text" name="title" class="form-control" id="edit_title{{ $row->id }}" value="{{ $row->title }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_content{{ $row->id }}" class="form-label">Deskripsi</label>
+                                <textarea name="content" class="form-control" id="edit_content{{ $row->id }}" rows="5" required>{{ $row->content }}</textarea>
+                            </div>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-warning text-white">Update</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endforeach
+
+    <script>
+        function confirmDelete(id){
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your announcement has been deleted.",
+                        icon: "success"
+                    }).then(()=>{
+                        document.getElementById('delete-announcement-' + id).submit();
+                    });
+                }
+            });
+        }
+    </script>
 
 @endsection
-
-
-
-

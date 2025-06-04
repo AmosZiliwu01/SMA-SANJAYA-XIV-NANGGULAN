@@ -14,9 +14,17 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        $galleries = Gallery::with('user')->paginate(5);
+        $query = Gallery::with('user');
+
+        if (auth()->user()->role !== 'administrator') {
+            $query->where('user_id', auth()->id());
+        }
+
+        $galleries = $query->latest()->paginate(5);
+
         return view('backend.gallery.index', compact('galleries'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -46,6 +54,8 @@ class GalleryController extends Controller
                 'image' => $imagePath,
                 'user_id' => auth()->id(),
             ]);
+
+            $this->logActivity('Menambahkan gallery: ' . $request->title);
 
             return back()->with('success', 'Gallery berhasil ditambahkan.');
 
@@ -107,6 +117,8 @@ class GalleryController extends Controller
 
             $gallery->save();
 
+            $this->logActivity('Memperbarui gallery: ' . $gallery->title);
+
             return redirect()->route('gallery.index')->with('success', 'Gallery berhasil diupdate.');
 
         } catch (\Exception $e) {
@@ -128,6 +140,8 @@ class GalleryController extends Controller
             }
 
             $gallery->delete();
+
+            $this->logActivity('Menghapus gallery: ' . $gallery->title);
 
             return redirect()->route('gallery.index')->with('success', 'gallery berhasil dihapus.');
         } catch (\Exception $e) {

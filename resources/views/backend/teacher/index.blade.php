@@ -1,4 +1,5 @@
 @extends('backend.layout.main')
+@section('title', 'Data Guru')
 @section('content')
 
     <div class="container-fluid py-4">
@@ -12,7 +13,7 @@
                         <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalAddTeacher">
                             <i class="bi bi-plus-circle me-1"></i> Add Guru
                         </button>
-                        <a href="{{ route('teacher.export') }}" class="btn btn-primary me-2">
+                        <a href="{{ route('teachers.export') }}" class="btn btn-primary me-2">
                             <i class="bi bi-file-earmark-spreadsheet"></i> Export Excel
                         </a>
                         <a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#importExcelModal">
@@ -41,11 +42,10 @@
                                     <tr>
                                         <td>{{ ($teachers->currentPage() - 1) * $teachers->perPage() + $loop->iteration }}</td>
                                         <td>
-                                            <img src="{{ asset('images/teacher/' . $row->photo) }}"
-                                                 alt="Foto Guru"
+                                            <img src="{{ asset('storage/teachers/' . $row->photo) }}"
+                                                 alt="Foto guru"
                                                  width="50"
                                                  height="50"
-                                                 class="rounded-circle"
                                                  onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
                                         </td>
                                         <td>{{$row->nip}}</td>
@@ -58,7 +58,7 @@
                                             <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditTeacher{{ $row->id }}">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
-                                            <form id="delete-teacher-{{$row->id}}" action="{{route('teacher.destroy', $row->id)}}" method="post" style="display:none;">
+                                            <form id="delete-teacher-{{$row->id}}" action="{{route('teachers.destroy', $row->id)}}" method="post" style="display:none;">
                                                 @csrf
                                             </form>
                                             <a href="#" onclick="confirmDelete({{$row->id}})" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
@@ -89,7 +89,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('teacher.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('teachers.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -155,7 +155,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('teacher.update', $row->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('teachers.update', $row->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -198,6 +198,15 @@
                             <div class="col-md-6">
                                 <label for="edit_foto" class="form-label">Foto</label>
                                 <input type="file" name="photo" class="form-control" id="edit_foto">
+                                @if($row->photo)
+                                    <img src="{{ asset('storage/teachers/' . $row->photo) }}"
+                                         alt="Foto guru"
+                                         width="100"
+                                         height="auto"
+                                         onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
+                                @else
+                                    <p>Belum ada foto</p>
+                                @endif
                                 <input type="hidden" name="old_photo" value="{{ $row->photo }}">
                             </div>
                         </div>
@@ -221,7 +230,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('teacher.import') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('teachers.import') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="importFile" class="form-label">Pilih File Excel</label>
@@ -250,10 +259,10 @@
                 if (result.isConfirmed) {
                     Swal.fire({
                         title: "Deleted!",
-                        text: "Your file has been deleted.",
+                        text: "Your teacher has been deleted.",
                         icon: "success"
                     }).then(()=>{
-                        document.getElementById('delete-teacher-' + id).submit();
+                        document.getElementById('delete-teachers-' + id).submit();
                     });
                 }
             });

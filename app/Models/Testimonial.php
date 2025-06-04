@@ -11,5 +11,5 @@ class Testimonial extends Model
 
     protected $table = 'testimonials';
 
-    protected $fillable = ['name', 'position', 'message', 'photo'];
+    protected $fillable = ['name', 'graduation_year', 'message', 'photo'];
 }

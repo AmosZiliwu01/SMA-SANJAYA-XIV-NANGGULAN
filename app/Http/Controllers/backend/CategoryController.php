@@ -42,6 +42,8 @@ class CategoryController extends Controller
                 'name' => $request->name
             ]);
 
+            $this->logActivity('Menambahkan kategori baru: ' . $request->name);
+
             return redirect()->route('category.index')->with('success', 'Kategori berhasil ditambahkan.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan kategori: ' . $e->getMessage());
@@ -82,6 +84,8 @@ class CategoryController extends Controller
                 'name' => $request->name
             ]);
 
+            $this->logActivity('Memperbarui kategori: ' . $request->name);
+
             return redirect()->route('category.index')->with('success', 'Kategori berhasil diperbarui.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui kategori: ' . $e->getMessage());
@@ -97,6 +101,8 @@ class CategoryController extends Controller
         try {
             $category = Category::findOrFail($id);
             $category->delete();
+
+            $this->logActivity('Menghapus kategori: ' . $category->name);
 
             return redirect()->route('category.index')->with('success', 'Kategori berhasil dihapus.');
         } catch (\Exception $e) {

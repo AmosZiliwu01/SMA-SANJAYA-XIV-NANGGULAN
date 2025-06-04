@@ -36,12 +36,12 @@ Route::prefix('/')->group(function () {
 });
 
 /*Backend Routes*/
-Route::prefix('dashboard')->group(function () {
+Route::prefix('dashboard')->middleware('auth')->group(function () {
     //Dashboard Routes
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
     //User Routes
-    Route::prefix('user')->group(function () {
+    Route::prefix('user')->middleware('role:administrator')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
         Route::post('/store', [UserController::class, 'store'])->name('user.store');
         Route::put('/update/{id}', [UserController::class, 'update'])->name('user.update');
@@ -65,6 +65,9 @@ Route::prefix('dashboard')->group(function () {
     //Announcement
     Route::prefix('announcement')->group(function () {
         Route::get('/', [AnnouncementController::class, 'index'])->name('announcement.index');
+        Route::post('/store', [AnnouncementController::class, 'store'])->name('announcement.store');
+        Route::put('/update{announcement}', [AnnouncementController::class, 'update'])->name('announcement.update');
+        Route::delete('/destroy{announcement}', [AnnouncementController::class, 'destroy'])->name('announcement.destroy');
     });
 
     //Category Routes
@@ -76,7 +79,7 @@ Route::prefix('dashboard')->group(function () {
     });
 
     //Class Routes
-    Route::prefix('class')->group(function () {
+    Route::prefix('class')->middleware('role:administrator')->group(function () {
         Route::get('/', [ClassController::class, 'index'])->name('class.index');
         Route::post('/store', [ClassController::class, 'store'])->name('class.store');
         Route::get('/edit/{class}', [ClassController::class, 'edit'])->name('class.edit');
@@ -119,7 +122,7 @@ Route::prefix('dashboard')->group(function () {
     });
 
     //Student Routes
-    Route::prefix('student')->group(function () {
+    Route::prefix('student')->middleware('role:administrator')->group(function () {
         Route::get('/', [StudentController::class, 'index'])->name('student.index');
         Route::get('/create', [StudentController::class, 'create'])->name('student.create');
         Route::post('/store', [StudentController::class, 'store'])->name('student.store');
@@ -131,18 +134,21 @@ Route::prefix('dashboard')->group(function () {
     });
 
     //Teacher Routes
-    Route::prefix('teacher')->group(function () {
-        Route::get('/', [TeacherController::class, 'index'])->name('teacher.index');
-        Route::post('/store', [TeacherController::class, 'store'])->name('teacher.store');
-        Route::post('/update/{teacher}', [TeacherController::class, 'update'])->name('teacher.update');
-        Route::post('/destroy/{teacher}', [TeacherController::class, 'destroy'])->name('teacher.destroy');
-        Route::get('/export', [TeacherController::class, 'export'])->name('teacher.export');
-        Route::post('/import', [TeacherController::class, 'import'])->name('teacher.import');
+    Route::prefix('teachers')->middleware('role:administrator')->group(function () {
+        Route::get('/', [TeacherController::class, 'index'])->name('teachers.index');
+        Route::post('/store', [TeacherController::class, 'store'])->name('teachers.store');
+        Route::post('/update/{teachers}', [TeacherController::class, 'update'])->name('teachers.update');
+        Route::post('/destroy/{teachers}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
+        Route::get('/export', [TeacherController::class, 'export'])->name('teachers.export');
+        Route::post('/import', [TeacherController::class, 'import'])->name('teachers.import');
     });
 
     //Testimonial Routes
-    Route::prefix('testimonial')->group(function () {
+    Route::prefix('testimonial')->middleware('role:administrator')->group(function () {
         Route::get('/', [TestimonialController::class, 'index'])->name('testimonial.index');
+        Route::post('/store', [TestimonialController::class, 'store'])->name('testimonial.store');
+        Route::put('/update/{testimonial}', [TestimonialController::class, 'update'])->name('testimonial.update');
+        Route::delete('/destroy/{testimonial}', [TestimonialController::class, 'destroy'])->name('testimonial.destroy');
     });
 
     //Visitor Routes

@@ -26,6 +26,7 @@ class AgendaFactory extends Factory
             'time' => $this->faker->time(),
             'note' => $this->faker->paragraph(),
             'author' => $this->faker->name(),
+            'user_id' => \App\Models\User::inRandomOrder()->value('id') ?? \App\Models\User::factory()->create()->id,
         ];
     }
 }

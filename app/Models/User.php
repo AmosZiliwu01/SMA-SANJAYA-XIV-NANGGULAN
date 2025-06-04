@@ -27,7 +27,7 @@ class User extends Authenticatable
         'phone',
         'role',
         'status',
-        'photo'
+        'photo',
     ];
 
     /**
@@ -49,4 +49,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
+    }
+
 }

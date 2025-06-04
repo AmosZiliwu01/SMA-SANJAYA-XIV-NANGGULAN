@@ -1,4 +1,5 @@
 @extends('backend.layout.main')
+@section('title', 'List Post')
 @section('content')
 
     <div class="container-fluid py-4">
@@ -34,7 +35,7 @@
                                     <tr class="text-center">
                                         <td>{{ ($post->currentPage() - 1) * $post->perPage() + $loop->iteration }}</td>
                                         <td class="text-center">
-                                            <img src="{{ Str::startsWith($row->image, 'http') ? $row->image : asset('storage/' . $row->image) }}"  width="80" height="80">
+                                            <img src="{{ Str::startsWith($row->image, 'http') ? $row->image : asset('storage/' . $row->image) }}"  width="50" height="50" onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
                                         </td>
                                         <td class="text-start">{{ $row->title }}</td>
                                         <td>
