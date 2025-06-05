@@ -12,6 +12,7 @@ use App\Http\Controllers\backend\FileController;
 use App\Http\Controllers\backend\GalleryController;
 use App\Http\Controllers\backend\MessageController;
 use App\Http\Controllers\backend\PostController;
+use App\Http\Controllers\backend\ProfileController;
 use App\Http\Controllers\backend\StudentController;
 use App\Http\Controllers\backend\TeacherController;
 use App\Http\Controllers\backend\TestimonialController;
@@ -155,7 +156,15 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::prefix('visitor')->group(function () {
         Route::get('/', [VisitorController::class, 'index'])->name('visitor.index');
     });
+
+    //Profile Routes
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile.index');
+        Route::put('/update', [ProfileController::class, 'update'])->name('profile.update');
+    });
 });
+
+
 
 /* Auth Routes */
 Route::prefix('auth')->group(function () {
