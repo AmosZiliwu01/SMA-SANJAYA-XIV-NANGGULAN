@@ -95,6 +95,9 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     //File Routes
     Route::prefix('file')->group(function () {
         Route::get('/', [FileController::class, 'index'])->name('file.index');
+        Route::post('/', [FileController::class, 'store'])->name('file.store');
+        Route::put('/update/{id}', [FileController::class, 'update'])->name('file.update');
+        Route::delete('/destroy/{id}', [FileController::class, 'destroy'])->name('file.destroy');
     });
 
     //Gallery Routes

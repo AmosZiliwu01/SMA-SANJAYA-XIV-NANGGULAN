@@ -144,8 +144,8 @@
 
                 <!-- File -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('file.index') ? 'active' : '' }}"
-                        href="{{ route('file.index') }}">
+                    <a class="nav-link {{ request()->routeIs('file.*') ? 'active' : '' }}"
+                        href="{{route('file.index')}}">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-folder-17 text-dark text-sm opacity-10"></i>
