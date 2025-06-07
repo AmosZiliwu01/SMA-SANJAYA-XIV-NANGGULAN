@@ -14,7 +14,7 @@ class TeacherExport implements FromView, ShouldAutoSize, WithTitle
     {
         $teachers = Teacher::orderBy('created_at', 'desc')->get();
 
-        return view('backend.teacher.export_table', [
+        return view('backend.teachers.export_table', [
             'teachers' => $teachers
         ]);
     }
