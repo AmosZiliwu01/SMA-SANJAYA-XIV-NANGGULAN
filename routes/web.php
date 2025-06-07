@@ -172,8 +172,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::prefix('teachers')->middleware('role:administrator')->group(function () {
         Route::get('/', [TeacherController::class, 'index'])->name('teachers.index');
         Route::post('/store', [TeacherController::class, 'store'])->name('teachers.store');
-        Route::post('/update/{teachers}', [TeacherController::class, 'update'])->name('teachers.update');
-        Route::post('/destroy/{teachers}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
+        Route::post('/update/{teacher}', [TeacherController::class, 'update'])->name('teachers.update');
+        Route::post('/destroy/{teacher}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
         Route::get('/export', [TeacherController::class, 'export'])->name('teachers.export');
         Route::post('/import', [TeacherController::class, 'import'])->name('teachers.import');
     });

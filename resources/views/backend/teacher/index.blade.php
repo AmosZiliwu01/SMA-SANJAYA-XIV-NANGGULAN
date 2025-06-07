@@ -262,7 +262,7 @@
                         text: "Your teacher has been deleted.",
                         icon: "success"
                     }).then(()=>{
-                        document.getElementById('delete-teachers-' + id).submit();
+                        document.getElementById('delete-teacher-' + id).submit();
                     });
                 }
             });
