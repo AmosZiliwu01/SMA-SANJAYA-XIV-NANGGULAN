@@ -1,0 +1,213 @@
+@extends('frontend.layout.main')
+@section('content')
+
+    <!-- News Section -->
+    <section class="news-section py-5 mt-3">
+        <div class="container">
+            <div class="row">
+                <!-- Main Content - News Grid -->
+                <div class="col-lg-8">
+                    <div class="row">
+                        <!-- News Card 1 -->
+                        <a href="{{route('frontend.post.detail')}}" class="col-md-6 mb-4 text-decoration-none">
+                            <div class="news-card">
+                                <div class="news-img-container">
+                                    <img src="slider-1.jpg" alt="Breaking News" class="news-img">
+                                </div>
+                                <div class="news-info">
+                                    <h4 class="news-title">Lorem ipsum is simply dummy text of the printing and typesetting industry</h4>
+                                    <div class="news-divider"></div>
+                                    <p class="news-excerpt">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                    <div class="news-meta">
+                                        <span><i class="far fa-clock"></i> 10 Menit lalu</span>
+                                        <span><i class="far fa-eye"></i> Dibaca: 15k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- News Card 2 -->
+                        <div class="col-md-6 mb-4">
+                            <div class="news-card">
+                                <div class="news-img-container">
+                                    <img src="slider-2.jpg" alt="Breaking News" class="news-img">
+                                </div>
+                                <div class="news-info">
+                                    <h4 class="news-title">Lorem ipsum is simply dummy text of the printing and typesetting industry</h4>
+                                    <div class="news-divider"></div>
+                                    <p class="news-excerpt">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                    <div class="news-meta">
+                                        <span><i class="far fa-clock"></i> 10 Menit lalu</span>
+                                        <span><i class="far fa-eye"></i> Dibaca: 15k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- News Card 3 -->
+                        <div class="col-md-6 mb-4">
+                            <div class="news-card">
+                                <div class="news-img-container">
+                                    <img src="slider-3.jpg" alt="Breaking News" class="news-img">
+                                </div>
+                                <div class="news-info">
+                                    <h4 class="news-title">Lorem ipsum is simply dummy text of the printing and typesetting industry</h4>
+                                    <div class="news-divider"></div>
+                                    <p class="news-excerpt">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                    <div class="news-meta">
+                                        <span><i class="far fa-clock"></i> 10 Menit lalu</span>
+                                        <span><i class="far fa-eye"></i> Dibaca: 15k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- News Card 4 -->
+                        <div class="col-md-6 mb-4">
+                            <div class="news-card">
+                                <div class="news-img-container">
+                                    <img src="slider-1.jpg" alt="Breaking News" class="news-img">
+                                </div>
+                                <div class="news-info">
+                                    <h4 class="news-title">Lorem ipsum is simply dummy text of the printing and typesetting industry</h4>
+                                    <div class="news-divider"></div>
+                                    <p class="news-excerpt">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                    <div class="news-meta">
+                                        <span><i class="far fa-clock"></i> 10 Menit lalu</span>
+                                        <span><i class="far fa-eye"></i> Dibaca: 15k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- News Card 5 -->
+                        <div class="col-md-6 mb-4">
+                            <div class="news-card">
+                                <div class="news-img-container">
+                                    <img src="slider-2.jpg" alt="Breaking News" class="news-img">
+                                </div>
+                                <div class="news-info">
+                                    <h4 class="news-title">Lorem ipsum is simply dummy text of the printing and typesetting industry</h4>
+                                    <div class="news-divider"></div>
+                                    <p class="news-excerpt">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                    <div class="news-meta">
+                                        <span><i class="far fa-clock"></i> 10 Menit lalu</span>
+                                        <span><i class="far fa-eye"></i> Dibaca: 15k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- News Card 6 -->
+                        <div class="col-md-6 mb-4">
+                            <div class="news-card">
+                                <div class="news-img-container">
+                                    <img src="slider-3.jpg" alt="Breaking News" class="news-img">
+                                </div>
+                                <div class="news-info">
+                                    <h4 class="news-title">Lorem ipsum is simply dummy text of the printing and typesetting industry</h4>
+                                    <div class="news-divider"></div>
+                                    <p class="news-excerpt">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                    <div class="news-meta">
+                                        <span><i class="far fa-clock"></i> 10 Menit lalu</span>
+                                        <span><i class="far fa-eye"></i> Dibaca: 15k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <div class="sidebar-container">
+                        <!-- Search Box -->
+                        <div class="sidebar-box search-box">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Cari artikel...">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Kategori Berita -->
+                        <div class="sidebar-box">
+                            <h3 class="sidebar-title">Kategori Berita</h3>
+                            <!-- Item Kategori -->
+                            <div class="kategori-item">
+                                <span class="kategori-name">Politik</span>
+                                <span class="badge">45</span>
+                            </div>
+                            <div class="kategori-item">
+                                <span class="kategori-name">Pendidikan</span>
+                                <span class="badge">32</span>
+                            </div>
+                            <div class="kategori-item">
+                                <span class="kategori-name">Kesehatan</span>
+                                <span class="badge">28</span>
+                            </div>
+                            <div class="kategori-item">
+                                <span class="kategori-name">Olahraga</span>
+                                <span class="badge">50</span>
+                            </div>
+                            <div class="kategori-item">
+                                <span class="kategori-name">Teknologi</span>
+                                <span class="badge">37</span>
+                            </div>
+                            <div class="kategori-item">
+                                <span class="kategori-name">Seni & Budaya</span>
+                                <span class="badge">25</span>
+                            </div>
+                        </div>
+
+                        <!-- Berita Terpopular -->
+                        <div class="sidebar-box">
+                            <h3 class="sidebar-title">Berita Terpopuler</h3>
+
+                            <!-- Popular Item 1 -->
+                            <div class="popular-item">
+                                <div class="popular-image">
+                                    <img src="slider-1.jpg" alt="Popular News">
+                                </div>
+                                <div class="popular-content">
+                                    <div class="popular-title">Lorem ipsum is simply dummy text of the printing and typesetting industry</div>
+                                    <div class="popular-meta">
+                                        <i class="far fa-clock"></i> 2 jam lalu
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Popular Item 2 -->
+                            <div class="popular-item">
+                                <div class="popular-image">
+                                    <img src="slider-2.jpg" alt="Popular News">
+                                </div>
+                                <div class="popular-content">
+                                    <div class="popular-title">Lorem ipsum is simply dummy text of the printing and typesetting industry</div>
+                                    <div class="popular-meta">
+                                        <i class="far fa-clock"></i> 4 jam lalu
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Popular Item 3 -->
+                            <div class="popular-item">
+                                <div class="popular-image">
+                                    <img src="slider-3.jpg" alt="Popular News">
+                                </div>
+                                <div class="popular-content">
+                                    <div class="popular-title">Lorem ipsum is simply dummy text of the printing and typesetting industry</div>
+                                    <div class="popular-meta">
+                                        <i class="far fa-clock"></i> 8 jam lalu
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+@endsection

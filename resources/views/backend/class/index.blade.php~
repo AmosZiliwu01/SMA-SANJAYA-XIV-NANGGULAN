@@ -20,7 +20,7 @@
                                 <thead class="table-light text-center">
                                     <tr>
                                         <th width="5%">No</th>
-                                        <th class="text-start">Name</th>
+                                        <th>Name</th>
                                         <th width="15%">Aksi</th>
                                     </tr>
                                 </thead>

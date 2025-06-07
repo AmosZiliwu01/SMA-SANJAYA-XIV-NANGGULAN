@@ -9,8 +9,8 @@
                         <h5 class="mb-0">Data Siswa</h5>
                     </div>
                     <div class="mb-0 m-4 text-lg-start">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddStudent">
-                            <i class="bi bi-plus-circle me-2"></i> Add Siswa
+                        <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalAddStudent">
+                            <i class="bi bi-plus-circle me-1"></i> Add Siswa
                         </button>
                         <a href="{{ route('student.export') }}" target="_blank" class="btn btn-primary me-2">
                             <i class="bi bi-file-earmark-spreadsheet"></i> Export Excel

@@ -1,0 +1,298 @@
+@extends('frontend.layout.main')
+@section('content')
+
+<!-- Slider Section (Carousel) -->
+<section>
+    <div class="slider_img">
+        <div id="carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-bs-target="#carousel" data-bs-slide-to="0" class="active"></li>
+                <li data-bs-target="#carousel" data-bs-slide-to="1"></li>
+                <li data-bs-target="#carousel" data-bs-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active">
+                    <img class="d-block" src="{{asset('assets/img/slider-1.jpeg')}}" alt="First slide">
+                    <div class="carousel-caption d-md-block">
+                        <div class="slider_title">
+                            <h1>Selamat Datang di SMA Sanjaya Nanggulan</h1>
+                            <h4>Membentuk Generasi Berintegritas, Berprestasi, dan Berakhlak Mulia</h4>
+                            <div class="slider-btn">
+                                <a href="#" class="btn btn-default">Pelajari Lebih Lanjut</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block" src="{{asset('assets/img/slider-2.jpg')}}" alt="Second slide">
+                    <div class="carousel-caption d-md-block">
+                        <div class="slider_title">
+                            <h1>Guru Berkualitas Tinggi</h1>
+                            <h4>Guru merupakan faktor penting dalam proses belajar-mengajar.<br> Kami memiliki pengajar terbaik untuk pendidikan optimal.</h4>
+                            <div class="slider-btn">
+                                <a href="#" class="btn btn-default">Lihat Profil Guru</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block" src="{{asset('assets/img/slider-3.jpg')}}" alt="Third slide">
+                    <div class="carousel-caption d-md-block">
+                        <div class="slider_title">
+                            <h1>Proses Belajar Interaktif</h1>
+                            <h4>Kami menciptakan lingkungan belajar yang menyenangkan dan interaktif<br> untuk mengembangkan potensi siswa secara optimal.</h4>
+                            <div class="slider-btn">
+                                <a href="#" class="btn btn-default">Lihat Galeri</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carousel" role="button" data-bs-slide="prev">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carousel" role="button" data-bs-slide="next">
+                <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Welcome Section -->
+<section class="welcome-section">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="welcome-header">
+                    <h2>WELCOME TO <span class="text-primary">SMA SANJAYA NAGGULAN</span></h2>
+                    <div class="welcome-divider">
+                        <div class="line"></div>
+                        <div class="icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="line"></div>
+                    </div>
+                </div>
+                <p class="welcome-text">
+                    Kami Menyambut baik terbitnya Website SMA Sanjaya, dengan harapan dipublikasinya
+                    website ini sekolah berharap : Peningkatan layanan pendidikan kepada siswa, orangtua, dan
+                    masyarakat pada umumnya semakin meningkat.
+                </p>
+            </div>
+            <div class="col-lg-5">
+                <div class="welcome-image-container">
+                    <img src="{{asset('assets/img/kepala-sekolah.jpg')}}" alt="Kepala Sekolah" class="welcome-image img-fluid rounded-circle">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- News Section -->
+<section class="news-section bg-light py-5">
+    <div class="container">
+        <div class="section-header mb-4">
+            <h2 class="section-title-news">Berita Terbaru</h2>
+            <a href="{{route('fe-post.index')}}" class="view-all">Baca Semua Berita</a>
+        </div>
+
+        <div class="row">
+            <!-- News Item 1 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="#" class="text-decoration-none">
+                    <div class="news-item">
+                        <div class="news-image">
+                            <img src="{{asset('assets/img/slider-2.jpg')}}" alt="berita" class="img-fluid">
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date">27-04-2025</div>
+                            <div class="news-category">INFORMASI</div>
+                            <h3 class="news-title">
+                                SMA Nanggulan Mengadakan Workshop Karir yang Inspiratif
+                            </h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- News Item 2 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="#" class="text-decoration-none">
+                    <div class="news-item">
+                        <div class="news-image">
+                            <img src="{{asset('assets/img/slider-1.jpeg')}}" alt="berita" class="img-fluid">
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date">18-04-2025</div>
+                            <div class="news-category">INFORMASI</div>
+                            <h3 class="news-title">
+                                SMA Nanggulan Mengadakan Diskusi Lintas Agama yang Menarik
+                            </h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- News Item 3 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="#" class="text-decoration-none">
+                    <div class="news-item">
+                        <div class="news-image">
+                            <img src="{{asset('assets/img/slider-3.jpg')}}" alt="berita" class="img-fluid">
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date">19-03-2025</div>
+                            <div class="news-category">INFORMASI</div>
+                            <h3 class="news-title">
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolore nisi perspiciatis voluptate rem porro quam quibusdam saepe recusandae nemo? Quo neque praesentium voluptate, dolores asperiores adipisci cupiditate sit sed minus.
+                            </h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Additional Features Section -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Image Gallery Preview -->
+            <div class="col-lg-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <h3><i class="fas fa-images me-2"></i> Galeri Kegiatan</h3>
+                    </div>
+                    <div class="gallery-preview">
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <img src="{{asset('assets/img/slider-1.jpeg')}}" alt="Kegiatan Sekolah" class="img-fluid rounded">
+                            </div>
+                            <div class="col-4">
+                                <img src="tes.jpg" alt="Kegiatan Sekolah" class="img-fluid rounded">
+                            </div>
+                            <div class="col-4">
+                                <img src="kepala-sekolah.jpg" alt="Kegiatan Sekolah" class="img-fluid rounded">
+                            </div>
+                            <div class="col-4">
+                                <img src="admin-wa.png" alt="Kegiatan Sekolah" class="img-fluid rounded">
+                            </div>
+                            <div class="col-4">
+                                <img src="logo-sekolah.png" alt="Kegiatan Sekolah" class="img-fluid rounded">
+                            </div>
+                            <div class="col-4">
+                                <img src="gallery-6.jpg" alt="Kegiatan Sekolah" class="img-fluid rounded">
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="gallery.html" class="btn btn-outline-primary btn-sm">Lihat Semua Galeri</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agenda Sekolah -->
+            <div class="col-lg-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <h3><i class="fas fa-calendar-alt me-2"></i> Agenda Sekolah</h3>
+                    </div>
+                    <div class="agenda-list">
+                        <div class="agenda-item">
+                            <div class="agenda-date">
+                                <span class="day">25</span>
+                                <span class="month">Mei</span>
+                            </div>
+                            <div class="agenda-content">
+                                <h5>Rapat Komite Sekolah</h5>
+                                <p class="mb-0">08:00 WIB - Aula Sekolah</p>
+                            </div>
+                        </div>
+                        <div class="agenda-item">
+                            <div class="agenda-date">
+                                <span class="day">30</span>
+                                <span class="month">Mei</span>
+                            </div>
+                            <div class="agenda-content">
+                                <h5>Perlombaan Hari Pendidikan</h5>
+                                <p class="mb-0">09:00 WIB - Lapangan Sekolah</p>
+                            </div>
+                        </div>
+                        <div class="agenda-item">
+                            <div class="agenda-date">
+                                <span class="day">05</span>
+                                <span class="month">Jun</span>
+                            </div>
+                            <div class="agenda-content">
+                                <h5>Ujian Akhir Semester</h5>
+                                <p class="mb-0">07:30 WIB - Seluruh Ruang Kelas</p>
+                            </div>
+                        </div>
+                        <div class="agenda-item">
+                            <div class="agenda-date">
+                                <span class="day">15</span>
+                                <span class="month">Jun</span>
+                            </div>
+                            <div class="agenda-content">
+                                <h5>Pembagian Rapor</h5>
+                                <p class="mb-0">10:00 WIB - Ruang Kelas Masing-masing</p>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="informasi.html#agenda" class="btn btn-outline-primary btn-sm">Lihat Semua Agenda</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pengumuman -->
+            <div class="col-lg-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <h3><i class="fas fa-bullhorn me-2"></i> Pengumuman</h3>
+                    </div>
+                    <div class="announcement-list">
+                        <div class="announcement-item">
+                            <div class="announcement-date">17 Mei 2025</div>
+                            <h5><a href="#">Pendaftaran Peserta Didik Baru TA 2025/2026</a></h5>
+                            <p>Pendaftaran dibuka mulai tanggal 1 Juni 2025. Formulir tersedia di kantor administrasi.</p>
+                        </div>
+                        <div class="announcement-item">
+                            <div class="announcement-date">14 Mei 2025</div>
+                            <h5><a href="#">Perubahan Jadwal Ujian Akhir Semester</a></h5>
+                            <p>Ujian akan dilaksanakan mulai tanggal 5 Juni 2025. Jadwal lengkap dapat diunduh dari laman sekolah.</p>
+                        </div>
+                        <div class="announcement-item">
+                            <div class="announcement-date">10 Mei 2025</div>
+                            <h5><a href="#">Pelaksanaan Vaksinasi COVID-19 Booster</a></h5>
+                            <p>Kegiatan vaksinasi akan dilaksanakan pada tanggal 28 Mei 2025 di gedung serbaguna.</p>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="informasi.html#pengumuman" class="btn btn-outline-primary btn-sm">Lihat Semua Pengumuman</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="map-section bg-light py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d256.54141042881093!2d110.21095289137934!3d-7.757428910240969!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7af118b22cf9cf%3A0xa27f2a76af87475!2sSMA%20Sanjaya%20XIV%20Nanggulan!5e1!3m2!1sen!2sid!4v1747698384225!5m2!1sen!2sid"
+                        width="100%"
+                        height="400"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>
+@endsection

@@ -58,7 +58,7 @@ Route::prefix('/')->group(function () {
 
     // Post Page
     Route::get('/post', [FePostController::class, 'index'])->name('fe-post.index');
-    Route::get('/post/detail', [FePostController::class, 'show'])->name('fe-post.detail');
+    Route::get('/post', [FePostController::class, 'show'])->name('fe-post.detail');
 
     //Teacher Page
     Route::get('/teacher', [FeTeacherController::class, 'index'])->name('fe-teacher.index');
