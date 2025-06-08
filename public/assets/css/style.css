@@ -2170,6 +2170,11 @@ mark {
     overflow: hidden;
 }
 
+.content-informasi {
+    justify-content: center;
+    padding: 10px 20px;
+}
+
 .agenda-informasi {
     border-color: #22c55e;
     box-shadow: -10px -5px 2px 2px rgba(34, 197, 94, 0.5);
