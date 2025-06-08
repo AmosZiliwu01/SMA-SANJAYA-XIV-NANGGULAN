@@ -97,17 +97,16 @@
 
                 <!-- School Management (NEW) -->
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center {{ request()->routeIs('school-management.index') ? 'active' : '' }}"
-                       data-bs-toggle="collapse" href="{{route('school-management.index')}}" role="button"
-                       aria-expanded="{{ request()->routeIs('school-management.*') ? 'true' : 'false' }}"
-                       aria-controls="submenuSchoolManagement">
+                    <a class="nav-link {{ request()->routeIs('school-management.index') ? 'active' : '' }}"
+                       href="{{ route('school-management.index') }}">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-building text-dark text-sm opacity-10"></i>
                         </div>
-                        <span class="nav-link-text">Manajemen Sekolah</span>
+                        <span class="nav-link-text ms-1">Manajemen Sekolah</span>
                     </a>
                 </li>
+
 
                 <!-- Berita (Collapsible) -->
                 <li class="nav-item">

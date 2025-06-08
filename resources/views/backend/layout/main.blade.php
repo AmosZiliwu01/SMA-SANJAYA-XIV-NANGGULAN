@@ -42,34 +42,6 @@
         class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4"
         id="sidenav-main"
         style="height: calc(100vh - 1.5rem); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #cbd5e0 transparent;">
-
-        <!-- Custom scrollbar styles -->
-        <style>
-            #sidenav-main::-webkit-scrollbar {
-                width: 6px;
-            }
-            #sidenav-main::-webkit-scrollbar-track {
-                background: transparent;
-            }
-            #sidenav-main::-webkit-scrollbar-thumb {
-                background-color: #cbd5e0;
-                border-radius: 3px;
-            }
-            #sidenav-main::-webkit-scrollbar-thumb:hover {
-                background-color: #9ca3af;
-            }
-
-            /* Smooth transitions for collapsible menus */
-            .collapse {
-                transition: all 0.3s ease;
-            }
-
-            /* Better spacing for nested menus */
-            .nav-item .nav-item {
-                margin-left: 0.5rem;
-            }
-        </style>
-
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
                aria-hidden="true" id="iconSidenav"></i>
