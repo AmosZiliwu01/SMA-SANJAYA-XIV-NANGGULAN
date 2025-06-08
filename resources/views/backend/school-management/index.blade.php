@@ -12,14 +12,14 @@
                     <div class="card-body p-4">
                         <!-- Navigation Tabs -->
                         <ul class="nav nav-pills nav-fill mb-4" id="schoolTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item" role="presentation" id="principalsTab">
                                 <button class="nav-link {{ session('active_tab') == 'principals' || !session('active_tab') ? 'active' : '' }}"
                                         id="principals-tab" data-bs-toggle="pill" data-bs-target="#principals"
                                         type="button" role="tab" aria-controls="principals" aria-selected="true">
                                     <i class="bi bi-person-badge me-2"></i>Kepala Sekolah
                                 </button>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item" role="presentation" id="aboutTab">
                                 <button class="nav-link {{ session('active_tab') == 'about' ? 'active' : '' }}"
                                         id="about-tab" data-bs-toggle="pill" data-bs-target="#about"
                                         type="button" role="tab" aria-controls="about" aria-selected="false">

@@ -97,36 +97,16 @@
 
                 <!-- School Management (NEW) -->
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center {{ request()->routeIs('school-management.*') ? 'active' : '' }}"
-                       data-bs-toggle="collapse" href="#submenuSchoolManagement" role="button"
-                       aria-expanded="{{ request()->routeIs('school-management.*') ? 'true' : 'false' }}"
-                       aria-controls="submenuSchoolManagement">
+                    <a class="nav-link {{ request()->routeIs('school-management.index') ? 'active' : '' }}"
+                       href="{{ route('school-management.index') }}">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-building text-dark text-sm opacity-10"></i>
                         </div>
-                        <span class="nav-link-text">Manajemen Sekolah</span>
+                        <span class="nav-link-text ms-1">Manajemen Sekolah</span>
                     </a>
-                    <div class="collapse ps-3 {{ request()->routeIs('school-management.*') ? 'show' : '' }}"
-                         id="submenuSchoolManagement">
-                        <ul class="nav flex-column mt-1">
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center {{ request()->routeIs('school-management.index') && (request()->get('tab') === 'principals' || !request()->has('tab')) ? 'active' : '' }}"
-                                   href="{{ route('school-management.index') }}?tab=principals">
-                                    <i class="ni ni-single-02 text-sm me-2"></i>
-                                    <span>Kepala Sekolah</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center {{ request()->routeIs('school-management.index') && request()->get('tab') === 'about' ? 'active' : '' }}"
-                                   href="{{ route('school-management.index') }}?tab=about">
-                                    <i class="ni ni-paper-diploma text-sm me-2"></i>
-                                    <span>Tentang Sekolah</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
+
 
                 <!-- Berita (Collapsible) -->
                 <li class="nav-item">
