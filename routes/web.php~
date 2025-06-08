@@ -13,11 +13,13 @@ use App\Http\Controllers\backend\GalleryController;
 use App\Http\Controllers\backend\MessageController;
 use App\Http\Controllers\backend\PostController;
 use App\Http\Controllers\backend\ProfileController;
+use App\Http\Controllers\backend\SchoolManagementController;
 use App\Http\Controllers\backend\StudentController;
 use App\Http\Controllers\backend\TeacherController;
 use App\Http\Controllers\backend\TestimonialController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\VisitorController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\frontend\FeAboutController;
 use App\Http\Controllers\frontend\FeContactController;
 use App\Http\Controllers\frontend\FeDocumentController;
@@ -75,6 +77,29 @@ Route::prefix('/')->group(function () {
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     //Dashboard Routes
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/search', [Controller::class, 'search'])->name('search');
+
+    //School Management Routes
+    Route::prefix('school-management')->name('school-management.')->group(function () {
+        // Main index page
+        Route::get('/', [SchoolManagementController::class, 'index'])->name('index');
+
+        // Principal Routes
+        Route::prefix('principal')->name('principal.')->group(function () {
+            Route::post('/', [SchoolManagementController::class, 'storePrincipal'])->name('store');
+            Route::put('/{principal}', [SchoolManagementController::class, 'updatePrincipal'])->name('update');
+            Route::delete('/{principal}', [SchoolManagementController::class, 'deletePrincipal'])->name('delete');
+            Route::patch('/{principal}/toggle-active', [SchoolManagementController::class, 'togglePrincipalActive'])->name('toggle-active');
+        });
+
+        // About School Routes
+        Route::prefix('about-school')->name('about-school.')->group(function () {
+            Route::post('/', [SchoolManagementController::class, 'storeAboutSchool'])->name('store');
+            Route::put('/{aboutSchool}', [SchoolManagementController::class, 'updateAboutSchool'])->name('update');
+            Route::delete('/{aboutSchool}', [SchoolManagementController::class, 'deleteAboutSchool'])->name('delete');
+            Route::patch('/{aboutSchool}/toggle-active', [SchoolManagementController::class, 'toggleAboutSchoolActive'])->name('toggle-active');
+        });
+    });
 
     //User Routes
     Route::prefix('user')->middleware('role:administrator')->group(function () {
