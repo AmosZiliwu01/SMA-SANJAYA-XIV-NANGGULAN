@@ -13,7 +13,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Pengunjung Hari Ini</p>
                                     <h5 class="font-weight-bolder">
-                                        {{ $visitorCountToday }}
+                                        {{ $visitorCountToday ?? 0 }}
                                     </h5>
                                     <p class="mb-0 text-sm">
                                         <span class="text-success font-weight-bolder">{{ now()->format('d M Y') }}</span>
@@ -38,7 +38,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Pengunjung</p>
                                     <h5 class="font-weight-bolder">
-                                        {{ number_format($totalUniqueVisitors) }}
+                                        {{ number_format($totalUniqueVisitors ?? 0) }}
                                     </h5>
                                     <p class="mb-0 text-sm">
                                         <span class="text-info font-weight-bolder">Visitor ID Unik</span>
@@ -63,7 +63,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Artikel</p>
                                     <h5 class="font-weight-bolder">
-                                        {{ number_format($totalPosts) }}
+                                        {{ number_format($totalPosts ?? 0) }}
                                     </h5>
                                     <p class="mb-0 text-sm">
                                         <span class="text-success font-weight-bolder">Semua Artikel</span>
@@ -88,7 +88,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Galeri</p>
                                     <h5 class="font-weight-bolder">
-                                        {{ number_format($totalGalleries) }}
+                                        {{ number_format($totalGalleries ?? 0) }}
                                     </h5>
                                     <p class="mb-0 text-sm">
                                         <span class="text-warning font-weight-bolder">Foto Galeri</span>
@@ -117,7 +117,7 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Pengguna</p>
-                                        <h5 class="font-weight-bolder">{{ $adminData['totalUsers'] ?? 0 }}</h5>
+                                        <h5 class="font-weight-bolder">{{ isset($adminData['totalUsers']) ? number_format($adminData['totalUsers']) : 0 }}</h5>
                                         <p class="mb-0 text-sm">
                                             <span class="text-primary font-weight-bolder">Registered Users</span>
                                         </p>
@@ -140,7 +140,7 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Guru</p>
-                                        <h5 class="font-weight-bolder">{{ $adminData['totalTeachers'] ?? 0 }}</h5>
+                                        <h5 class="font-weight-bolder">{{ isset($adminData['totalTeachers']) ? number_format($adminData['totalTeachers']) : 0 }}</h5>
                                         <p class="mb-0 text-sm">
                                             <span class="text-info font-weight-bolder">Tenaga Pengajar</span>
                                         </p>
@@ -163,9 +163,9 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Siswa</p>
-                                        <h5 class="font-weight-bolder">{{ $adminData['totalStudents'] ?? 0 }}</h5>
+                                        <h5 class="font-weight-bolder">{{ isset($adminData['totalStudents']) ? number_format($adminData['totalStudents']) : 0 }}</h5>
                                         <p class="mb-0 text-sm">
-                                            <span class="text-success font-weight-bolder">{{ $adminData['totalClasses'] ?? 0 }} Kelas</span>
+                                            <span class="text-success font-weight-bolder">{{ isset($adminData['totalClasses']) ? number_format($adminData['totalClasses']) : 0 }} Kelas</span>
                                         </p>
                                     </div>
                                 </div>
@@ -186,7 +186,7 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">Pesan Masuk</p>
-                                        <h5 class="font-weight-bolder">{{ $adminData['unreadMessages'] ?? 0 }}</h5>
+                                        <h5 class="font-weight-bolder">{{ isset($adminData['unreadMessages']) ? number_format($adminData['unreadMessages']) : 0 }}</h5>
                                         <p class="mb-0 text-sm">
                                             <span class="text-danger font-weight-bolder">Belum Dibaca</span>
                                         </p>
@@ -240,52 +240,61 @@
                         <div class="card-body p-3">
                             <!-- Kategori Populer Content -->
                             <div id="categories-content">
-                                @if(isset($adminData['topCategories']) && $adminData['topCategories']->count() > 0)
-                                    @foreach($adminData['topCategories'] as $category)
+                                @if(isset($adminData['topCategories']) && !empty($adminData['topCategories']) && (is_countable($adminData['topCategories']) ? count($adminData['topCategories']) > 0 : $adminData['topCategories']->count() > 0))
+                                    @php
+                                        $categories = is_array($adminData['topCategories']) ? collect($adminData['topCategories']) : $adminData['topCategories'];
+                                        $maxPostsCount = max($categories->max('posts_count') ?? 1, 1);
+                                    @endphp
+                                    @foreach($categories as $category)
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <div>
-                                                <h6 class="mb-0 text-sm">{{ $category->name }}</h6>
-                                                <span class="text-xs text-secondary">{{ $category->posts_count }} artikel</span>
+                                                <h6 class="mb-0 text-sm">{{ $category->name ?? 'Kategori Tidak Diketahui' }}</h6>
+                                                <span class="text-xs text-secondary">{{ ($category->posts_count ?? 0) }} artikel</span>
                                             </div>
                                             <div class="progress" style="width: 60px; height: 6px;">
                                                 <div class="progress-bar bg-gradient-primary"
-                                                     style="width: {{ ($category->posts_count / $adminData['topCategories']->max('posts_count')) * 100 }}%"></div>
+                                                     style="width: {{ $maxPostsCount > 0 ? (($category->posts_count ?? 0) / $maxPostsCount) * 100 : 0 }}%"></div>
                                             </div>
                                         </div>
                                     @endforeach
                                 @else
-                                    <p class="text-muted text-center">Belum ada data kategori</p>
+                                    <div class="text-center py-4">
+                                        <i class="ni ni-folder-17 text-muted" style="font-size: 2rem;"></i>
+                                        <p class="text-muted text-center mt-2 mb-0">Belum ada data kategori</p>
+                                        <small class="text-xs text-muted">Data akan muncul setelah ada artikel dengan kategori</small>
+                                    </div>
                                 @endif
                             </div>
 
                             <!-- Postingan Populer Content -->
                             <div id="posts-content" style="display: none;">
-                                @if(isset($adminData['topPosts']) && $adminData['topPosts']->count() > 0)
-                                    @foreach($adminData['topPosts'] as $post)
+                                @php
+                                    $topPosts = null;
+                                    if (isset($adminData['topPosts']) && !empty($adminData['topPosts'])) {
+                                        $topPosts = is_array($adminData['topPosts']) ? collect($adminData['topPosts']) : $adminData['topPosts'];
+                                    } elseif (isset($authorData['topPosts']) && !empty($authorData['topPosts'])) {
+                                        $topPosts = is_array($authorData['topPosts']) ? collect($authorData['topPosts']) : $authorData['topPosts'];
+                                    }
+                                @endphp
+
+                                @if($topPosts && (is_countable($topPosts) ? count($topPosts) > 0 : $topPosts->count() > 0))
+                                    @foreach($topPosts as $post)
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <div class="flex-grow-1">
-                                                <h6 class="mb-0 text-sm">{{ Str::limit($post->title, 40) }}</h6>
-                                                <span class="text-xs text-secondary">{{ number_format($post->views) }} views</span>
+                                                <h6 class="mb-0 text-sm">{{ isset($post->title) ? Str::limit($post->title, 40) : 'Judul Tidak Tersedia' }}</h6>
+                                                <span class="text-xs text-secondary">{{ number_format($post->views ?? 0) }} views</span>
                                             </div>
                                             <div class="text-end">
-                                                <span class="badge badge-sm bg-gradient-success">{{ $post->views }}</span>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @elseif(isset($authorData['topPosts']) && $authorData['topPosts']->count() > 0)
-                                    @foreach($authorData['topPosts'] as $post)
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div class="flex-grow-1">
-                                                <h6 class="mb-0 text-sm">{{ Str::limit($post->title, 40) }}</h6>
-                                                <span class="text-xs text-secondary">{{ number_format($post->views) }} views</span>
-                                            </div>
-                                            <div class="text-end">
-                                                <span class="badge badge-sm bg-gradient-success">{{ $post->views }}</span>
+                                                <span class="badge badge-sm bg-gradient-success">{{ number_format($post->views ?? 0) }}</span>
                                             </div>
                                         </div>
                                     @endforeach
                                 @else
-                                    <p class="text-muted text-center">Belum ada data postingan</p>
+                                    <div class="text-center py-4">
+                                        <i class="ni ni-paper-diploma text-muted" style="font-size: 2rem;"></i>
+                                        <p class="text-muted text-center mt-2 mb-0">Belum ada data postingan</p>
+                                        <small class="text-xs text-muted">Data akan muncul setelah ada artikel yang dilihat</small>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -301,13 +310,22 @@
                             <h6>Pesan Terbaru</h6>
                         </div>
                         <div class="card-body">
-                            @if(isset($adminData['recentMessages']) && $adminData['recentMessages']->count() > 0)
-                                @foreach($adminData['recentMessages'] as $message)
+                            @if(isset($adminData['recentMessages']) && !empty($adminData['recentMessages']) && (is_countable($adminData['recentMessages']) ? count($adminData['recentMessages']) > 0 : $adminData['recentMessages']->count() > 0))
+                                @php
+                                    $messages = is_array($adminData['recentMessages']) ? collect($adminData['recentMessages']) : $adminData['recentMessages'];
+                                @endphp
+                                @foreach($messages as $message)
                                     <div class="d-flex align-items-center mb-3 p-2 border-radius-lg border">
                                         <div class="flex-grow-1">
-                                            <h6 class="mb-1">{{ $message->name }}</h6>
-                                            <p class="text-sm mb-0">{{ Str::limit($message->message, 100) }}</p>
-                                            <small class="text-muted">{{ $message->created_at->diffForHumans() }}</small>
+                                            <h6 class="mb-1">{{ $message->name ?? 'Pengirim Tidak Diketahui' }}</h6>
+                                            <p class="text-sm mb-0">{{ isset($message->message) ? Str::limit($message->message, 100) : 'Pesan tidak tersedia' }}</p>
+                                            <small class="text-muted">
+                                                @if(isset($message->created_at))
+                                                    {{ $message->created_at->diffForHumans() }}
+                                                @else
+                                                    Waktu tidak tersedia
+                                                @endif
+                                            </small>
                                         </div>
                                         <div>
                                             <span class="badge bg-gradient-warning">Baru</span>
@@ -315,7 +333,11 @@
                                     </div>
                                 @endforeach
                             @else
-                                <p class="text-muted text-center">Tidak ada pesan baru</p>
+                                <div class="text-center py-4">
+                                    <i class="ni ni-email-83 text-muted" style="font-size: 3rem;"></i>
+                                    <p class="text-muted text-center mt-3 mb-0">Tidak ada pesan baru</p>
+                                    <small class="text-xs text-muted">Pesan akan muncul di sini ketika ada yang menghubungi</small>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -334,7 +356,7 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">Artikel Saya</p>
-                                        <h5 class="font-weight-bolder">{{ $authorData['myPosts'] ?? 0 }}</h5>
+                                        <h5 class="font-weight-bolder">{{ isset($authorData['myPosts']) ? number_format($authorData['myPosts']) : 0 }}</h5>
                                         <p class="mb-0 text-sm">
                                             <span class="text-primary font-weight-bolder">Total Artikel</span>
                                         </p>
@@ -380,7 +402,7 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">Galeri Saya</p>
-                                        <h5 class="font-weight-bolder">{{ $authorData['myGalleries'] ?? 0 }}</h5>
+                                        <h5 class="font-weight-bolder">{{ isset($authorData['myGalleries']) ? number_format($authorData['myGalleries']) : 0 }}</h5>
                                         <p class="mb-0 text-sm">
                                             <span class="text-info font-weight-bolder">Total Foto</span>
                                         </p>
@@ -403,7 +425,7 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">Agenda Saya</p>
-                                        <h5 class="font-weight-bolder">{{ $authorData['myAgendas'] ?? 0 }}</h5>
+                                        <h5 class="font-weight-bolder">{{ isset($authorData['myAgendas']) ? number_format($authorData['myAgendas']) : 0 }}</h5>
                                         <p class="mb-0 text-sm">
                                             <span class="text-warning font-weight-bolder">Total Agenda</span>
                                         </p>
@@ -444,20 +466,27 @@
                             <h6 class="mb-3">Artikel Terpopuler</h6>
                         </div>
                         <div class="card-body p-3">
-                            @if(isset($authorData['topPosts']) && $authorData['topPosts']->count() > 0)
-                                @foreach($authorData['topPosts'] as $post)
+                            @if(isset($authorData['topPosts']) && !empty($authorData['topPosts']) && (is_countable($authorData['topPosts']) ? count($authorData['topPosts']) > 0 : $authorData['topPosts']->count() > 0))
+                                @php
+                                    $authorTopPosts = is_array($authorData['topPosts']) ? collect($authorData['topPosts']) : $authorData['topPosts'];
+                                @endphp
+                                @foreach($authorTopPosts as $post)
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div>
-                                            <h6 class="mb-0 text-sm">{{ Str::limit($post->title, 30) }}</h6>
-                                            <span class="text-xs text-secondary">{{ $post->views }} views</span>
+                                            <h6 class="mb-0 text-sm">{{ isset($post->title) ? Str::limit($post->title, 30) : 'Judul Tidak Tersedia' }}</h6>
+                                            <span class="text-xs text-secondary">{{ number_format($post->views ?? 0) }} views</span>
                                         </div>
                                         <div class="text-end">
-                                            <span class="badge badge-sm bg-gradient-success">{{ $post->views }}</span>
+                                            <span class="badge badge-sm bg-gradient-success">{{ number_format($post->views ?? 0) }}</span>
                                         </div>
                                     </div>
                                 @endforeach
                             @else
-                                <p class="text-muted text-center">Belum ada artikel</p>
+                                <div class="text-center py-4">
+                                    <i class="ni ni-paper-diploma text-muted" style="font-size: 2rem;"></i>
+                                    <p class="text-muted text-center mt-2 mb-0">Belum ada artikel</p>
+                                    <small class="text-xs text-muted">Mulai menulis artikel untuk melihat statistik</small>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -472,23 +501,49 @@
                             <h6>Artikel Terbaru Anda</h6>
                         </div>
                         <div class="card-body">
-                            @if(isset($authorData['recentPosts']) && $authorData['recentPosts']->count() > 0)
-                                @foreach($authorData['recentPosts'] as $post)
+                            @if(isset($authorData['recentPosts']) && !empty($authorData['recentPosts']) && (is_countable($authorData['recentPosts']) ? count($authorData['recentPosts']) > 0 : $authorData['recentPosts']->count() > 0))
+                                @php
+                                    $recentPosts = is_array($authorData['recentPosts']) ? collect($authorData['recentPosts']) : $authorData['recentPosts'];
+                                @endphp
+                                @foreach($recentPosts as $post)
                                     <div class="d-flex align-items-center mb-3 p-2 border-radius-lg border">
                                         <div class="flex-grow-1 me-3">
-                                            <h6 class="mb-1">{{ $post->title }}</h6>
-                                            <p class="text-sm mb-0">{{ Str::limit(strip_tags($post->content), 100) }}</p>
-                                            <small class="text-muted">{{ $post->created_at->diffForHumans() }} • {{ $post->views }} views</small>
+                                            <h6 class="mb-1">{{ $post->title ?? 'Judul Tidak Tersedia' }}</h6>
+                                            <p class="text-sm mb-0">
+                                                @if(isset($post->content))
+                                                    {{ Str::limit(strip_tags($post->content), 100) }}
+                                                @else
+                                                    Konten tidak tersedia
+                                                @endif
+                                            </p>
+                                            <small class="text-muted">
+                                                @if(isset($post->created_at))
+                                                    {{ $post->created_at->diffForHumans() }}
+                                                @else
+                                                    Waktu tidak tersedia
+                                                @endif
+                                                • {{ number_format($post->views ?? 0) }} views
+                                            </small>
                                         </div>
                                         <div>
-                                            <a href="{{ route('fe-post.detail', $post->slug) }}" class="btn btn-sm btn-outline-primary">
-                                                <i class="fas fa-eye me-2"></i> Lihat
-                                            </a>
+                                            @if(isset($post->slug))
+                                                <a href="{{ route('fe-post.detail', $post->slug) }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye me-2"></i> Lihat
+                                                </a>
+                                            @else
+                                                <button class="btn btn-sm btn-outline-secondary" disabled>
+                                                    <i class="fas fa-eye me-2"></i> Tidak Tersedia
+                                                </button>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
                             @else
-                                <p class="text-muted text-center">Belum ada artikel</p>
+                                <div class="text-center py-4">
+                                    <i class="ni ni-paper-diploma text-muted" style="font-size: 3rem;"></i>
+                                    <p class="text-muted text-center mt-3 mb-0">Belum ada artikel</p>
+                                    <small class="text-xs text-muted">Artikel terbaru Anda akan muncul di sini</small>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -517,35 +572,50 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @forelse ($activityLogs as $log)
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex px-2 py-1">
-                                                <div>
-                                                    <img src="{{ $log->user->photo ?? asset('assets/img/team-2.jpg') }}"
-                                                         class="avatar avatar-sm me-3" alt="user">
+                                @if(isset($activityLogs) && !empty($activityLogs) && (is_countable($activityLogs) ? count($activityLogs) > 0 : $activityLogs->count() > 0))
+                                    @php
+                                        $logs = is_array($activityLogs) ? collect($activityLogs) : $activityLogs;
+                                    @endphp
+                                    @foreach ($logs as $log)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex px-2 py-1">
+                                                    <div>
+                                                        <img src="{{ (isset($log->user) && isset($log->user->photo)) ? $log->user->photo : asset('assets/img/team-2.jpg') }}"
+                                                             class="avatar avatar-sm me-3" alt="user">
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm">{{ (isset($log->user) && isset($log->user->name)) ? $log->user->name : 'System' }}</h6>
+                                                        <p class="text-xs text-secondary mb-0">{{ (isset($log->user) && isset($log->user->email)) ? $log->user->email : '-' }}</p>
+                                                    </div>
                                                 </div>
+                                            </td>
+                                            <td>
                                                 <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">{{ $log->user->name ?? 'System' }}</h6>
-                                                    <p class="text-xs text-secondary mb-0">{{ $log->user->email ?? '-' }}</p>
+                                                    <h6 class="mb-0 text-sm">{{ $log->activity ?? 'Aktivitas Tidak Diketahui' }}</h6>
+                                                    <p class="text-xs text-secondary mb-0">{{ isset($log->action) ? Str::limit($log->action, 100) : 'Tidak ada detail' }}</p>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">{{ $log->activity }}</h6>
-                                                <p class="text-xs text-secondary mb-0">{{ Str::limit($log->action, 100) }}</p>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="text-secondary text-xs font-weight-bold">{{ $log->created_at->diffForHumans() }}</span>
-                                        </td>
-                                    </tr>
-                                @empty
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary text-xs font-weight-bold">
+                                                    @if(isset($log->created_at))
+                                                        {{ $log->created_at->diffForHumans() }}
+                                                    @else
+                                                        Waktu tidak tersedia
+                                                    @endif
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        <td colspan="3" class="text-center text-muted">Belum ada aktivitas</td>
+                                        <td colspan="3" class="text-center py-4">
+                                            <i class="ni ni-time-alarm text-muted" style="font-size: 2rem;"></i>
+                                            <p class="text-muted text-center mt-2 mb-0">Belum ada aktivitas</p>
+                                            <small class="text-xs text-muted">Aktivitas sistem akan muncul di sini</small>
+                                        </td>
                                     </tr>
-                                @endforelse
+                                @endif
                                 </tbody>
                             </table>
                         </div>
@@ -554,121 +624,6 @@
             </div>
         </div>
     </div>
-    <style>
-        .toggle-buttons {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 4px;
-            border: 1px solid #e9ecef;
-        }
-
-        .toggle-btn {
-            border: none !important;
-            border-radius: 6px !important;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.875rem;
-            padding: 8px 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .toggle-btn:not(.active) {
-            background: transparent !important;
-            color: #6c757d !important;
-            box-shadow: none !important;
-        }
-
-        .toggle-btn.active {
-            background: #5e72e4 !important;
-            color: white !important;
-            box-shadow: 0 2px 4px rgba(94, 114, 228, 0.3) !important;
-        }
-
-        .toggle-btn:hover:not(.active) {
-            background: #e9ecef !important;
-            color: #495057 !important;
-        }
-
-        /* Sliding effect */
-        .toggle-container {
-            position: relative;
-            display: inline-flex;
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 4px;
-            border: 1px solid #e9ecef;
-        }
-
-        .toggle-container::before {
-            content: '';
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            width: calc(50% - 4px);
-            height: calc(100% - 8px);
-            background: #5e72e4;
-            border-radius: 6px;
-            transition: transform 0.3s ease;
-            z-index: 0;
-            box-shadow: 0 2px 4px rgba(94, 114, 228, 0.3);
-        }
-
-        .toggle-container.posts-active::before {
-            transform: translateX(100%);
-        }
-
-        .slide-btn {
-            position: relative;
-            z-index: 1;
-            border: none;
-            background: transparent;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: color 0.3s ease;
-            font-weight: 500;
-            font-size: 0.875rem;
-            color: #6c757d;
-            width: 50%;
-        }
-
-        .slide-btn.active {
-            color: white;
-        }
-
-        /* Modern segmented control */
-        .segmented-control {
-            display: inline-flex;
-            background: #ffffff;
-            border-radius: 5px;
-            padding: 3px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border: 1px solid #e9ecef;
-        }
-
-        .segment-btn {
-            border: none;
-            background: transparent;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.875rem;
-            color: #6c757d;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .segment-btn.active {
-            background: #5e72e4;
-            color: white;
-            box-shadow: 0 2px 4px rgba(94, 114, 228, 0.4);
-        }
-
-        .segment-btn:hover:not(.active) {
-            background: #f8f9fa;
-            color: #495057;
-        }
-    </style>
 
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -678,16 +633,16 @@
                 // Visitor Chart for Admin
                 if (document.getElementById('chart-visitors')) {
                     const visitorsData = @json($adminData['weeklyVisitors'] ?? []);
-                    const visitorsLabels = visitorsData.map(item => new Date(item.date).toLocaleDateString('id-ID', {month: 'short', day: 'numeric'}));
-                    const visitorsValues = visitorsData.map(item => item.count);
+                    const visitorsLabels = visitorsData.length > 0 ? visitorsData.map(item => new Date(item.date).toLocaleDateString('id-ID', {month: 'short', day: 'numeric'})) : [];
+                    const visitorsValues = visitorsData.length > 0 ? visitorsData.map(item => item.count || 0) : [];
 
                     new Chart(document.getElementById('chart-visitors'), {
                         type: 'line',
                         data: {
-                            labels: visitorsLabels,
+                            labels: visitorsLabels.length > 0 ? visitorsLabels : ['Tidak ada data'],
                             datasets: [{
                                 label: 'Pengunjung Unik',
-                                data: visitorsValues,
+                                data: visitorsValues.length > 0 ? visitorsValues : [0],
                                 borderColor: '#5e72e4',
                                 backgroundColor: 'rgba(94, 114, 228, 0.1)',
                                 borderWidth: 2,
@@ -723,9 +678,13 @@
                     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
                     const postCounts = Array(12).fill(0);
 
-                    monthlyPostsData.forEach(item => {
-                        postCounts[item.month - 1] = item.count;
-                    });
+                    if (monthlyPostsData && Array.isArray(monthlyPostsData) && monthlyPostsData.length > 0) {
+                        monthlyPostsData.forEach(item => {
+                            if (item && item.month && item.month >= 1 && item.month <= 12) {
+                                postCounts[item.month - 1] = item.count || 0;
+                            }
+                        });
+                    }
 
                     new Chart(document.getElementById('chart-posts'), {
                         type: 'bar',
@@ -763,44 +722,65 @@
         <script>
             // Style 3: Segmented Control
             function toggle3(type, button) {
+                // Check if button and its parent exist
+                if (!button || !button.parentElement) {
+                    console.error('Button or parent element not found');
+                    return;
+                }
+
                 button.parentElement.querySelectorAll('.segment-btn').forEach(btn => {
                     btn.classList.remove('active');
                 });
                 button.classList.add('active');
                 toggleContent(type);
             }
+
             function toggleContent(type) {
                 const categoriesContent = document.getElementById('categories-content');
                 const postsContent = document.getElementById('posts-content');
                 const btnCategories = document.getElementById('btn-categories');
                 const btnPosts = document.getElementById('btn-posts');
 
+                // Check if elements exist before manipulating them
+                if (!categoriesContent || !postsContent) {
+                    console.error('Content elements not found');
+                    return;
+                }
+
                 if (type === 'categories') {
                     // Show categories, hide posts
                     categoriesContent.style.display = 'block';
                     postsContent.style.display = 'none';
 
-                    // Update button states
-                    btnCategories.classList.add('active');
-                    btnCategories.classList.remove('btn-outline-primary');
-                    btnCategories.classList.add('btn-primary');
+                    // Update button states if they exist
+                    if (btnCategories) {
+                        btnCategories.classList.add('active');
+                        btnCategories.classList.remove('btn-outline-primary');
+                        btnCategories.classList.add('btn-primary');
+                    }
 
-                    btnPosts.classList.remove('active');
-                    btnPosts.classList.remove('btn-primary');
-                    btnPosts.classList.add('btn-outline-primary');
+                    if (btnPosts) {
+                        btnPosts.classList.remove('active');
+                        btnPosts.classList.remove('btn-primary');
+                        btnPosts.classList.add('btn-outline-primary');
+                    }
                 } else {
                     // Show posts, hide categories
                     categoriesContent.style.display = 'none';
                     postsContent.style.display = 'block';
 
-                    // Update button states
-                    btnPosts.classList.add('active');
-                    btnPosts.classList.remove('btn-outline-primary');
-                    btnPosts.classList.add('btn-primary');
+                    // Update button states if they exist
+                    if (btnPosts) {
+                        btnPosts.classList.add('active');
+                        btnPosts.classList.remove('btn-outline-primary');
+                        btnPosts.classList.add('btn-primary');
+                    }
 
-                    btnCategories.classList.remove('active');
-                    btnCategories.classList.remove('btn-primary');
-                    btnCategories.classList.add('btn-outline-primary');
+                    if (btnCategories) {
+                        btnCategories.classList.remove('active');
+                        btnCategories.classList.remove('btn-primary');
+                        btnCategories.classList.add('btn-outline-primary');
+                    }
                 }
             }
         </script>
