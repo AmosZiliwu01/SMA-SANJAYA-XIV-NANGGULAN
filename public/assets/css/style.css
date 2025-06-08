@@ -721,6 +721,10 @@ body {
     margin-bottom: 0.5rem;
 }
 
+.teacher-hidden {
+    display: none !important;
+}
+
 .teacher-subject {
     color: #0091C4;
     font-weight: 600;

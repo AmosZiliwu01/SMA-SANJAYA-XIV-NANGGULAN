@@ -19,101 +19,39 @@
             <div class="tab-content" id="infoTabsContent">
                 <!-- Pengumuman Tab -->
                 <div class="tab-pane fade show active" id="pengumuman" role="tabpanel" aria-labelledby="pengumuman-tab">
-                    <!-- Pengumuman 1 -->
-                    <div class="pengumuman-informasi">
-                        <div class="date"><span>15 Mei 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Pembukaan Pendaftaran Tahun Ajaran Baru 2024</strong>
-                            <p style="font-size: 15px;">Pendaftaran siswa baru untuk tahun ajaran 2024 telah dibuka. Segera daftarkan putra/putri Anda untuk mendapatkan pendidikan berkualitas di SMA Sanjaya Nanggulan.</p>
-                        </div>
-                    </div>
-
-                    <!-- Pengumuman 2 -->
-                    <div class="pengumuman-informasi">
-                        <div class="date"><span>10 Mei 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Jadwal Ujian Akhir Semester Genap</strong>
-                            <p style="font-size: 15px;">Diumumkan kepada seluruh siswa bahwa ujian akhir semester genap akan dilaksanakan pada tanggal 1-10 Juni 2025. Persiapkan diri Anda dengan baik.</p>
-                        </div>
-                    </div>
-
-                    <!-- Pengumuman 3 -->
-                    <div class="pengumuman-informasi">
-                        <div class="date"><span>5 Mei 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Pembagian Rapor Semester Genap</strong>
-                            <p style="font-size: 15px;">Pembagian rapor semester genap akan dilaksanakan pada tanggal 20 Juni 2025. Harap dihadiri oleh orang tua/wali murid.</p>
-                        </div>
-                    </div>
-
-                    <!-- Pengumuman 4 -->
-                    <div class="pengumuman-informasi">
-                        <div class="date"><span>1 Mei 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Libur Nasional Hari Buruh</strong>
-                            <p style="font-size: 15px;">Sekolah akan libur pada tanggal 1 Mei 2025 dalam rangka memperingati Hari Buruh Internasional. Kegiatan belajar mengajar akan dilanjutkan pada tanggal 2 Mei 2025.</p>
-                        </div>
-                    </div>
-
-                    <!-- Pengumuman 5 -->
-                    <div class="pengumuman-informasi">
-                        <div class="date"><span>28 April 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Pendaftaran Lomba Cerdas Cermat</strong>
-                            <p style="font-size: 15px;">Pendaftaran lomba cerdas cermat tingkat kabupaten telah dibuka. Pendaftaran ditutup pada tanggal 5 Mei 2025. Segera daftarkan tim Anda!</p>
-                        </div>
+                    <div class="pengumuman-list">
+                        @foreach($announcements as $announcement)
+                            <div class="pengumuman-informasi">
+                                <div class="date">
+                                    <span>{{ \Carbon\Carbon::parse($announcement->created_at)->translatedFormat('d F Y') }}</span>
+                                </div>
+                                <div class="content-informasi">
+                                    <strong style="display: inline-block; margin-bottom: 10px; font-size: 20px">{{ $announcement->title }}</strong>
+                                    <p style="font-size: 15px;">{{ Str::limit($announcement->content, 150, '...') }}</p>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
 
                 <!-- Agenda Tab -->
                 <div class="tab-pane fade" id="agenda" role="tabpanel" aria-labelledby="agenda-tab">
-                    <!-- Agenda 1 -->
-                    <div class="agenda-informasi">
-                        <div class="date"><span>25 Mei 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Upacara Bendera Khusus</strong>
-                            <p style="font-size: 15px;">Upacara khusus memperingati Hari Pendidikan Nasional akan dilaksanakan di lapangan sekolah. Semua siswa wajib hadir dengan seragam lengkap.</p>
+                    @foreach($agendas as $agenda)
+                        <div class="agenda-informasi">
+                            <div class="date">
+                                <span>{{ \Carbon\Carbon::parse($agenda->start_date)->translatedFormat('d F Y') }}</span>
+                            </div>
+                            <div class="content-informasi">
+                                <strong style="display: inline-block; margin-bottom: 10px; font-size: 20px">{{ $agenda->name }}</strong>
+                                <p style="font-size: 15px;">{{ Str::limit($agenda->description, 150, '...') }}</p>
+                                <small><em>{{ \Carbon\Carbon::parse($agenda->start_date)->format('d/m/Y') }} s/d {{ \Carbon\Carbon::parse($agenda->end_date)->format('d/m/Y') }}</em></small>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Agenda 2 -->
-                    <div class="agenda-informasi">
-                        <div class="date"><span>20 Mei 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Workshop Karya Tulis Ilmiah</strong>
-                            <p style="font-size: 15px;">Workshop penulisan karya tulis ilmiah untuk siswa kelas XI akan dilaksanakan di ruang multimedia. Peserta diharapkan membawa laptop.</p>
-                        </div>
-                    </div>
-
-                    <!-- Agenda 3 -->
-                    <div class="agenda-informasi">
-                        <div class="date"><span>15 Mei 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Kunjungan Industri</strong>
-                            <p style="font-size: 15px;">Kunjungan industri ke PT. Industri Maju untuk siswa kelas XII jurusan IPA. Peserta diharapkan membawa bekal dan air minum.</p>
-                        </div>
-                    </div>
-
-                    <!-- Agenda 4 -->
-                    <div class="agenda-informasi">
-                        <div class="date"><span>10 Januari 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Latihan Dasar Kepemimpinan</strong>
-                            <p style="font-size: 15px;">Latihan dasar kepemimpinan untuk pengurus OSIS periode 2025-2026 akan dilaksanakan di Bumi Perkemahan Gunung Kidul.</p>
-                        </div>
-                    </div>
-
-                    <!-- Agenda 5 -->
-                    <div class="agenda-informasi">
-                        <div class="date"><span>5 Mei 2025</span></div>
-                        <div class="content-informasi">
-                            <strong>Seminar Kesehatan Remaja</strong>
-                            <p style="font-size: 15px;">Seminar kesehatan remaja dengan tema "Hidup Sehat di Era Digital" akan diadakan di aula sekolah. Terbuka untuk semua siswa.</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </section>
+
 
 @endsection

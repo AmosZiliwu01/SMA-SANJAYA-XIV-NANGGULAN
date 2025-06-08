@@ -219,107 +219,141 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     // ==================== PHOTO GALLERY ====================
     (function(){
         const galleryItems = document.querySelectorAll('.photo-gallery-unique .gallery-item');
         const modal = document.querySelector('.photo-gallery-modal');
+        const showMoreBtn = document.querySelector('.photo-gallery-unique .show-more-btn');
 
-        if (galleryItems.length > 0 && modal) {
+        let currentIndex = -1;
+        let expanded = false;
+
+        // Function to open modal with the image and caption according to the index
+        function openModal(index) {
+            const item = galleryItems[index];
+            const img = item.querySelector('img');
+            const caption = item.getAttribute('data-caption') || img.alt || '';
+
             const modalImg = modal.querySelector('img');
             const modalCaption = modal.querySelector('#modal-caption');
+
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            modalCaption.textContent = caption;
+
+            currentIndex = index;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+
+            // Focus on the close button when modal is opened
             const closeBtn = modal.querySelector('.photo-gallery-close-btn');
-            const prevBtn = modal.querySelector('.photo-gallery-modal-prev');
-            const nextBtn = modal.querySelector('.photo-gallery-modal-next');
-            const showMoreBtn = document.querySelector('.photo-gallery-unique .show-more-btn');
+            if (closeBtn) closeBtn.focus();
+        }
 
-            let currentIndex = -1;
-            let expanded = false;
+        // Function to close the modal and reset
+        function closeModal() {
+            modal.classList.remove('open');
 
-            function openModal(index) {
-                const item = galleryItems[index];
-                const img = item.querySelector('img');
-                const caption = item.getAttribute('data-caption') || img.alt || '';
+            const modalImg = modal.querySelector('img');
+            const modalCaption = modal.querySelector('#modal-caption');
 
-                modalImg.src = img.src;
-                modalImg.alt = img.alt;
-                modalCaption.textContent = caption;
+            modalImg.src = '';
+            modalImg.alt = '';
+            modalCaption.textContent = '';
 
-                currentIndex = index;
-                modal.classList.add('open');
-                document.body.style.overflow = 'hidden';
+            document.body.style.overflow = '';
+            currentIndex = -1;
+        }
 
-                if (closeBtn) closeBtn.focus();
+        // Function to go to the previous image
+        function showPrev() {
+            if (currentIndex <= 0) {
+                currentIndex = galleryItems.length - 1;
+            } else {
+                currentIndex--;
             }
+            openModal(currentIndex);
+        }
 
-            function closeModal() {
-                modal.classList.remove('open');
-                modalImg.src = '';
-                modalImg.alt = '';
-                modalCaption.textContent = '';
-
-                document.body.style.overflow = '';
-                currentIndex = -1;
+        // Function to go to the next image
+        function showNext() {
+            if (currentIndex >= galleryItems.length - 1) {
+                currentIndex = 0;
+            } else {
+                currentIndex++;
             }
+            openModal(currentIndex);
+        }
 
-            function showPrev() {
-                if (currentIndex <= 0) {
-                    currentIndex = galleryItems.length - 1;
-                } else {
-                    currentIndex--;
+        // Attach click and keyboard event listeners to each gallery item
+        galleryItems.forEach((item, idx) => {
+            item.addEventListener('click', () => openModal(idx));
+            item.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openModal(idx);
                 }
-                openModal(currentIndex);
-            }
+            });
+        });
 
-            function showNext() {
-                if (currentIndex >= galleryItems.length - 1) {
-                    currentIndex = 0;
-                } else {
-                    currentIndex++;
-                }
-                openModal(currentIndex);
-            }
+        // Close modal button
+        const closeBtn = modal.querySelector('.photo-gallery-close-btn');
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
-            galleryItems.forEach((item, idx) => {
-                item.addEventListener('click', () => openModal(idx));
-                item.addEventListener('keydown', e => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        openModal(idx);
+        // Modal navigation buttons
+        const prevBtn = modal.querySelector('.photo-gallery-modal-prev');
+        const nextBtn = modal.querySelector('.photo-gallery-modal-next');
+        if (prevBtn) prevBtn.addEventListener('click', showPrev);
+        if (nextBtn) nextBtn.addEventListener('click', showNext);
+
+        // Close modal if clicking outside the modal content (backdrop)
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Keyboard navigation when modal is open
+        document.addEventListener('keydown', (e) => {
+            if (!modal.classList.contains('open')) return;
+            if (e.key === 'Escape') closeModal();
+            else if (e.key === 'ArrowLeft') showPrev();
+            else if (e.key === 'ArrowRight') showNext();
+        });
+
+        // Toggle the "Show More / Show Less" button
+        if (showMoreBtn) {
+            showMoreBtn.addEventListener('click', () => {
+                expanded = !expanded;
+                galleryItems.forEach((item, idx) => {
+                    if (idx >= 6) {
+                        item.classList.toggle('hidden', !expanded);
                     }
                 });
+                showMoreBtn.textContent = expanded ? 'Show Less' : 'Show More';
+                showMoreBtn.setAttribute('aria-expanded', expanded.toString());
             });
-
-            if (closeBtn) closeBtn.addEventListener('click', closeModal);
-            if (prevBtn) prevBtn.addEventListener('click', showPrev);
-            if (nextBtn) nextBtn.addEventListener('click', showNext);
-
-            // Close modal when backdrop clicked
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-
-            // Keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (!modal.classList.contains('open')) return;
-                if (e.key === 'Escape') closeModal();
-                else if (e.key === 'ArrowLeft') showPrev();
-                else if (e.key === 'ArrowRight') showNext();
-            });
-
-            // Show More toggle
-            if (showMoreBtn) {
-                showMoreBtn.addEventListener('click', () => {
-                    expanded = !expanded;
-                    galleryItems.forEach((item, idx) => {
-                        if (idx >= 6) {
-                            item.classList.toggle('hidden', !expanded);
-                        }
-                    });
-                    showMoreBtn.textContent = expanded ? 'Tampilkan Lebih Sedikit' : 'Tampilkan Lebih Banyak';
-                    showMoreBtn.setAttribute('aria-expanded', expanded.toString());
-                });
-            }
         }
     })();
+});
 
+
+// ==================== TEACHERS ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('toggleBtn');
+    const teacherCards = document.querySelectorAll('.teacher-card');
+    let expanded = false;
+
+    function toggleTeachers() {
+        expanded = !expanded;
+        teacherCards.forEach((card, idx) => {
+            if (idx >= 4) {
+                card.classList.toggle('teacher-hidden', !expanded);
+            }
+        });
+
+        toggleBtn.textContent = expanded ? 'Show Less' : 'Show More';
+        toggleBtn.setAttribute('aria-expanded', expanded.toString());
+    }
+
+    toggleBtn.addEventListener('click', toggleTeachers);
 });
