@@ -593,11 +593,7 @@
                                             <td>
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <h6 class="mb-0 text-sm">{{ $log->action ?? 'Aktivitas Tidak Diketahui' }}</h6>
-
-                                                    <p class="text-xs text-secondary mb-0">
-                                                        {{ $log->user->name ?? 'Pengguna Tidak Diketahui' }} -
-                                                        {{ \Carbon\Carbon::parse($log->logged_at)->format('d M Y, H:i') }}
-                                                    </p>
+                                                    <p class="text-xs text-secondary mb-0">{{ isset($log->action) ? Str::limit($log->action, 100) : 'Tidak ada detail' }}</p>
                                                 </div>
                                             </td>
                                             <td>
