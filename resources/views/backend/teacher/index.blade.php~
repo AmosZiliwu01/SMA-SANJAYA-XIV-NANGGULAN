@@ -73,7 +73,7 @@
                                     Menampilkan {{ $teachers->firstItem() }} - {{ $teachers->lastItem() }} dari total {{ $teachers->total() }} guru
                                 </p>
                                 <div class="d-flex justify-content-center">
-                                    {{ $teachers->links('pagination::bootstrap-5') }}
+                                    {{ $teachers->appends(request()->query())->links() }}
                                 </div>
                             </div>
                         </div>

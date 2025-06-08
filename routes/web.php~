@@ -57,8 +57,12 @@ Route::prefix('/')->group(function () {
     Route::get('/gallery', [FeGalleryController::class, 'index'])->name('fe-gallery.index');
 
     // Post Page
-    Route::get('/post', [FePostController::class, 'index'])->name('fe-post.index');
-    Route::get('/post/detail', [FePostController::class, 'show'])->name('fe-post.detail');
+    Route::prefix('artikel')->name('fe-post.')->group(function () {
+        Route::get('/', [FePostController::class, 'index'])->name('index');
+        Route::get('/search', [FePostController::class, 'search'])->name('search');
+        Route::get('/kategori/{slug}', [FePostController::class, 'category'])->name('category');
+        Route::get('/{slug}', [FePostController::class, 'show'])->name('detail');
+    });
 
     //Teacher Page
     Route::get('/teacher', [FeTeacherController::class, 'index'])->name('fe-teacher.index');
@@ -172,7 +176,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::prefix('teachers')->middleware('role:administrator')->group(function () {
         Route::get('/', [TeacherController::class, 'index'])->name('teachers.index');
         Route::post('/store', [TeacherController::class, 'store'])->name('teachers.store');
-        Route::post('/update/{teachers}', [TeacherController::class, 'update'])->name('teachers.update');
+        Route::post('/update/{teacher}', [TeacherController::class, 'update'])->name('teachers.update');
         Route::post('/destroy/{teacher}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
         Route::get('/export', [TeacherController::class, 'export'])->name('teachers.export');
         Route::post('/import', [TeacherController::class, 'import'])->name('teachers.import');

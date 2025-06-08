@@ -4,7 +4,7 @@
 
     <div class="container-fluid py-4">
         <div class="row">
-            {{-- Card: Pengunjung Hari Ini --}}
+            {{-- Common Cards for All Users --}}
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-body p-3">
@@ -30,7 +30,6 @@
                 </div>
             </div>
 
-            {{-- Card: Total Pengunjung --}}
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-body p-3">
@@ -56,25 +55,24 @@
                 </div>
             </div>
 
-            {{-- Card: Total Pengunjung Keseluruhan tanpa unik --}}
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-body p-3">
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Pengunjung Keseluruhan</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Artikel</p>
                                     <h5 class="font-weight-bolder">
-                                        {{ number_format($totalVisits) }}
+                                        {{ number_format($totalPosts) }}
                                     </h5>
                                     <p class="mb-0 text-sm">
-                                        <span class="text-info font-weight-bolder">Jumlah Pengunjung</span>
+                                        <span class="text-success font-weight-bolder">Semua Artikel</span>
                                     </p>
                                 </div>
                             </div>
                             <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                                    <i class="ni ni-chart-bar-32 text-lg opacity-10" aria-hidden="true"></i>
+                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -82,8 +80,425 @@
                 </div>
             </div>
 
-            {{-- Card: Activity Logs --}}
-            <div class="mt-4 col-12 mb-4">
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Galeri</p>
+                                    <h5 class="font-weight-bolder">
+                                        {{ number_format($totalGalleries) }}
+                                    </h5>
+                                    <p class="mb-0 text-sm">
+                                        <span class="text-warning font-weight-bolder">Foto Galeri</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                                    <i class="ni ni-image text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Admin Only Section --}}
+        @can('admin')
+            <div class="row mt-4">
+                {{-- Admin Stats Cards --}}
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Pengguna</p>
+                                        <h5 class="font-weight-bolder">{{ $adminData['totalUsers'] ?? 0 }}</h5>
+                                        <p class="mb-0 text-sm">
+                                            <span class="text-primary font-weight-bolder">Registered Users</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                        <i class="ni ni-circle-08 text-lg opacity-10"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Guru</p>
+                                        <h5 class="font-weight-bolder">{{ $adminData['totalTeachers'] ?? 0 }}</h5>
+                                        <p class="mb-0 text-sm">
+                                            <span class="text-info font-weight-bolder">Tenaga Pengajar</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-info shadow-info text-center rounded-circle">
+                                        <i class="ni ni-hat-3 text-lg opacity-10"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Siswa</p>
+                                        <h5 class="font-weight-bolder">{{ $adminData['totalStudents'] ?? 0 }}</h5>
+                                        <p class="mb-0 text-sm">
+                                            <span class="text-success font-weight-bolder">{{ $adminData['totalClasses'] ?? 0 }} Kelas</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                        <i class="ni ni-books text-lg opacity-10"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Pesan Masuk</p>
+                                        <h5 class="font-weight-bolder">{{ $adminData['unreadMessages'] ?? 0 }}</h5>
+                                        <p class="mb-0 text-sm">
+                                            <span class="text-danger font-weight-bolder">Belum Dibaca</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+                                        <i class="ni ni-email-83 text-lg opacity-10"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Admin Charts --}}
+            <div class="row mt-4">
+                <div class="col-lg-8 mb-lg-0 mb-4">
+                    <div class="card z-index-2 h-100">
+                        <div class="card-header pb-0 pt-3 bg-transparent">
+                            <h6 class="text-capitalize">Statistik Pengunjung (7 Hari Terakhir)</h6>
+                            <p class="text-sm mb-0">
+                                <i class="fa fa-arrow-up text-success"></i>
+                                <span class="font-weight-bold">Pengunjung Unik Harian</span>
+                            </p>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="chart">
+                                <canvas id="chart-visitors" class="chart-canvas" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-header pb-0 p-3 col-12 d-flex justify-content-center">
+                            <div class="btn-group" role="group">
+                                <div class="mb-4 d-flex justify-content-center align-items-center">
+                                    <div class="segmented-control">
+                                        <button type="button" class="segment-btn active" onclick="toggle3('categories', this)">
+                                            Kategori Populer
+                                        </button>
+                                        <button type="button" class="segment-btn" onclick="toggle3('posts', this)">
+                                            Postingan Populer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            <!-- Kategori Populer Content -->
+                            <div id="categories-content">
+                                @if(isset($adminData['topCategories']) && $adminData['topCategories']->count() > 0)
+                                    @foreach($adminData['topCategories'] as $category)
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <h6 class="mb-0 text-sm">{{ $category->name }}</h6>
+                                                <span class="text-xs text-secondary">{{ $category->posts_count }} artikel</span>
+                                            </div>
+                                            <div class="progress" style="width: 60px; height: 6px;">
+                                                <div class="progress-bar bg-gradient-primary"
+                                                     style="width: {{ ($category->posts_count / $adminData['topCategories']->max('posts_count')) * 100 }}%"></div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-muted text-center">Belum ada data kategori</p>
+                                @endif
+                            </div>
+
+                            <!-- Postingan Populer Content -->
+                            <div id="posts-content" style="display: none;">
+                                @if(isset($adminData['topPosts']) && $adminData['topPosts']->count() > 0)
+                                    @foreach($adminData['topPosts'] as $post)
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-0 text-sm">{{ Str::limit($post->title, 40) }}</h6>
+                                                <span class="text-xs text-secondary">{{ number_format($post->views) }} views</span>
+                                            </div>
+                                            <div class="text-end">
+                                                <span class="badge badge-sm bg-gradient-success">{{ $post->views }}</span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @elseif(isset($authorData['topPosts']) && $authorData['topPosts']->count() > 0)
+                                    @foreach($authorData['topPosts'] as $post)
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-0 text-sm">{{ Str::limit($post->title, 40) }}</h6>
+                                                <span class="text-xs text-secondary">{{ number_format($post->views) }} views</span>
+                                            </div>
+                                            <div class="text-end">
+                                                <span class="badge badge-sm bg-gradient-success">{{ $post->views }}</span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-muted text-center">Belum ada data postingan</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Recent Messages for Admin --}}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6>Pesan Terbaru</h6>
+                        </div>
+                        <div class="card-body">
+                            @if(isset($adminData['recentMessages']) && $adminData['recentMessages']->count() > 0)
+                                @foreach($adminData['recentMessages'] as $message)
+                                    <div class="d-flex align-items-center mb-3 p-2 border-radius-lg border">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">{{ $message->name }}</h6>
+                                            <p class="text-sm mb-0">{{ Str::limit($message->message, 100) }}</p>
+                                            <small class="text-muted">{{ $message->created_at->diffForHumans() }}</small>
+                                        </div>
+                                        <div>
+                                            <span class="badge bg-gradient-warning">Baru</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-muted text-center">Tidak ada pesan baru</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endcan
+
+        {{-- Author Only Section --}}
+        @can('author')
+            <div class="row mt-4">
+                {{-- Author Stats Cards --}}
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Artikel Saya</p>
+                                        <h5 class="font-weight-bolder">{{ $authorData['myPosts'] ?? 0 }}</h5>
+                                        <p class="mb-0 text-sm">
+                                            <span class="text-primary font-weight-bolder">Total Artikel</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                        <i class="ni ni-paper-diploma text-lg opacity-10"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Views</p>
+                                        <h5 class="font-weight-bolder">{{ number_format($authorData['totalViews'] ?? 0) }}</h5>
+                                        <p class="mb-0 text-sm">
+                                            <span class="text-success font-weight-bolder">Pembaca</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                        <i class="ni ni-chart-bar-32 text-lg opacity-10"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Galeri Saya</p>
+                                        <h5 class="font-weight-bolder">{{ $authorData['myGalleries'] ?? 0 }}</h5>
+                                        <p class="mb-0 text-sm">
+                                            <span class="text-info font-weight-bolder">Total Foto</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-info shadow-info text-center rounded-circle">
+                                        <i class="ni ni-image text-lg opacity-10"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Agenda Saya</p>
+                                        <h5 class="font-weight-bolder">{{ $authorData['myAgendas'] ?? 0 }}</h5>
+                                        <p class="mb-0 text-sm">
+                                            <span class="text-warning font-weight-bolder">Total Agenda</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                                        <i class="ni ni-calendar-grid-58 text-lg opacity-10"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Author Charts --}}
+            <div class="row mt-4">
+                <div class="col-lg-8 mb-lg-0 mb-4">
+                    <div class="card z-index-2 h-100">
+                        <div class="card-header pb-0 pt-3 bg-transparent">
+                            <h6 class="text-capitalize">Artikel Bulanan (Tahun Ini)</h6>
+                            <p class="text-sm mb-0">
+                                <i class="fa fa-arrow-up text-success"></i>
+                                <span class="font-weight-bold">Produktivitas Menulis</span>
+                            </p>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="chart">
+                                <canvas id="chart-posts" class="chart-canvas" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-header pb-0 p-3">
+                            <h6 class="mb-3">Artikel Terpopuler</h6>
+                        </div>
+                        <div class="card-body p-3">
+                            @if(isset($authorData['topPosts']) && $authorData['topPosts']->count() > 0)
+                                @foreach($authorData['topPosts'] as $post)
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <h6 class="mb-0 text-sm">{{ Str::limit($post->title, 30) }}</h6>
+                                            <span class="text-xs text-secondary">{{ $post->views }} views</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge badge-sm bg-gradient-success">{{ $post->views }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-muted text-center">Belum ada artikel</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Recent Posts for Author --}}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6>Artikel Terbaru Anda</h6>
+                        </div>
+                        <div class="card-body">
+                            @if(isset($authorData['recentPosts']) && $authorData['recentPosts']->count() > 0)
+                                @foreach($authorData['recentPosts'] as $post)
+                                    <div class="d-flex align-items-center mb-3 p-2 border-radius-lg border">
+                                        <div class="flex-grow-1 me-3">
+                                            <h6 class="mb-1">{{ $post->title }}</h6>
+                                            <p class="text-sm mb-0">{{ Str::limit(strip_tags($post->content), 100) }}</p>
+                                            <small class="text-muted">{{ $post->created_at->diffForHumans() }} • {{ $post->views }} views</small>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('fe-post.detail', $post->slug) }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-2"></i> Lihat
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-muted text-center">Belum ada artikel</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endcan
+
+        {{-- Activity Logs (Common for both) --}}
+        <div class="row mt-4">
+            <div class="col-12 mb-4">
                 <div class="card">
                     <div class="card-header pl-3 py-2 d-flex justify-content-between align-items-center">
                         <div>
@@ -107,7 +522,7 @@
                                         <td>
                                             <div class="d-flex px-2 py-1">
                                                 <div>
-                                                    <img src="{{ $log->user->avatar ?? asset('assets/img/team-2.jpg') }}"
+                                                    <img src="{{ $log->user->photo ?? asset('assets/img/team-2.jpg') }}"
                                                          class="avatar avatar-sm me-3" alt="user">
                                                 </div>
                                                 <div class="d-flex flex-column justify-content-center">
@@ -117,29 +532,18 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="d-flex flex-column">
-                                    <span class="text-sm font-weight-bold">
-                                        {{ $log->activity_description ?? $log->action ?? '-' }}
-                                    </span>
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm">{{ $log->activity }}</h6>
+                                                <p class="text-xs text-secondary mb-0">{{ Str::limit($log->action, 100) }}</p>
                                             </div>
                                         </td>
                                         <td>
-                                <span class="text-sm font-weight-bold">
-                                    {{ $log->created_at ? $log->created_at->format('d M Y') : '-' }}
-                                </span>
-                                            <span class="text-xs d-block">
-                                    {{ $log->created_at ? $log->created_at->diffForHumans() : '-' }}
-                                </span>
+                                            <span class="text-secondary text-xs font-weight-bold">{{ $log->created_at->diffForHumans() }}</span>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center py-4">
-                                            <div class="d-flex flex-column align-items-center">
-                                                <i class="ni ni-collection text-secondary mb-2" style="font-size: 2rem;"></i>
-                                                <p class="text-muted">Tidak ada log aktivitas saat ini</p>
-                                            </div>
-                                        </td>
+                                        <td colspan="3" class="text-center text-muted">Belum ada aktivitas</td>
                                     </tr>
                                 @endforelse
                                 </tbody>
@@ -148,309 +552,258 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-lg-7 mb-lg-0 mb-4">
-                    <div class="card z-index-2 h-100">
-                        <div class="card-header pb-0 pt-3 bg-transparent">
-                            <h6 class="text-capitalize">Sales overview</h6>
-                            <p class="text-sm mb-0">
-                                <i class="fa fa-arrow-up text-success"></i>
-                                <span class="font-weight-bold">4% more</span> in 2021
-                            </p>
-                        </div>
-                        <div class="card-body p-3">
-                            <div class="chart">
-                                <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="card card-carousel overflow-hidden h-100 p-0">
-                        <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
-                            <div class="carousel-inner border-radius-lg h-100">
-                                <div class="carousel-item h-100 active" style="background-image: url('../assets/img/carousel-1.jpg');
-      background-size: cover;">
-                                    <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                                        <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                                            <i class="ni ni-camera-compact text-dark opacity-10"></i>
-                                        </div>
-                                        <h5 class="text-white mb-1">Get started with Argon</h5>
-                                        <p>There’s nothing I really wanted to do in life that I wasn’t able to get good at.</p>
-                                    </div>
-                                </div>
-                                <div class="carousel-item h-100" style="background-image: url('../assets/img/carousel-2.jpg');
-      background-size: cover;">
-                                    <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                                        <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                                            <i class="ni ni-bulb-61 text-dark opacity-10"></i>
-                                        </div>
-                                        <h5 class="text-white mb-1">Faster way to create web pages</h5>
-                                        <p>That’s my skill. I’m not really specifically talented at anything except for the ability to learn.</p>
-                                    </div>
-                                </div>
-                                <div class="carousel-item h-100" style="background-image: url('../assets/img/carousel-3.jpg');
-      background-size: cover;">
-                                    <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                                        <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                                            <i class="ni ni-trophy text-dark opacity-10"></i>
-                                        </div>
-                                        <h5 class="text-white mb-1">Share with us your design tips!</h5>
-                                        <p>Don’t be afraid to be wrong because you can’t learn anything from a compliment.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="carousel-control-prev w-5 me-3" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next w-5 me-3" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-lg-7 mb-lg-0 mb-4">
-                    <div class="card ">
-                        <div class="card-header pb-0 p-3">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="mb-2">Sales by Country</h6>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table align-items-center ">
-                                <tbody>
-                                <tr>
-                                    <td class="w-30">
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <img src="../assets/img/icons/flags/US.png" alt="Country flag">
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                                <h6 class="text-sm mb-0">United States</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                            <h6 class="text-sm mb-0">2500</h6>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                            <h6 class="text-sm mb-0">$230,900</h6>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-sm">
-                                        <div class="col text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                            <h6 class="text-sm mb-0">29.9%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="w-30">
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <img src="../assets/img/icons/flags/DE.png" alt="Country flag">
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                                <h6 class="text-sm mb-0">Germany</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                            <h6 class="text-sm mb-0">3.900</h6>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                            <h6 class="text-sm mb-0">$440,000</h6>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-sm">
-                                        <div class="col text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                            <h6 class="text-sm mb-0">40.22%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="w-30">
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <img src="../assets/img/icons/flags/GB.png" alt="Country flag">
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                                <h6 class="text-sm mb-0">Great Britain</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                            <h6 class="text-sm mb-0">1.400</h6>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                            <h6 class="text-sm mb-0">$190,700</h6>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-sm">
-                                        <div class="col text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                            <h6 class="text-sm mb-0">23.44%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="w-30">
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <img src="../assets/img/icons/flags/BR.png" alt="Country flag">
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                                <h6 class="text-sm mb-0">Brasil</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                            <h6 class="text-sm mb-0">562</h6>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                            <h6 class="text-sm mb-0">$143,960</h6>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-sm">
-                                        <div class="col text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                            <h6 class="text-sm mb-0">32.14%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="card">
-                        <div class="card-header pb-0 p-3">
-                            <h6 class="mb-0">Categories</h6>
-                        </div>
-                        <div class="card-body p-3">
-                            <ul class="list-group">
-                                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                                            <i class="ni ni-mobile-button text-white opacity-10"></i>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h6 class="mb-1 text-dark text-sm">Devices</h6>
-                                            <span class="text-xs">250 in stock, <span class="font-weight-bold">346+ sold</span></span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex">
-                                        <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                                    </div>
-                                </li>
-                                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                                            <i class="ni ni-tag text-white opacity-10"></i>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h6 class="mb-1 text-dark text-sm">Tickets</h6>
-                                            <span class="text-xs">123 closed, <span class="font-weight-bold">15 open</span></span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex">
-                                        <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                                    </div>
-                                </li>
-                                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                                            <i class="ni ni-box-2 text-white opacity-10"></i>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h6 class="mb-1 text-dark text-sm">Error logs</h6>
-                                            <span class="text-xs">1 is active, <span class="font-weight-bold">40 closed</span></span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex">
-                                        <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                                    </div>
-                                </li>
-                                <li class="list-group-item border-0 d-flex justify-content-between ps-0 border-radius-lg">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                                            <i class="ni ni-satisfied text-white opacity-10"></i>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h6 class="mb-1 text-dark text-sm">Happy users</h6>
-                                            <span class="text-xs font-weight-bold">+ 430</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex">
-                                        <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <footer class="footer pt-3  ">
-                <div class="container-fluid">
-                    <div class="row align-items-center justify-content-lg-between">
-                        <div class="col-lg-6 mb-lg-0 mb-4">
-                            <div class="copyright text-center text-sm text-muted text-lg-start">
-                                © <script>
-                                    document.write(new Date().getFullYear())
-                                </script>,
-                                made with <i class="fa fa-heart"></i> by
-                                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-                                for a better web.
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
+    </div>
+    <style>
+        .toggle-buttons {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 4px;
+            border: 1px solid #e9ecef;
+        }
+
+        .toggle-btn {
+            border: none !important;
+            border-radius: 6px !important;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.875rem;
+            padding: 8px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toggle-btn:not(.active) {
+            background: transparent !important;
+            color: #6c757d !important;
+            box-shadow: none !important;
+        }
+
+        .toggle-btn.active {
+            background: #5e72e4 !important;
+            color: white !important;
+            box-shadow: 0 2px 4px rgba(94, 114, 228, 0.3) !important;
+        }
+
+        .toggle-btn:hover:not(.active) {
+            background: #e9ecef !important;
+            color: #495057 !important;
+        }
+
+        /* Sliding effect */
+        .toggle-container {
+            position: relative;
+            display: inline-flex;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 4px;
+            border: 1px solid #e9ecef;
+        }
+
+        .toggle-container::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: calc(50% - 4px);
+            height: calc(100% - 8px);
+            background: #5e72e4;
+            border-radius: 6px;
+            transition: transform 0.3s ease;
+            z-index: 0;
+            box-shadow: 0 2px 4px rgba(94, 114, 228, 0.3);
+        }
+
+        .toggle-container.posts-active::before {
+            transform: translateX(100%);
+        }
+
+        .slide-btn {
+            position: relative;
+            z-index: 1;
+            border: none;
+            background: transparent;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #6c757d;
+            width: 50%;
+        }
+
+        .slide-btn.active {
+            color: white;
+        }
+
+        /* Modern segmented control */
+        .segmented-control {
+            display: inline-flex;
+            background: #ffffff;
+            border-radius: 5px;
+            padding: 3px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .segment-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #6c757d;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .segment-btn.active {
+            background: #5e72e4;
+            color: white;
+            box-shadow: 0 2px 4px rgba(94, 114, 228, 0.4);
+        }
+
+        .segment-btn:hover:not(.active) {
+            background: #f8f9fa;
+            color: #495057;
+        }
+    </style>
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                @can('admin')
+                // Visitor Chart for Admin
+                if (document.getElementById('chart-visitors')) {
+                    const visitorsData = @json($adminData['weeklyVisitors'] ?? []);
+                    const visitorsLabels = visitorsData.map(item => new Date(item.date).toLocaleDateString('id-ID', {month: 'short', day: 'numeric'}));
+                    const visitorsValues = visitorsData.map(item => item.count);
+
+                    new Chart(document.getElementById('chart-visitors'), {
+                        type: 'line',
+                        data: {
+                            labels: visitorsLabels,
+                            datasets: [{
+                                label: 'Pengunjung Unik',
+                                data: visitorsValues,
+                                borderColor: '#5e72e4',
+                                backgroundColor: 'rgba(94, 114, 228, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }
+                @endcan
+
+                @can('author')
+                // Posts Chart for Author
+                if (document.getElementById('chart-posts')) {
+                    const monthlyPostsData = @json($authorData['monthlyPosts'] ?? []);
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                    const postCounts = Array(12).fill(0);
+
+                    monthlyPostsData.forEach(item => {
+                        postCounts[item.month - 1] = item.count;
+                    });
+
+                    new Chart(document.getElementById('chart-posts'), {
+                        type: 'bar',
+                        data: {
+                            labels: months,
+                            datasets: [{
+                                label: 'Artikel',
+                                data: postCounts,
+                                backgroundColor: '#11cdef',
+                                borderRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }
+                @endcan
+            });
+        </script>
+        <script>
+            // Style 3: Segmented Control
+            function toggle3(type, button) {
+                button.parentElement.querySelectorAll('.segment-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+                toggleContent(type);
+            }
+            function toggleContent(type) {
+                const categoriesContent = document.getElementById('categories-content');
+                const postsContent = document.getElementById('posts-content');
+                const btnCategories = document.getElementById('btn-categories');
+                const btnPosts = document.getElementById('btn-posts');
+
+                if (type === 'categories') {
+                    // Show categories, hide posts
+                    categoriesContent.style.display = 'block';
+                    postsContent.style.display = 'none';
+
+                    // Update button states
+                    btnCategories.classList.add('active');
+                    btnCategories.classList.remove('btn-outline-primary');
+                    btnCategories.classList.add('btn-primary');
+
+                    btnPosts.classList.remove('active');
+                    btnPosts.classList.remove('btn-primary');
+                    btnPosts.classList.add('btn-outline-primary');
+                } else {
+                    // Show posts, hide categories
+                    categoriesContent.style.display = 'none';
+                    postsContent.style.display = 'block';
+
+                    // Update button states
+                    btnPosts.classList.add('active');
+                    btnPosts.classList.remove('btn-outline-primary');
+                    btnPosts.classList.add('btn-primary');
+
+                    btnCategories.classList.remove('active');
+                    btnCategories.classList.remove('btn-primary');
+                    btnCategories.classList.add('btn-outline-primary');
+                }
+            }
+        </script>
+    @endpush
+
 @endsection

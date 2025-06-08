@@ -1,0 +1,177 @@
+@extends('frontend.layout.main')
+@section('content')
+
+    <!-- Hero Section for News Detail -->
+    <section class="news-hero-section">
+        <!-- Background Image -->
+        @if($post->image)
+            <div class="hero-background" style="background-image: url('{{ asset('storage/' . $post->image) }}');">
+                <div class="hero-overlay"></div>
+            </div>
+        @else
+            <div class="hero-background hero-default-bg">
+                <div class="hero-overlay"></div>
+            </div>
+        @endif
+
+        <!-- Hero Content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="hero-content">
+                        <div class="hero-content-wrapper align-items-start">
+                            <!-- Date Box (Left side) - Hidden on mobile -->
+                            <div class="hero-date-box d-none d-md-block">
+                                <div class="date-number">{{ $post->created_at->format('d') }}</div>
+                                <div class="date-month">{{ strtoupper($post->created_at->format('M')) }}</div>
+                            </div>
+
+                            <!-- Content (Right side) -->
+                            <div class="hero-text-content">
+                                <!-- Title -->
+                                <h1 class="hero-title">{{ $post->title }}</h1>
+
+                                <!-- Meta Information -->
+                                <div class="hero-meta">
+                                    <span class="meta-author">OLEH: {{ strtoupper($post->user ? $post->user->name : ($post->author ?? 'ADMIN')) }}</span>
+                                    <span class="meta-separator">/</span>
+                                    @if($post->category)
+                                        <span class="meta-category">{{ strtoupper($post->category->name) }}</span>
+                                    @else
+                                        <span class="meta-category">ARTIKEL</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Breadcrumb Section -->
+    <section class="breadcrumb-section">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('fe-post.index') }}">Beranda</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('fe-post.index') }}">Berita</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($post->title, 50) }}</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- News Content Section -->
+    <section class="news-content-section">
+        <div class="container">
+            <div class="row">
+                <!-- Main Content Column (Left side) -->
+                <div class="col-lg-8">
+                    <!-- News Content - Removed card background -->
+                    <div class="news-content">
+                        {!! $post->content !!}
+                    </div>
+                </div>
+
+                <!-- Sidebar Column (Right side) -->
+                <div class="col-lg-4">
+                    <!-- Social Share -->
+                    <div class="sidebar-section social-share">
+                        <div class="share-text">
+                            <h5>Bagikan Ke :</h5>
+                        </div>
+                        <div class="row social-buttons">
+                            <div class="col-6 mb-2">
+                                <a href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}&text={{ urlencode($post->title) }}"
+                                   target="_blank" class="btn btn-twitter d-block">
+                                    <i class="fab fa-twitter me-2"></i>
+                                    <span>Twitter</span>
+                                </a>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}"
+                                   target="_blank" class="btn btn-facebook d-block">
+                                    <i class="fab fa-facebook-f me-2"></i>
+                                    <span>Facebook</span>
+                                </a>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(request()->fullUrl()) }}"
+                                   target="_blank" class="btn btn-linkedin d-block">
+                                    <i class="fab fa-linkedin-in me-2"></i>
+                                    <span>LinkedIn</span>
+                                </a>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <a href="https://pinterest.com/pin/create/button/?url={{ urlencode(request()->fullUrl()) }}&description={{ urlencode($post->title) }}"
+                                   target="_blank" class="btn btn-pinterest d-block">
+                                    <i class="fab fa-pinterest-p me-2"></i>
+                                    <span>Pinterest</span>
+                                </a>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <a href="https://wa.me/?text={{ urlencode($post->title . ' - ' . request()->fullUrl()) }}"
+                                   target="_blank" class="btn btn-pinterest d-block">
+                                    <i class="fab fa-whatsapp me-2"></i>
+                                    <span>WhatsApp</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Berita Info Box -->
+                    <div class="sidebar-section mt-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Informasi Berita</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-item mb-2">
+                                    <strong>Dipublikasikan:</strong><br>
+                                    <small class="text-muted">{{ $post->created_at->format('d F Y, H:i') }} WIB</small>
+                                </div>
+                                @if($post->updated_at != $post->created_at)
+                                    <div class="info-item mb-2">
+                                        <strong>Diperbarui:</strong><br>
+                                        <small class="text-muted">{{ $post->updated_at->format('d F Y, H:i') }} WIB</small>
+                                    </div>
+                                @endif
+                                <div class="info-item mb-2">
+                                    <strong>Penulis:</strong><br>
+                                    <small class="text-muted">{{ $post->user ? $post->user->name : ($post->author ?? 'Admin') }}</small>
+                                </div>
+                                @if($post->category)
+                                    <div class="info-item mb-2">
+                                        <strong>Kategori:</strong><br>
+                                        <small class="text-muted">{{ $post->category->name }}</small>
+                                    </div>
+                                @endif
+                                <div class="info-item">
+                                    <strong>Dibaca:</strong><br>
+                                    <small class="text-muted">{{ number_format($post->views) }} kali</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+
+    </style>
+    <script>
+        // Mengatur semua gambar di dalam content sesuai posisi di CKEditor
+        document.querySelectorAll('.news-content img').forEach(img => {
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            img.style.borderRadius = '8px';
+            img.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+
+            img.classList.add('content-image');
+        });
+
+    </script>
+@endsection

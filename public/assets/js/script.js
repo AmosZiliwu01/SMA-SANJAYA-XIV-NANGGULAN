@@ -8,20 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to check if we're on mobile
     function isMobile() {
-        return window.innerWidth <= 576;
+        return window.innerWidth <= 768; // Changed from 576 to 768 to match CSS breakpoint
     }
 
     window.addEventListener('scroll', function () {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-        if (isMobile()) {
-            // Mobile behavior: change margin-top when scrolled
-            if (scrollTop > 50) {
-                navbarContainer.classList.add('navbar-scrolled-mobile');
-            } else {
-                navbarContainer.classList.remove('navbar-scrolled-mobile');
-            }
-        } else {
+        // Only apply scroll behavior on desktop
+        if (!isMobile()) {
             // Desktop behavior: original logic
             if (scrollTop > lastScrollTop) {
                 // Scroll ke bawah - sembunyikan top bar
@@ -35,16 +29,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
+        // Mobile: do nothing, navbar stays fixed in place
 
         lastScrollTop = scrollTop;
     });
 
-    // Reset mobile classes on resize
+    // Reset classes on resize
     window.addEventListener('resize', function() {
-        if (!isMobile()) {
-            navbarContainer.classList.remove('navbar-scrolled-mobile');
+        if (isMobile()) {
+            // Remove all scroll-related classes on mobile
+            navbarContainer.classList.remove('navbar-scrolled', 'navbar-scrolled-mobile');
+            topBar.style.transform = '';
+            topBar.style.display = '';
         }
     });
+
 
     // ==================== BOOTSTRAP CAROUSEL ====================
     // Auto carousel cycle

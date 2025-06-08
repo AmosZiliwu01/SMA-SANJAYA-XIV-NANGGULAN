@@ -1,0 +1,321 @@
+<?php
+
+namespace App\Http\Controllers\backend;
+
+use App\Http\Controllers\Controller;
+use App\Models\SchoolPrincipal;
+use App\Models\AboutSchool;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class SchoolManagementController extends Controller
+{
+    /**
+     * Display the combined management page
+     */
+    public function index()
+    {
+        $principals = SchoolPrincipal::orderBy('created_at', 'desc')->get();
+        $aboutSchools = AboutSchool::orderBy('created_at', 'desc')->get();
+
+        return view('backend.school-management.index', compact('principals', 'aboutSchools'));
+    }
+
+    // ==================== PRINCIPAL METHODS ====================
+
+    /**
+     * Store a new principal
+     */
+    public function storePrincipal(Request $request)
+    {
+        try {
+            $validate = $request->validate([
+                'name' => 'required|string|max:255',
+                'welcome_message' => 'required|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'is_active' => 'boolean'
+            ]);
+
+            // If this principal is set as active, deactivate others
+            if ($request->is_active) {
+                SchoolPrincipal::where('is_active', true)->update(['is_active' => false]);
+            }
+
+            $imageName = null;
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_principal.' . $request->image->extension();
+                $request->file('image')->storeAs('public/principals', $imageName);
+            }
+
+            SchoolPrincipal::create([
+                'name' => $validate['name'],
+                'welcome_message' => $validate['welcome_message'],
+                'image' => $imageName,
+                'is_active' => $request->is_active ?? false,
+            ]);
+
+            $this->logActivity('Menambahkan kepala sekolah baru: ' . $request->name);
+
+            return redirect()->route('school-management.index')
+                ->with('success', 'Data kepala sekolah berhasil disimpan')
+                ->with('active_tab', 'principals');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage())
+                ->with('active_tab', 'principals');
+        }
+    }
+
+    /**
+     * Update principal
+     */
+    public function updatePrincipal(Request $request, SchoolPrincipal $principal)
+    {
+        try {
+            $validate = $request->validate([
+                'name' => 'required|string|max:255',
+                'welcome_message' => 'required|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'is_active' => 'boolean'
+            ]);
+
+            // If this principal is set as active, deactivate others
+            if ($request->is_active) {
+                SchoolPrincipal::where('id', '!=', $principal->id)
+                    ->where('is_active', true)
+                    ->update(['is_active' => false]);
+            }
+
+            $imageName = $principal->image;
+
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($principal->image && Storage::exists('public/principals/' . $principal->image)) {
+                    Storage::delete('public/principals/' . $principal->image);
+                }
+
+                $imageName = time() . '_principal.' . $request->image->extension();
+                $request->file('image')->storeAs('public/principals', $imageName);
+            }
+
+            $principal->update([
+                'name' => $validate['name'],
+                'welcome_message' => $validate['welcome_message'],
+                'image' => $imageName,
+                'is_active' => $request->is_active ?? false,
+            ]);
+
+            $this->logActivity('Memperbarui data kepala sekolah: ' . $principal->name);
+
+            return redirect()->route('school-management.index')
+                ->with('success', 'Data kepala sekolah berhasil diperbarui')
+                ->with('active_tab', 'principals');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat memperbarui data: ' . $e->getMessage())
+                ->with('active_tab', 'principals');
+        }
+    }
+
+    /**
+     * Delete principal
+     */
+    public function deletePrincipal(SchoolPrincipal $principal)
+    {
+        try {
+            // Delete image file
+            if ($principal->image && Storage::exists('public/principals/' . $principal->image)) {
+                Storage::delete('public/principals/' . $principal->image);
+            }
+
+            $principal->delete();
+
+            $this->logActivity('Menghapus data kepala sekolah: ' . $principal->name);
+
+            return redirect()->route('school-management.index')
+                ->with('success', 'Data kepala sekolah berhasil dihapus')
+                ->with('active_tab', 'principals');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage())
+                ->with('active_tab', 'principals');
+        }
+    }
+
+    /**
+     * Toggle principal active status
+     */
+    public function togglePrincipalActive(SchoolPrincipal $principal)
+    {
+        try {
+            if (!$principal->is_active) {
+                SchoolPrincipal::where('id', '!=', $principal->id)
+                    ->update(['is_active' => false]);
+                $principal->update(['is_active' => true]);
+                $message = 'Kepala sekolah berhasil diaktifkan.';
+            } else {
+                $principal->update(['is_active' => false]);
+                $message = 'Kepala sekolah berhasil dinonaktifkan.';
+            }
+
+            $this->logActivity($message . ' ' . $principal->name);
+
+            return redirect()->back()
+                ->with('success', $message)
+                ->with('active_tab', 'principals');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->with('active_tab', 'principals');
+        }
+    }
+
+    // ==================== ABOUT SCHOOL METHODS ====================
+
+    /**
+     * Store a new about school section
+     */
+    public function storeAboutSchool(Request $request)
+    {
+        try {
+            $validate = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'is_active' => 'boolean'
+            ]);
+
+            // If this about section is set as active, deactivate others
+            if ($request->is_active) {
+                AboutSchool::where('is_active', true)->update(['is_active' => false]);
+            }
+
+            $imageName = null;
+            if ($request->hasFile('background_image')) {
+                $imageName = time() . '_about.' . $request->background_image->extension();
+                $request->file('background_image')->storeAs('public/about-schools', $imageName);
+            }
+
+            AboutSchool::create([
+                'title' => $validate['title'],
+                'description' => $validate['description'],
+                'background_image' => $imageName,
+                'is_active' => $request->is_active ?? false,
+            ]);
+
+            $this->logActivity('Menambahkan tentang sekolah baru: ' . $request->school_name);
+
+            return redirect()->route('school-management.index')
+                ->with('success', 'Data tentang sekolah berhasil disimpan')
+                ->with('active_tab', 'about');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage())
+                ->with('active_tab', 'about');
+        }
+    }
+
+    /**
+     * Update about school section
+     */
+    public function updateAboutSchool(Request $request, AboutSchool $aboutSchool)
+    {
+        try {
+            $validate = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'is_active' => 'boolean'
+            ]);
+
+            // If this about section is set as active, deactivate others
+            if ($request->is_active) {
+                AboutSchool::where('id', '!=', $aboutSchool->id)
+                    ->where('is_active', true)
+                    ->update(['is_active' => false]);
+            }
+
+            $imageName = $aboutSchool->background_image;
+
+            if ($request->hasFile('background_image')) {
+                // Delete old image
+                if ($aboutSchool->background_image && Storage::exists('public/about-schools/' . $aboutSchool->background_image)) {
+                    Storage::delete('public/about-schools/' . $aboutSchool->background_image);
+                }
+
+                $imageName = time() . '_about.' . $request->background_image->extension();
+                $request->file('background_image')->storeAs('public/about-schools', $imageName);
+            }
+
+            $aboutSchool->update([
+                'title' => $validate['title'],
+                'description' => $validate['description'],
+                'background_image' => $imageName,
+                'is_active' => $request->is_active ?? false,
+            ]);
+
+            $this->logActivity('Memperbarui data tentang sekolah: ' . $aboutSchool->school_name);
+
+            return redirect()->route('school-management.index')
+                ->with('success', 'Data tentang sekolah berhasil diperbarui')
+                ->with('active_tab', 'about');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat memperbarui data: ' . $e->getMessage())
+                ->with('active_tab', 'about');
+        }
+    }
+
+    /**
+     * Delete about school section
+     */
+    public function deleteAboutSchool(AboutSchool $aboutSchool)
+    {
+        try {
+            // Delete background image file
+            if ($aboutSchool->background_image && Storage::exists('public/about-schools/' . $aboutSchool->background_image)) {
+                Storage::delete('public/about-schools/' . $aboutSchool->background_image);
+            }
+
+            $aboutSchool->delete();
+
+            $this->logActivity('Menghapus data tentang sekolah: ' . $aboutSchool->school_name);
+
+            return redirect()->route('school-management.index')
+                ->with('success', 'Data tentang sekolah berhasil dihapus')
+                ->with('active_tab', 'about');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage())
+                ->with('active_tab', 'about');
+        }
+    }
+
+    /**
+     * Toggle about school active status
+     */
+    public function toggleAboutSchoolActive(AboutSchool $aboutSchool)
+    {
+        try {
+            if (!$aboutSchool->is_active) {
+                AboutSchool::where('id', '!=', $aboutSchool->id)
+                    ->update(['is_active' => false]);
+                $aboutSchool->update(['is_active' => true]);
+                $message = 'Tentang sekolah berhasil diaktifkan.';
+            } else {
+                $aboutSchool->update(['is_active' => false]);
+                $message = 'Tentang sekolah berhasil dinonaktifkan.';
+            }
+
+            $this->logActivity($message . ' ' . $aboutSchool->school_name);
+
+            return redirect()->back()
+                ->with('success', $message)
+                ->with('active_tab', 'about');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->with('active_tab', 'about');
+        }
+    }
+}

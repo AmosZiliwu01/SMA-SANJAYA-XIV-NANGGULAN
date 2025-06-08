@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class SchoolPrincipal extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'title',
+        'welcome_message',
+        'image',
+        'is_active'
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean'
+    ];
+
+    /**
+     * Scope to get only active principals
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Get the current active principal
+     */
+    public static function getCurrent()
+    {
+        return static::where('is_active', true)->first();
+    }
+}

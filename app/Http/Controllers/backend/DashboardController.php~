@@ -84,11 +84,6 @@ class DashboardController extends Controller
                     ->orderBy('posts_count', 'desc')
                     ->take(5)
                     ->get(),
-
-                // Top posts by views (untuk admin)
-                'topPosts' => Post::orderBy('views', 'desc')
-                    ->take(5)
-                    ->get(),
             ];
         }
 

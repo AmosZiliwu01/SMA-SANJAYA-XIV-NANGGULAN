@@ -16,7 +16,7 @@
                     @if($aboutSchool)
                         {!! nl2br(e($aboutSchool->description)) !!}
                     @else
-                        Di era digital saat ini, website sekolah merupakan pintu gerbang informasi terdepan sebagai sarana untuk menyebarkan berbagai publikasi terkait kemajuan pendidikan dan pencapaian SMA Sanjaya XIV Nanggulan terkini.<br><br>
+                         era digital saat ini, website sekolah merupakan pintu gerbang informasi terdepan sebagai sarana untuk menyebarkan berbagai publikasi terkait kemajuan pendidikan dan pencapaian SMA Sanjaya XIV Nanggulan terkini.<br><br>
                         Sebagai media pembelajaran, website sekolah juga diarahkan dapat mendatangkan kemanfaatan sebagai sarana pembelajaran dengan memuat blog, e-learning, karya, dan media pembelajaran yang dibuat oleh pendidik serta para siswa.<br><br>
                         Di sisi lain kami sungguh berharap Website ini juga dapat menjadi sarana silaturahmi dan komunikasi antara sekolah dengan para alumni di berbagai tempat, sebagai sebuah keluarga besar yang solid serta dapat berkontribusi dalam memajukan pendidikan di SMA Sanjaya XIV Nanggulan tercinta.<br><br>
                         Kami menyadari website SMA Sanjaya XIV Nanggulan ini masih memiliki banyak kekurangan, oleh karena itu, kami akan terus belajar dan meng-update diri, sehingga konten dan kualitas tampilan website sekolah ini akan semakin berkembang. Kritik, saran dan masukan dari berbagai stakeholder sekolah tentu sangat kami harapkan.<br><br>

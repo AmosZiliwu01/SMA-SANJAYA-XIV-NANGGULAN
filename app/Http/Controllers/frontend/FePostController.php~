@@ -157,48 +157,4 @@ class FePostController extends Controller
 
         return view('frontend.post.detail', compact('post', 'relatedPosts'));
     }
-
-    /**
-     * Apply sorting logic based on request
-     */
-    private function applySorting($query, Request $request)
-    {
-        if ($request->filled('search')) {
-            // Sort by relevance when searching
-            $searchTerm = trim($request->search);
-            return $query->selectRaw('posts.*,
-                CASE
-                    WHEN title LIKE ? THEN 5
-                    WHEN title LIKE ? THEN 3
-                    WHEN content LIKE ? THEN 1
-                    ELSE 0
-                END as relevance_score', [
-                $searchTerm . '%',
-                '%' . $searchTerm . '%',
-                '%' . $searchTerm . '%'
-            ])
-                ->orderBy('relevance_score', 'desc')
-                ->orderBy('created_at', 'desc');
-        }
-
-        // Default sorting
-        return $query->latest('created_at');
-    }
-
-    /**
-     * Get sidebar data (categories, popular posts, etc.)
-     */
-    private function getSidebarData()
-    {
-        return [
-            'categories' => Category::withCount(['posts' => function($query) {
-                $query->latest(); // Only count recent posts if needed
-            }])->orderBy('name')->get(),
-            'allPostsCount' => Post::count(),
-            'popularPosts' => Post::with(['category', 'user'])
-                ->orderBy('views', 'desc')
-                ->take(5)
-                ->get(),
-        ];
-    }
 }
