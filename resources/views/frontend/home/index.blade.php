@@ -126,7 +126,7 @@
                 </div>
                 <div class="col-lg-5">
                     <div class="welcome-image-container">
-                        <img src="{{ $schoolPrincipal && $schoolPrincipal->image}}"
+                        <img src="{{ $schoolPrincipal && $schoolPrincipal->image ? asset('storage/principals/' . $schoolPrincipal->image) : asset('assets/img/kepala-sekolah.jpg') }}"
                              alt="{{ $schoolPrincipal ? $schoolPrincipal->name : 'Kepala Sekolah' }}"
                              class="welcome-image img-fluid rounded-circle"
                              onerror="this.src='{{ asset('assets/img/kepala-sekolah.jpg') }}'">
