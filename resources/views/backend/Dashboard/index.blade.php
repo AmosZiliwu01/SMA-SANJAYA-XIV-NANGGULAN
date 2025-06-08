@@ -581,7 +581,7 @@
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div>
-                                                        <img src="{{ (isset($log->user) && isset($log->user->photo)) ? $log->user->photo : asset('assets/img/team-2.jpg') }}"
+                                                        <img src="{{ (isset($log->user) && isset($log->user->photo)) ? $log->user->photo : asset('assets/img/user.jpg') }}"
                                                              class="avatar avatar-sm me-3" alt="user">
                                                     </div>
                                                     <div class="d-flex flex-column justify-content-center">
@@ -595,7 +595,6 @@
                                                     <h6 class="mb-0 text-sm">{{ $log->action ?? 'Aktivitas Tidak Diketahui' }}</h6>
 
                                                     <p class="text-xs text-secondary mb-0">
-                                                        {{ $log->user->name ?? 'Pengguna Tidak Diketahui' }} -
                                                         {{ \Carbon\Carbon::parse($log->logged_at)->format('d M Y, H:i') }}
                                                     </p>
                                                 </div>
