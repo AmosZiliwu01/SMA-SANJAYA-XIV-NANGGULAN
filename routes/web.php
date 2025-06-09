@@ -53,6 +53,7 @@ Route::prefix('/')->group(function () {
 
     // Contact Page
     Route::get('/contact', [FeContactController::class, 'index'])->name('fe-contact.index');
+    Route::post('/contact', [FeContactController::class, 'store'])->name('fe-contact.store');
 
     // Gallery Page
     Route::get('/gallery', [FeGalleryController::class, 'index'])->name('fe-gallery.index');
@@ -170,6 +171,9 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     //Message Routes
     Route::prefix('message')->group(function () {
         Route::get('/', [MessageController::class, 'index'])->name('message.index');
+        Route::post('/store', [MessageController::class, 'store'])->name('message.store');
+        Route::delete('/destroy/{message}', [MessageController::class, 'destroy'])->name('message.destroy');
+        Route::post('/message/reply/{id}', [MessageController::class, 'reply'])->name('message.reply');
     });
 
     //Post Routes
@@ -184,15 +188,13 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     });
 
     //Student Routes
-    Route::prefix('student')->middleware('role:administrator')->group(function () {
-        Route::get('/', [StudentController::class, 'index'])->name('student.index');
-        Route::get('/create', [StudentController::class, 'create'])->name('student.create');
-        Route::post('/store', [StudentController::class, 'store'])->name('student.store');
-        Route::post('/{student}', [StudentController::class, 'update'])->name('student.update');
-        Route::delete('/{student}', [StudentController::class, 'destroy'])->name('student.destroy');
-        Route::get('/export', [StudentController::class, 'export'])->name('student.export');
-        Route::post('/student/import', [StudentController::class, 'import'])->name('student.import');
-
+    Route::prefix('students')->middleware('role:administrator')->group(function () {
+        Route::get('/', [StudentController::class, 'index'])->name('students.index');
+        Route::post('/store', [StudentController::class, 'store'])->name('students.store');
+        Route::post('/{student}', [StudentController::class, 'update'])->name('students.update');
+        Route::delete('/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+        Route::get('/export', [StudentController::class, 'export'])->name('students.export');
+        Route::post('/import', [StudentController::class, 'import'])->name('students.import');
     });
 
     //Teacher Routes

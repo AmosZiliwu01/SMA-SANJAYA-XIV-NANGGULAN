@@ -9,75 +9,20 @@
 
             <!-- Daftar Dokumen -->
             <div class="d-flex flex-column gap-3">
-                <!-- Item -->
-                <div class="d-flex align-items-center p-3 rounded bg-light shadow-sm">
-                    <div class="me-3">
-                        <i class="fas fa-file-alt fa-2x" style="color: #003B8F;"></i>
+                @foreach($files as $file)
+                    <div class="d-flex align-items-center p-3 rounded bg-light shadow-sm">
+                        <div class="me-3">
+                            <i class="fas fa-file-alt fa-2x" style="color: #003B8F;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">{{ $file->title }}</div>
+                            <div class="text-muted small">{{ Str::limit($file->description, 50) }}</div>
+                        </div>
+                        <a href="{{ asset('storage/' . $file->file_path) }}" download class="btn ms-3"
+                           style="background-color: #003B8F; color: white;">Download</a>
                     </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-semibold">Panduan Akademik 2024</div>
-                        <div class="text-muted small">Panduan lengkap kurikulum dan kegiatan akademik tahun 2024.</div>
-                    </div>
-                    <a href="file/panduan-akademik-2024.pdf" download class="btn ms-3" style="background-color: #003B8F; color: white;">Download</a>
-                </div>
-
-                <!-- Duplikasi item untuk dokumen lain -->
-                <div class="d-flex align-items-center p-3 rounded bg-light shadow-sm">
-                    <div class="me-3">
-                        <i class="fas fa-file-alt fa-2x" style="color: #003B8F;"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-semibold">Panduan Akademik 2024</div>
-                        <div class="text-muted small">Panduan lengkap kurikulum dan kegiatan akademik tahun 2024.</div>
-                    </div>
-                    <a href="file/panduan-akademik-2024.pdf" download class="btn ms-3" style="background-color: #003B8F; color: white;">Download</a>
-                </div>
-
-                <div class="d-flex align-items-center p-3 rounded bg-light shadow-sm">
-                    <div class="me-3">
-                        <i class="fas fa-file-alt fa-2x" style="color: #003B8F;"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-semibold">Panduan Akademik 2024</div>
-                        <div class="text-muted small">Panduan lengkap kurikulum dan kegiatan akademik tahun 2024.</div>
-                    </div>
-                    <a href="file/panduan-akademik-2024.pdf" download class="btn ms-3" style="background-color: #003B8F; color: white;">Download</a>
-                </div>
-
-                <div class="d-flex align-items-center p-3 rounded bg-light shadow-sm">
-                    <div class="me-3">
-                        <i class="fas fa-file-alt fa-2x" style="color: #003B8F;"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-semibold">Panduan Akademik 2024</div>
-                        <div class="text-muted small">Panduan lengkap kurikulum dan kegiatan akademik tahun 2024.</div>
-                    </div>
-                    <a href="file/panduan-akademik-2024.pdf" download class="btn ms-3" style="background-color: #003B8F; color: white;">Download</a>
-                </div>
-
-                <div class="d-flex align-items-center p-3 rounded bg-light shadow-sm">
-                    <div class="me-3">
-                        <i class="fas fa-file-alt fa-2x" style="color: #003B8F;"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-semibold">Panduan Akademik 2024</div>
-                        <div class="text-muted small">Panduan lengkap kurikulum dan kegiatan akademik tahun 2024.</div>
-                    </div>
-                    <a href="file/panduan-akademik-2024.pdf" download class="btn ms-3" style="background-color: #003B8F; color: white;">Download</a>
-                </div>
-
-                <div class="d-flex align-items-center p-3 rounded bg-light shadow-sm">
-                    <div class="me-3">
-                        <i class="fas fa-file-alt fa-2x" style="color: #003B8F;"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-semibold">Panduan Akademik 2024</div>
-                        <div class="text-muted small">Panduan lengkap kurikulum dan kegiatan akademik tahun 2024.</div>
-                    </div>
-                    <a href="file/panduan-akademik-2024.pdf" download class="btn ms-3" style="background-color: #003B8F; color: white;">Download</a>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
-
 @endsection

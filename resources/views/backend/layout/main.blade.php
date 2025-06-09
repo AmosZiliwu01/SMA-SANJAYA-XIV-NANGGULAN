@@ -230,9 +230,9 @@
 
                 <!-- Data Siswa (Class) -->
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center {{ request()->routeIs('class.*') || request()->routeIs('student.*') ? 'active' : '' }}"
+                    <a class="nav-link d-flex align-items-center {{ request()->routeIs('class.*') || request()->routeIs('students.*') ? 'active' : '' }}"
                        data-bs-toggle="collapse" href="#submenu-class" role="button"
-                       aria-expanded="{{ request()->routeIs('class.*') || request()->routeIs('student.*') ? 'true' : 'false' }}"
+                       aria-expanded="{{ request()->routeIs('class.*') || request()->routeIs('students.*') ? 'true' : 'false' }}"
                        aria-controls="submenu-class">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -240,7 +240,7 @@
                         </div>
                         <span class="nav-link-text ms-1">Data Siswa</span>
                     </a>
-                    <div class="collapse ps-3 {{ request()->routeIs('class.*', 'student.*') ? 'show' : '' }}"
+                    <div class="collapse ps-3 {{ request()->routeIs('class.*') || request()->routeIs('students.*') ? 'show' : '' }}"
                          id="submenu-class">
                         <ul class="nav flex-column mt-1">
                             <li class="nav-item">
@@ -251,8 +251,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center {{ request()->routeIs('student.*') ? 'active' : '' }}"
-                                   href="{{ route('student.index') }}">
+                                <a class="nav-link d-flex align-items-center {{ request()->routeIs('students.*') ? 'active' : '' }}"
+                                   href="{{ route('students.index') }}">
                                     <i class="bi bi-person-lines-fill text-sm me-2"></i>
                                     <span>Student</span>
                                 </a>

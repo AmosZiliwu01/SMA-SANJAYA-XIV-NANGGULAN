@@ -30,13 +30,21 @@
 
                         <!-- Kolom Formulir Kanan -->
                         <div class="col-md-6">
-                            <form>
+                            @if(session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            <form action="{{ route('fe-contact.store') }}" method="POST">
+                                @csrf
+                                @method("POST")
                                 <div class="p-3 rounded" style="background-color: #073b87;">
                                     <h6 class="text-white fw-bold mb-3">Tinggalkan Pesan</h6>
-                                    <input type="text" class="form-control mb-2 rounded-3" placeholder="Name">
-                                    <input type="email" class="form-control mb-2 rounded-3" placeholder="Email">
-                                    <input type="text" class="form-control mb-2 rounded-3" placeholder="Phone">
-                                    <textarea class="form-control mb-2 rounded-3" rows="4" placeholder="Message"></textarea>
+                                    <input type="text" class="form-control mb-2 rounded-3" placeholder="Name" name="name" required>
+                                    <input type="email" class="form-control mb-2 rounded-3" placeholder="Email" name="email" required>
+                                    <input type="text" class="form-control mb-2 rounded-3" placeholder="Phone" name="phone">
+                                    <textarea class="form-control mb-2 rounded-3" rows="4" placeholder="Message" name="message" required></textarea>
                                 </div>
 
                                 <!-- Tombol Submit di luar card biru -->
