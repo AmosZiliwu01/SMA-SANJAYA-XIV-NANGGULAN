@@ -38,7 +38,7 @@
                     @foreach($testimonials as $testimonial)
                         <div class="testimonial-card">
                             <p class="testimonial-text">"{{ $testimonial->message }}"</p>
-                            <img src="{{ $testimonial->photo_url }}"
+                            <img src="{{ $testimonial->photo ? asset('storage/testimonials/' . $testimonial->photo) : 'https://placehold.co/400' }}"
                                  alt="{{ $testimonial->name }}"
                                  class="alumni-img img-fluid"
                                  onerror="this.src='https://placehold.co/400'">
