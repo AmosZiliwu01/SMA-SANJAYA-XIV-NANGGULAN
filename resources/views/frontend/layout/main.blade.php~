@@ -299,7 +299,7 @@
         icon: "success",
         title: "{{ session('success') }}",
         showConfirmButton: false,
-        timer: 5000,
+        timer: 2500,
         toast: true,
         width: '30rem'
     });

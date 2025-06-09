@@ -32,7 +32,7 @@ class FeContactController extends Controller
         ]);
 
         // Beri respon atau redirect
-        return redirect()->back()->with('success', 'Pesan Anda berhasil dikirim!');
+        return redirect()->back()->with('success', 'Pesan Anda berhasil dikirim! Silakan cek email Anda untuk balasan dari admin.');
     }
 }
 

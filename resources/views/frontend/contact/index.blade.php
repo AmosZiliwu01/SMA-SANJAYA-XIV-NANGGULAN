@@ -30,11 +30,6 @@
 
                         <!-- Kolom Formulir Kanan -->
                         <div class="col-md-6">
-                            @if(session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
 
                             <form action="{{ route('fe-contact.store') }}" method="POST">
                                 @csrf
