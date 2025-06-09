@@ -69,14 +69,15 @@ class DashboardController extends Controller
                     ->orderBy('month')
                     ->get(),
 
-                // Visitor statistics for last 7 days
-                'weeklyVisitors' => Visitor::select(
-                    DB::raw('DATE(visited_at) as date'),
+                // Visitor statistics for last month
+                'monthlyVisitors' => Visitor::select(
+                    DB::raw('MONTH(visited_at) as month'),
+                    DB::raw('YEAR(visited_at) as year'),
                     DB::raw('COUNT(DISTINCT visitor_id) as count')
                 )
-                    ->where('visited_at', '>=', Carbon::now()->subDays(7))
-                    ->groupBy('date')
-                    ->orderBy('date')
+                    ->whereYear('visited_at', date('Y'))
+                    ->groupBy('month', 'year')
+                    ->orderBy('month')
                     ->get(),
 
                 // Top categories by post count

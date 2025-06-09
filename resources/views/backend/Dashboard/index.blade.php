@@ -208,10 +208,10 @@
                 <div class="col-lg-8 mb-lg-0 mb-4">
                     <div class="card z-index-2 h-100">
                         <div class="card-header pb-0 pt-3 bg-transparent">
-                            <h6 class="text-capitalize">Statistik Pengunjung (7 Hari Terakhir)</h6>
+                            <h6 class="text-capitalize">Statistik Pengunjung (Tahun Ini)</h6>
                             <p class="text-sm mb-0">
                                 <i class="fa fa-arrow-up text-success"></i>
-                                <span class="font-weight-bold">Pengunjung Unik Harian</span>
+                                <span class="font-weight-bold">Pengunjung Unik Bulanan</span>
                             </p>
                         </div>
                         <div class="card-body p-3">
@@ -635,17 +635,26 @@
                 @can('admin')
                 // Visitor Chart for Admin
                 if (document.getElementById('chart-visitors')) {
-                    const visitorsData = @json($adminData['weeklyVisitors'] ?? []);
-                    const visitorsLabels = visitorsData.length > 0 ? visitorsData.map(item => new Date(item.date).toLocaleDateString('id-ID', {month: 'short', day: 'numeric'})) : [];
-                    const visitorsValues = visitorsData.length > 0 ? visitorsData.map(item => item.count || 0) : [];
+                    const visitorsData = @json($adminData['monthlyVisitors'] ?? []);
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                    const visitorCounts = Array(12).fill(0);
+
+                    // Proses data pengunjung bulanan seperti chart posts
+                    if (visitorsData && Array.isArray(visitorsData) && visitorsData.length > 0) {
+                        visitorsData.forEach(item => {
+                            if (item && item.month && item.month >= 1 && item.month <= 12) {
+                                visitorCounts[item.month - 1] = item.count || 0;
+                            }
+                        });
+                    }
 
                     new Chart(document.getElementById('chart-visitors'), {
                         type: 'line',
                         data: {
-                            labels: visitorsLabels.length > 0 ? visitorsLabels : ['Tidak ada data'],
+                            labels: months, // Menggunakan array months langsung
                             datasets: [{
                                 label: 'Pengunjung Unik',
-                                data: visitorsValues.length > 0 ? visitorsValues : [0],
+                                data: visitorCounts, // Menggunakan visitorCounts yang sudah diproses
                                 borderColor: '#5e72e4',
                                 backgroundColor: 'rgba(94, 114, 228, 0.1)',
                                 borderWidth: 2,
