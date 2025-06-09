@@ -48,7 +48,7 @@
                             <img class="d-block" src="{{asset('assets/img/slider-1.jpeg')}}" alt="First slide">
                             <div class="carousel-caption d-md-block">
                                 <div class="slider_title">
-                                    <h1>Selamat Datang di SMA Sanjaya Nanggulan</h1>
+                                    <h1>Selamat Datang di SMA Sanjaya XIV Nanggulan</h1>
                                     <h4>Membentuk Generasi Berintegritas, Berprestasi, dan Berakhlak Mulia</h4>
                                     <div class="slider-btn">
                                         <a href="#" class="btn btn-default">Pelajari Lebih Lanjut</a>
@@ -101,7 +101,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-7">
                     <div class="welcome-header">
-                        <h2>WELCOME TO <span class="text-primary">SMA SANJAYA NANGGULAN</span></h2>
+                        <h2>WELCOME TO <span class="text-primary">SMA SANJAYA XIV NANGGULAN</span></h2>
                         <div class="welcome-divider">
                             <div class="line"></div>
                             <div class="icon"><i class="fas fa-graduation-cap"></i></div>

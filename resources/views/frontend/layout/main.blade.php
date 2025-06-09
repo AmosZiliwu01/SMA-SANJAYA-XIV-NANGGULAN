@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @if(isset($post))
-        <title>{{ $post->title }} | SMA Sanjaya Nanggulan</title>
+        <title>SMA Sanjaya XIV Nanggulan</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/icon-sma-sanjaya.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('assets/img/logo-sma-sanjaya.png') }}">
 
         <!-- Primary Meta Tags -->
         <meta name="title" content="{{ $post->title }} | SMA Sanjaya Nanggulan">
@@ -130,7 +132,7 @@
                 <div class="logo-container">
                     <img src="{{ asset('assets/img/logo-sma-sanjaya.png') }}" alt="Logo SMA Sanjaya" class="logo-img" style="width: 30px;">
                     <div class="school-name">
-                        SMA Sanjaya<br>Nanggulan
+                        SMA Sanjaya<br>XIV Nanggulan
                     </div>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

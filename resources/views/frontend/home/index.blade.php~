@@ -101,7 +101,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-7">
                     <div class="welcome-header">
-                        <h2>WELCOME TO <span class="text-primary">SMA SANJAYA NANGGULAN</span></h2>
+                        <h2>WELCOME TO <span class="text-primary">SMA SANJAYA XIV NANGGULAN</span></h2>
                         <div class="welcome-divider">
                             <div class="line"></div>
                             <div class="icon"><i class="fas fa-graduation-cap"></i></div>
@@ -147,7 +147,7 @@
             <div class="row">
                 @if($latestPosts->count() > 0)
                     @foreach($latestPosts as $post)
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-lg-4 col-md-6 mb-4">
                             <a href="{{ route('fe-post.detail', $post->slug) }}" class="text-decoration-none">
                                 <div class="news-item">
                                     <div class="news-image">
