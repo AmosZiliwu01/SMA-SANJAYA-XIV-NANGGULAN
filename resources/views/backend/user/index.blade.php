@@ -23,8 +23,7 @@
                                     <th>No</th>
                                     <th style="width: 100px;">Foto</th>
                                     <th>Nama</th>
-                                    <th>Email</th> <!-- Tambahan -->
-                                    <th>Password</th>
+                                    <th>Email</th>
                                     <th>Kontak</th>
                                     <th>Role</th>
                                     <th style="width: 180px;">Aksi</th>
@@ -39,7 +38,6 @@
                                     </td>
                                     <td>{{$user->username}}</td>
                                     <td>{{$user->email}}</td>
-                                    <td>{{$user->password}}</td>
                                     <td>{{$user->phone}}</td>
                                     <td>{{$user->role}}</td>
                                     <td class="text-center">
@@ -64,11 +62,13 @@
                             </table>
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start mt-3 px-2 gap-2">
                             <p class="text-muted small mb-0">
-                                Menampilkan {{ $users->firstItem() }} - {{ $users->lastItem() }} dari total {{ $users->total() }} user
+                                Menampilkan {{ $users->firstItem() }} - {{ $users->lastItem() }} dari total {{ $users->total() }} pengguna
                             </p>
-                            {{ $users->links('pagination::bootstrap-5') }}
+                            <div class="d-flex justify-content-center">
+                                {{ $users->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

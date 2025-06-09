@@ -43,7 +43,7 @@
                                             </td>
                                             <td>{{ $row->name }}</td>
                                             <td>{{ $row->graduation_year }}</td>
-                                            <td>{{ Str::limit($row->message, 100, '...') }}</td>
+                                            <td class="text-start">{{ Str::limit($row->message, 50, '...') }}</td>
                                             <td>{{ $row->created_at->format('d M Y') }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#modalEditTestimonial{{ $row->id }}">
@@ -60,11 +60,13 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start mt-3 px-2 gap-2">
                                 <p class="text-muted small mb-0">
                                     Menampilkan {{ $testimonials->firstItem() }} - {{ $testimonials->lastItem() }} dari total {{ $testimonials->total() }} testimoni
                                 </p>
-                                {{ $testimonials->links('pagination::bootstrap-5') }}
+                                <div class="d-flex justify-content-center">
+                                    {{ $testimonials->links('pagination::bootstrap-5') }}
+                                </div>
                             </div>
                         </div>
                     </div>

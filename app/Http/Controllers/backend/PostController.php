@@ -13,9 +13,6 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $query = Post::with(['category', 'user'])->latest();
@@ -29,19 +26,12 @@ class PostController extends Controller
         return view('backend.post.list-post.index', compact('post'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $categories = Category::all();
         return view('backend.post.list-post.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         try {
@@ -82,17 +72,6 @@ class PostController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Post $post)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $post = Post::findOrFail($id);
@@ -100,10 +79,6 @@ class PostController extends Controller
         return view('backend.post.list-post.edit', compact('post', 'categories'));
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         try {
@@ -201,8 +176,6 @@ class PostController extends Controller
             return redirect()->route('post.index')->with('error', 'Terjadi kesalahan saat menghapus post.');
         }
     }
-
-
 
     public function uploadImage(Request $request)
     {

@@ -47,7 +47,7 @@
                                         <td>{{ $row->name }}</td>
                                         <td>{{ $row->gender }}</td>
                                         <td>{{ $row->class->name ?? '-' }}</td>
-                                        <td>{{ $row->entry_year }}</td>
+                                        <td>{{ $row->entry_year ?? '-' }}</td>
                                         <td>
                                             <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal"
                                                     data-bs-target="#modalEditStudent{{ $row->id }}">
@@ -68,11 +68,9 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            <div
-                                class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start mt-3 px-2 gap-2">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start mt-3 px-2 gap-2">
                                 <p class="text-muted small mb-0">
-                                    Menampilkan {{ $students->firstItem() }} - {{ $students->lastItem() }} dari
-                                    total {{ $students->total() }} siswa
+                                    Menampilkan {{ $students->firstItem() }} - {{ $students->lastItem() }} dari total {{ $students->total() }} siswa
                                 </p>
                                 <div class="d-flex justify-content-center">
                                     {{ $students->links('pagination::bootstrap-5') }}

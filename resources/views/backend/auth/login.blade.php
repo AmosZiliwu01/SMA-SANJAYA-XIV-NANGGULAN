@@ -10,7 +10,7 @@
                             <div class="card card-plain">
                                 <div class="card-header pb-0 text-start">
                                     <div class="d-flex justify-content-center">
-                                        <img src="{{asset('assets/img/logo-sma-sanjaya.png')}}" alt="Logo Sekolah" class="img-fluid mt-3 mb-4" style="max-width: 150px; height: 100px;">
+                                        <img src="{{asset('assets/img/logo-sma-sanjaya.jpg')}}" alt="Logo Sekolah" class="img-fluid mt-3 mb-4" style="max-width: 150px; height: 100px;">
                                     </div>
                                     <h4 class="font-weight-bolder">Sign In</h4>
                                     <p class="mb-0">Enter your email and password to sign in</p>

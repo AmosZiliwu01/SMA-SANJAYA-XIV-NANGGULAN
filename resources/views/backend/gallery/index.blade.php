@@ -60,11 +60,13 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start mt-3 px-2 gap-2">
                             <p class="text-muted small mb-0">
-                                Menampilkan {{ $galleries->firstItem() }} - {{ $galleries->lastItem() }} dari total {{ $galleries->total() }} Gallery
+                                Menampilkan {{ $galleries->firstItem() }} - {{ $galleries->lastItem() }} dari total {{ $galleries->total() }} galeri
                             </p>
-                            {{ $galleries->links('pagination::bootstrap-5') }}
+                            <div class="d-flex justify-content-center">
+                                {{ $galleries->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

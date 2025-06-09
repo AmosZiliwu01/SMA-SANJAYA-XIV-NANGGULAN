@@ -9,28 +9,17 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        // Menampilkan semua file
-        $files = File::paginate(5);
+        $query = File::with('user')->orderBy('created_at', 'desc');
+
+        if (auth()->user()->role !== 'administrator') {
+            $query->where('user_id', auth()->id());
+        }
+        $files = $query->paginate(5);
         return view('backend.file.index', compact('files'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // Menampilkan form tambah file
-        return view('backend.file.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         // Validasi input
@@ -54,7 +43,8 @@ class FileController extends Controller
             $data = new File();
             $data->title = $request->title;
             $data->description = $request->description;
-            $data->file_path = $filePath; // path file relatif (untuk <a href="{{ asset('storage/'.$file->file_path) }}">)
+            $data->file_path = $filePath;
+            $data->user_id = auth()->id();
             $data->save();
 
             return redirect()->back()->with('success', 'File berhasil diunggah!');
@@ -63,25 +53,6 @@ class FileController extends Controller
         return redirect()->back()->with('error', 'Gagal mengunggah file!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(File $file)
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(File $file)
-    {
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         // Validasi input
@@ -92,6 +63,7 @@ class FileController extends Controller
         ]);
 
         $file = File::findOrFail($id);
+
         $file->title = $request->title;
         $file->description = $request->description;
 
@@ -116,10 +88,6 @@ class FileController extends Controller
         return redirect()->back()->with('success', 'File berhasil diupdate!');
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $file = File::findOrFail($id);

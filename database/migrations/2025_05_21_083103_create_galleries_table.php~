@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('albums', function (Blueprint $table) {
+        Schema::create('galleries', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('title');
+            $table->string('image');
+            $table->unsignedBigInteger('album_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('author')->nullable();
-            $table->integer('photo_count')->default(0);
-            $table->string('cover_photo')->nullable();
             $table->timestamps();
 
+            $table->foreign('album_id')->references('id')->on('albums')->onDelete('set null');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('albums');
+        Schema::dropIfExists('galleries');
     }
 };

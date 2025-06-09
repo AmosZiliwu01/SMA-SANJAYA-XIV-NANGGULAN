@@ -6,7 +6,7 @@
     @if(isset($post))
         <title>SMA Sanjaya XIV Nanggulan</title>
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/icon-sma-sanjaya.png') }}">
-        <link rel="icon" type="image/png" href="{{ asset('assets/img/logo-sma-sanjaya.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('assets/img/logo-sma-sanjaya.jpg') }}">
 
         <!-- Primary Meta Tags -->
         <meta name="title" content="{{ $post->title }} | SMA Sanjaya Nanggulan">
@@ -130,7 +130,7 @@
         <div class="container-fluid">
             <div class="logo-section">
                 <div class="logo-container">
-                    <img src="{{ asset('assets/img/logo-sma-sanjaya.png') }}" alt="Logo SMA Sanjaya" class="logo-img" style="width: 30px;">
+                    <img src="{{ asset('assets/img/logo-sma-sanjaya.jpg') }}" alt="Logo SMA Sanjaya" class="logo-img" style="width: 30px;">
                     <div class="school-name">
                         SMA Sanjaya<br>XIV Nanggulan
                     </div>
@@ -177,7 +177,7 @@
             <!-- School Info Column -->
             <div class="col-lg-4 mb-4 mb-lg-0">
                 <div class="d-flex align-items-center">
-                    <img src="{{ asset('assets/img/logo-sma-sanjaya.png') }}" alt="SMA Sanjaya Logo" class="me-3" style="width: 80px; height: auto;">
+                    <img src="{{ asset('assets/img/logo-sma-sanjaya.jpg') }}" alt="SMA Sanjaya Logo" class="me-3" style="width: 80px; height: auto;">
                     <div>
                         <h3 class="mb-0 text-white fw-bold">SMA SANJAYA XIV</h3>
                         <h5 class="text-white fw-light">NANGGULAN</h5>

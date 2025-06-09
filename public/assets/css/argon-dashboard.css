@@ -28368,4 +28368,8 @@ pre[class*=language-] {
     color: #495057;
 }
 
+.position-relative:hover label {
+    opacity: 1 !important;
+}
+
 /*# sourceMappingURL=dashboard-free.css.map */

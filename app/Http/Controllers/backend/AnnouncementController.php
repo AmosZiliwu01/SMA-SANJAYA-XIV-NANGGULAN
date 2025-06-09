@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AnnouncementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $query = Announcement::with('user')->orderBy('created_at', 'desc');
@@ -25,18 +22,6 @@ class AnnouncementController extends Controller
         return view('backend.announcement.index', compact('announcements'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         try {
@@ -59,25 +44,6 @@ class AnnouncementController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Announcement $announcement)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Announcement $announcement)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Announcement $announcement)
     {
         try {
@@ -99,9 +65,6 @@ class AnnouncementController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Announcement $announcement)
     {
         try {

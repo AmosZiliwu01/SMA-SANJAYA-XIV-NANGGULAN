@@ -72,11 +72,13 @@
                             </table>
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start mt-3 px-2 gap-2">
                             <p class="text-muted small mb-0">
                                 Menampilkan {{ $files->firstItem() }} - {{ $files->lastItem() }} dari total {{ $files->total() }} file
                             </p>
-                            {{ $files->links('pagination::bootstrap-5') }}
+                            <div class="d-flex justify-content-center">
+                                {{ $files->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

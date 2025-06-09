@@ -13,6 +13,6 @@ class VisitorSeeder extends Seeder
      */
     public function run(): void
     {
-        Visitor::factory(10)->create();
+        Visitor::factory(1)->create();
     }
 }

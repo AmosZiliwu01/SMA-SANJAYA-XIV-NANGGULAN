@@ -15,8 +15,8 @@
                                 <img src="{{ $user->photo ? asset('storage/' . $user->photo) : asset('assets/img/img-not-found.png') }}"
                                      alt="Foto Profil"
                                      class="rounded-circle shadow-sm"
-                                     style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #f8f9fa;">
-
+                                     style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #f8f9fa;"
+                                    onerror="this.onerror=null; this.src='{{ asset('assets/img/img-not-found.png') }}';">
                                 {{-- Overlay Kamera --}}
                                 <label for="photoInput"
                                        class="position-absolute top-2 start-0 d-flex justify-content-center align-items-center rounded-circle"
@@ -176,11 +176,6 @@
             </div>
         </div>
     </div>
-    <style>
-        .position-relative:hover label {
-            opacity: 1 !important;
-        }
-    </style>
     @push('scripts')
         <script>
             const inputPhoto = document.getElementById('photoInput');

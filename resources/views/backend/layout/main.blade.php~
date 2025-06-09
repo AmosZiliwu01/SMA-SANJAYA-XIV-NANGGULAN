@@ -125,7 +125,6 @@
                     </div>
                 </li>
 
-                @can('admin')
                 <!-- Pengguna -->
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}"
@@ -137,7 +136,6 @@
                         <span class="nav-link-text ms-1">Pengguna</span>
                     </a>
                 </li>
-                @endcan
 
                 <!-- Agenda -->
                 <li class="nav-item">
@@ -187,7 +185,6 @@
                     </a>
                 </li>
 
-                @can('admin')
                 <!-- Data Guru -->
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('teachers.index') ? 'active' : '' }}"
@@ -256,7 +253,6 @@
                         </ul>
                     </div>
                 </li>
-                @endcan
             </ul>
         </div>
     </aside>

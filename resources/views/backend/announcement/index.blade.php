@@ -32,7 +32,7 @@
                                 @foreach ($announcements as $row)
                                     <tr>
                                         <td class="text-center">{{ ($announcements->currentPage() - 1) * $announcements->perPage() + $loop->iteration }}</td>
-                                        <td>{{ $row->title }}</td>
+                                        <td>{{ Str::limit($row->title, 50, '...') }}</td>
                                         <td class="align-middle text-start">
                                         <span title="{{ $row->content }}">
                                             {{ Str::limit($row->content, 50, '...') }}
@@ -55,11 +55,13 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start mt-3 px-2 gap-2">
                             <p class="text-muted small mb-0">
                                 Menampilkan {{ $announcements->firstItem() }} - {{ $announcements->lastItem() }} dari total {{ $announcements->total() }} pengumuman
                             </p>
-                            {{ $announcements->links('pagination::bootstrap-5') }}
+                            <div class="d-flex justify-content-center">
+                                {{ $announcements->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

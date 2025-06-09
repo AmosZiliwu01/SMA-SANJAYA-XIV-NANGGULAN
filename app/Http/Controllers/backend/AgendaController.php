@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AgendaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $query = Agenda::with('user')->latest();
@@ -23,18 +20,6 @@ class AgendaController extends Controller
         return view('backend.agenda.index', compact('agendas'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         try {
@@ -68,26 +53,6 @@ class AgendaController extends Controller
         }
      }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Agenda $agenda)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Agenda $agenda)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         try {
@@ -111,7 +76,6 @@ class AgendaController extends Controller
                 $agenda->time = $request->time;
                 $agenda->description = $request->description;
 
-                // Jika ada relasi user_id, misalnya dari auth user
                 if (auth()->check()) {
                     $agenda->user_id = auth()->id();
                 }
@@ -126,9 +90,7 @@ class AgendaController extends Controller
                 return redirect()->back()   ->with('error', 'Terjadi kesalahan saat memperbarui agenda. Silakan coba lagi.' . $e->getMessage());
         }
     }
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy($id)
     {
         try {

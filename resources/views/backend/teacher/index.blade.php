@@ -51,7 +51,7 @@
                                         <td>{{$row->nip}}</td>
                                         <td>{{$row->name}}</td>
                                         <td>{{$row->phone ?? '-'}}</td>
-                                        <td>{{$row->address ?? '-'}} / {{$row->date_of_birth ?? '-'}}</td>
+                                        <td class="text-start">{{Str::limit($row->address, 20, '...')}} / {{Str::limit($row->date_of_birth, 10, '...') ?? '-'}}</td>
                                         <td>{{$row->gender}}</td>
                                         <td>{{$row->mapel}}</td>
                                         <td>

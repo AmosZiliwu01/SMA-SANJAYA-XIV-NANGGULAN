@@ -51,7 +51,7 @@
                                     <h1>Selamat Datang di SMA Sanjaya XIV Nanggulan</h1>
                                     <h4>Membentuk Generasi Berintegritas, Berprestasi, dan Berakhlak Mulia</h4>
                                     <div class="slider-btn">
-                                        <a href="#" class="btn btn-default">Pelajari Lebih Lanjut</a>
+                                        <a href="{{route('fe-about.index')}}" class="btn btn-default">Pelajari Lebih Lanjut</a>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                                     <h1>Guru Berkualitas Tinggi</h1>
                                     <h4>Guru merupakan faktor penting dalam proses belajar-mengajar.<br> Kami memiliki pengajar terbaik untuk pendidikan optimal.</h4>
                                     <div class="slider-btn">
-                                        <a href="#" class="btn btn-default">Lihat Profil Guru</a>
+                                        <a href="{{route('fe-teacher.index')}}" class="btn btn-default">Lihat Profil Guru</a>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                                     <h1>Proses Belajar Interaktif</h1>
                                     <h4>Kami menciptakan lingkungan belajar yang menyenangkan dan interaktif<br> untuk mengembangkan potensi siswa secara optimal.</h4>
                                     <div class="slider-btn">
-                                        <a href="#" class="btn btn-default">Lihat Galeri</a>
+                                        <a href="{{route('fe-gallery.index')}}" class="btn btn-default">Lihat Galeri</a>
                                     </div>
                                 </div>
                             </div>

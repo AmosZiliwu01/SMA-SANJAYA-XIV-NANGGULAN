@@ -63,13 +63,11 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start mt-3 px-2 gap-2">
+                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
                             <p class="text-muted small mb-0">
-                                Menampilkan {{ $agendas->firstItem() }} - {{ $agendas->lastItem() }} dari total {{ $agendas->total() }} agenda
+                                Menampilkan {{ $agendas->firstItem() }} - {{ $agendas->lastItem() }} dari total {{ $agendas->total() }} Gallery
                             </p>
-                            <div class="d-flex justify-content-center">
-                                {{ $agendas->links('pagination::bootstrap-5') }}
-                            </div>
+                            {{ $agendas->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>

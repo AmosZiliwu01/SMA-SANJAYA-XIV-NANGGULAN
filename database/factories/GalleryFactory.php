@@ -19,7 +19,6 @@ class GalleryFactory extends Factory
         return [
             'title' => $this->faker->sentence(),
             'image' => $this->faker->imageUrl(640, 480, 'nature', true),
-            'album_id' => \App\Models\Album::inRandomOrder()->first()->id ?? \App\Models\Album::factory(), // Ambil ID album acak atau buat baru jika belum ada
             'user_id' => \App\Models\User::inRandomOrder()->first()->id ?? \App\Models\User::factory(), // Lebih aman daripada hardcode
         ];
     }

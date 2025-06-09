@@ -20,7 +20,6 @@ class FileFactory extends Factory
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
             'file_path' => $this->faker->filePath(),
-            'user_id' => \App\Models\User::factory(),
         ];
     }
 }

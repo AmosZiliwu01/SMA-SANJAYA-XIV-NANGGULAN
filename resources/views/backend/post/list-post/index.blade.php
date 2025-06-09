@@ -37,7 +37,7 @@
                                         <td class="text-center">
                                             <img src="{{ Str::startsWith($row->image, 'http') ? $row->image : asset('storage/' . $row->image) }}"  width="50" height="50" onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
                                         </td>
-                                        <td class="text-start">{{ $row->title }}</td>
+                                        <td class="text-start">{{ Str::limit($row->title, 50) }}</td>
                                         <td>
                                             {{ $row->updated_at != $row->created_at
                                                 ? $row->updated_at->format('d M Y')
@@ -64,11 +64,13 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start mt-3 px-2 gap-2">
                             <p class="text-muted small mb-0">
-                                Menampilkan {{ $post->firstItem() }} - {{ $post->lastItem() }} dari total {{ $post->total() }} Berita
+                                Menampilkan {{ $post->firstItem() }} - {{ $post->lastItem() }} dari total {{ $post->total() }} berita
                             </p>
-                            {{ $post->links('pagination::bootstrap-5') }}
+                            <div class="d-flex justify-content-center">
+                                {{ $post->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

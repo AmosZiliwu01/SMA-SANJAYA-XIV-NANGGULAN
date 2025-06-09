@@ -79,10 +79,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
     //School Management Routes
-    Route::prefix('school-management')->name('school-management.')->group(function () {
-        // Main index page
+    Route::prefix('school-management')->middleware('role:administrator')->name('school-management.')->group(function () {
         Route::get('/', [SchoolManagementController::class, 'index'])->name('index');
-
         // Principal Routes
         Route::prefix('principal')->name('principal.')->group(function () {
             Route::post('/', [SchoolManagementController::class, 'storePrincipal'])->name('store');
@@ -90,7 +88,6 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
             Route::delete('/{principal}', [SchoolManagementController::class, 'deletePrincipal'])->name('delete');
             Route::patch('/{principal}/toggle-active', [SchoolManagementController::class, 'togglePrincipalActive'])->name('toggle-active');
         });
-
         // About School Routes
         Route::prefix('about-school')->name('about-school.')->group(function () {
             Route::post('/', [SchoolManagementController::class, 'storeAboutSchool'])->name('store');
@@ -107,11 +104,6 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
         Route::put('/update/{id}', [UserController::class, 'update'])->name('user.update');
         Route::put('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('user.resetPassword');
         Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-    });
-
-    //Activity Log Routes
-    Route::prefix('activity-log')->group(function () {
-        Route::get('/', [ActivityLogController::class, 'index'])->name('activity-log.index');
     });
 
     //Agenda Routes
@@ -147,11 +139,6 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
         Route::delete('/destroy/{class}', [ClassController::class, 'destroy'])->name('class.destroy');
     });
 
-    //Comment Routes
-    Route::prefix('comment')->group(function () {
-        Route::get('/', [CommentController::class, 'index'])->name('comment.index');
-    });
-
     //File Routes
     Route::prefix('file')->group(function () {
         Route::get('/', [FileController::class, 'index'])->name('file.index');
@@ -169,7 +156,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
         });
 
     //Message Routes
-    Route::prefix('message')->group(function () {
+    Route::prefix('message')->middleware('role:administrator')->group(function () {
         Route::get('/', [MessageController::class, 'index'])->name('message.index');
         Route::post('/store', [MessageController::class, 'store'])->name('message.store');
         Route::delete('/destroy/{message}', [MessageController::class, 'destroy'])->name('message.destroy');
@@ -215,11 +202,6 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
         Route::delete('/destroy/{testimonial}', [TestimonialController::class, 'destroy'])->name('testimonial.destroy');
     });
 
-    //Visitor Routes
-    Route::prefix('visitor')->group(function () {
-        Route::get('/', [VisitorController::class, 'index'])->name('visitor.index');
-    });
-
     //Profile Routes
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.index');
@@ -246,6 +228,3 @@ Route::prefix('auth')->group(function () {
     Route::get('/reset-password/{token}', [AuthController::class, 'password_reset'])->name('password.reset');
     Route::post('/reset-password', [AuthController::class, 'update_password'])->name('update.password');
 });
-
-
-/*Storage Routes*/

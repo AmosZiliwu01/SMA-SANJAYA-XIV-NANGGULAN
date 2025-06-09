@@ -9,71 +9,13 @@ use Illuminate\Support\Facades\Mail;
 
 class MessageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $messages = Message::paginate(5);
+        $messages = Message::latest()->paginate(10);
         return view('backend.message.index', compact('messages'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // Kosong karena belum digunakan
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'message' => 'required|string|max:255',
-        ]);
-
-        Message::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'message' => $request->message,
-            'is_read' => 0,
-        ]);
-
-        return redirect()->route('message.index')->with('success', 'Data pesan berhasil dibuat.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Message $message)
-    {
-        // Kosong karena belum digunakan
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Message $message)
-    {
-        // Kosong karena belum digunakan
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Message $message)
-    {
-        // Kosong karena belum digunakan
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         try {
@@ -95,15 +37,25 @@ class MessageController extends Controller
 
         $message = Message::findOrFail($id);
 
-        // Kirim email ke pengirim pesan
-        Mail::raw($request->reply, function ($mail) use ($message) {
+        $emailContent = $request->reply . "\n\n" .
+            "---\n" .
+            "Pesan ini adalah balasan otomatis dari admin. " .
+            "Pesan Anda telah kami terima dan tidak perlu dibalas kembali.\n\n" .
+            "Jika Anda memerlukan bantuan lebih lanjut, silakan hubungi kami melalui:\n" .
+            "Email: sma_sanjaya14@yahoo.com\n" .
+            "WhatsApp: [Nomor WA SMA]\n\n" .
+            "Terima kasih atas perhatian Anda.\n" .
+            "Tim Admin SMA Sanjaya";
+
+        Mail::raw($emailContent, function ($mail) use ($message) {
             $mail->to($message->email)
-                ->subject('Balasan dari Admin');
+                ->subject('Balasan dari Admin - SMA Sanjaya');
         });
 
+        $message->reply = $request->reply;
         $message->is_read = 1;
         $message->save();
 
-        return redirect()->back()->with('success', 'Balasan berhasil dikirim lewat email.');
+        return redirect()->back()->with('success', 'Balasan berhasil dikirim lewat email dengan informasi kontak.');
     }
 }

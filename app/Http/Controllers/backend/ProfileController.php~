@@ -5,7 +5,6 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -44,7 +43,7 @@ class ProfileController extends Controller
 
                 if ($user->photo) {
                     $oldPath = str_replace('storage/', '', $user->photo);
-                    Storage::disk('public')->delete($oldPath);
+                    \Storage::disk('public')->delete($oldPath);
                 }
 
                 $user->photo = $filename;
