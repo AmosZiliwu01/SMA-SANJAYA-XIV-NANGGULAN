@@ -106,6 +106,10 @@ class UserController extends Controller
             ]);
 
             if ($request->hasFile('photo')) {
+                if ($user->photo && file_exists(storage_path('app/public/' . $user->photo))) {
+                    unlink(storage_path('app/public/' . $user->photo));
+                }
+
                 $photoPath = $request->file('photo')->store('photos', 'public');
                 $user->photo = $photoPath;
             }

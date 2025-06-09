@@ -203,18 +203,18 @@
                                         <input type="number" name="entry_year" class="form-control"
                                                id="edit_entry_year" value="{{ $row->entry_year }}" required>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="edit_photo" class="form-label">Foto</label>
-                                        <input type="file" name="photo" class="form-control" id="edit_photo">
-                                        @if($row->photo)
-                                            <img src="{{ asset('storage/students/' . $row->photo) }}" alt="Foto siswa"
-                                                 width="100" height="auto"
-                                                 onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
-                                        @else
-                                            <p>Belum ada foto</p>
-                                        @endif
-                                        <input type="hidden" name="old_photo" value="{{ $row->photo }}">
-                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="edit_photo" class="form-label">Foto</label>
+                                    <input type="file" name="photo" class="form-control" id="edit_photo">
+                                    @if($row->photo)
+                                        <img src="{{ asset('storage/students/' . $row->photo) }}" alt="Foto siswa"
+                                             width="100" height="auto"
+                                             onerror="this.src='{{ asset('assets/img/img-not-found.png') }}'">
+                                    @else
+                                        <p>Belum ada foto</p>
+                                    @endif
+                                    <input type="hidden" name="old_photo" value="{{ $row->photo }}">
                                 </div>
                                 <div class="text-end">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal

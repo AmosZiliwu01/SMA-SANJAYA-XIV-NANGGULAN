@@ -48,7 +48,7 @@ class FileController extends Controller
             $fileName = time() . '_' . $file->getClientOriginalName();
 
             // Simpan file di storage/app/public/uploads
-            $filePath = $file->storeAs('uploads', $fileName, 'public');
+            $filePath = $file->storeAs('files', $fileName, 'public');
 
             // Simpan data ke database
             $data = new File();
@@ -105,7 +105,7 @@ class FileController extends Controller
             // Upload file baru
             $uploadedFile = $request->file('file_path');
             $fileName = time() . '_' . $uploadedFile->getClientOriginalName();
-            $filePath = $uploadedFile->storeAs('uploads', $fileName, 'public');
+            $filePath = $uploadedFile->storeAs('files', $fileName, 'public');
 
             $file->file_path = $filePath;
         }
@@ -122,7 +122,14 @@ class FileController extends Controller
      */
     public function destroy($id)
     {
-        File::destroy($id);
+        $file = File::findOrFail($id);
+
+        if ($file->file_path && Storage::disk('public')->exists($file->file_path)) {
+            Storage::disk('public')->delete($file->file_path);
+        }
+
+        $file->delete();
+
         return redirect()->back()->with('success', 'File berhasil dihapus!');
     }
 }

@@ -17,7 +17,6 @@
                 <td>{{ $item->name }}</td>
                 <td>{{ $item->gender }}</td>
                 <td>{{ $item->class->name ?? '-' }}</td>
-                <td>{{ $item->entry_year ?? '-' }}</td>
             </tr>
         @endforeach
     </tbody>

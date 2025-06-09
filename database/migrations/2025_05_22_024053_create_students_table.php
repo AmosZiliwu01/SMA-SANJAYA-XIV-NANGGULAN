@@ -19,11 +19,13 @@ return new class extends Migration
             $table->char('gender', 2)->nullable();
             $table->unsignedBigInteger('class_id')->nullable();
             $table->string('photo')->nullable();
+            $table->year('entry_year')->nullable();
             $table->timestamps();
 
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('set null');
         });
     }
+
 
     /**
      * Reverse the migrations.

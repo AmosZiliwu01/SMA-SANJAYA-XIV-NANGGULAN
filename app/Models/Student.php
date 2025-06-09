@@ -12,7 +12,7 @@ class Student extends Model
 
     protected $table = 'students';
 
-    protected $fillable = ['nis', 'name', 'gender', 'class_id', 'photo'];
+    protected $fillable = ['nis', 'name', 'gender', 'class_id', 'entry_year', 'photo'];
 
     public function class (): BelongsTo{
         return $this->belongsTo(Classes::class, 'class_id', 'id');

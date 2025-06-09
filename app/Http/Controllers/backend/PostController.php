@@ -117,6 +117,10 @@ class PostController extends Controller
                 'is_slider' => 'boolean',
             ]);
 
+            $oldContent = $post->content;
+            preg_match_all('/<img[^>]+src="([^">]+)"/', $oldContent, $oldImages);
+            $oldImages = $oldImages[1];
+
             $data = $request->only(['title', 'content', 'category_id']);
             $data['is_slider'] = $request->has('is_slider') ? 1 : 0;
             $data['user_id'] = auth()->id();
@@ -125,7 +129,6 @@ class PostController extends Controller
                 if ($post->image && Storage::disk('public')->exists($post->image)) {
                     Storage::disk('public')->delete($post->image);
                 }
-
                 $data['image'] = $request->file('image')->store('posts', 'public');
             }
 
@@ -141,7 +144,18 @@ class PostController extends Controller
 
             $post->update($data);
 
-            // Log aktivitas
+            preg_match_all('/<img[^>]+src="([^">]+)"/', $post->content, $newImages);
+            $newImages = $newImages[1];
+
+            foreach ($oldImages as $img) {
+                $parsedUrl = parse_url($img, PHP_URL_PATH);
+                $relativePath = ltrim(str_replace('/storage/', '', $parsedUrl), '/');
+
+                if (!in_array($img, $newImages) && Storage::disk('public')->exists($relativePath)) {
+                    Storage::disk('public')->delete($relativePath);
+                }
+            }
+
             $this->logActivity('Memperbarui post: ' . $post->title);
 
             return redirect()->route('post.index')->with('success', 'Post berhasil diperbarui.');
@@ -162,17 +176,32 @@ class PostController extends Controller
                 Storage::disk('public')->delete($post->image);
             }
 
+            $content = $post->content;
+            preg_match_all('/<img[^>]+src="([^">]+)"/i', $content, $matches);
+
+            if (!empty($matches[1])) {
+                foreach ($matches[1] as $imgUrl) {
+                    $parsedUrl = parse_url($imgUrl, PHP_URL_PATH);
+                    $storagePath = ltrim(str_replace('/storage/', '', $parsedUrl), '/');
+
+                    if (Storage::disk('public')->exists($storagePath)) {
+                        Storage::disk('public')->delete($storagePath);
+                    }
+                }
+            }
+
             $title = $post->title;
             $post->delete();
 
             // Log aktivitas
             $this->logActivity('Menghapus post: ' . $title);
 
-            return redirect()->route('post.index')->with('success', 'Post berhasil dihapus.');
+            return redirect()->route('post.index')->with('success', 'Post berhasil dihapus beserta semua gambar kontennya.');
         } catch (\Exception $e) {
             return redirect()->route('post.index')->with('error', 'Terjadi kesalahan saat menghapus post.');
         }
     }
+
 
 
     public function uploadImage(Request $request)

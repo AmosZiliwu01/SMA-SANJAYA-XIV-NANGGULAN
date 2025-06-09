@@ -44,6 +44,7 @@ class StudentController extends Controller
                 'name' => 'required|string|max:255',
                 'gender' => 'required|string|max:2',
                 'class_id' => 'required|numeric',
+                'entry_year' => 'required|date_format:Y',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
@@ -58,6 +59,7 @@ class StudentController extends Controller
                 'name' => $validate['name'],
                 'gender' => $validate['gender'],
                 'class_id' => $validate['class_id'],
+                'entry_year' => $validate['entry_year'],
                 'photo' => $imageName,
             ]);
 
@@ -97,6 +99,7 @@ class StudentController extends Controller
                 'name' => 'required|string|max:255',
                 'gender' => 'required|string|max:2',
                 'class_id' => 'required|numeric',
+                'entry_year' => 'required|date_format:Y',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
@@ -115,6 +118,7 @@ class StudentController extends Controller
                 'name' => $validate['name'],
                 'gender' => $validate['gender'],
                 'class_id' => $validate['class_id'],
+                'entry_year' => $validate['entry_year'],
                 'photo' => $imageName,
             ]);
 
