@@ -581,8 +581,11 @@
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div>
+<<<<<<<<<<<<<<  ✨ Codeium Command 🌟 >>>>>>>>>>>>>>>>
+                                                        <img src="{{ (isset($log->user) && isset($log->user->photo)) ? asset('storage/' . $log->user->photo) : asset('assets/img/user.jpg') }}"
                                                         <img src="{{ (isset($log->user) && isset($log->user->photo)) ? $log->user->photo : asset('assets/img/user.jpg') }}"
                                                              class="avatar avatar-sm me-3" alt="user">
+<<<<<<<  f34a74ce-f1d1-4ab6-b651-d7f221e6122e  >>>>>>>
                                                     </div>
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm">{{ (isset($log->user) && isset($log->user->name)) ? $log->user->name : 'System' }}</h6>
@@ -638,15 +641,23 @@
                     const visitorsData = @json($adminData['monthlyVisitors'] ?? []);
                     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
                     const visitorCounts = Array(12).fill(0);
-                    const visitorsValues = visitorsData.length > 0 ? visitorsData.map(item => item.count || 0) : [];
+
+                    // Proses data pengunjung bulanan seperti chart posts
+                    if (visitorsData && Array.isArray(visitorsData) && visitorsData.length > 0) {
+                        visitorsData.forEach(item => {
+                            if (item && item.month && item.month >= 1 && item.month <= 12) {
+                                visitorCounts[item.month - 1] = item.count || 0;
+                            }
+                        });
+                    }
 
                     new Chart(document.getElementById('chart-visitors'), {
                         type: 'line',
                         data: {
-                            labels: visitorsLabels.length > 0 ? visitorsLabels : ['Tidak ada data'],
+                            labels: months, // Menggunakan array months langsung
                             datasets: [{
                                 label: 'Pengunjung Unik',
-                                data: visitorsValues.length > 0 ? visitorsValues : [0],
+                                data: visitorCounts, // Menggunakan visitorCounts yang sudah diproses
                                 borderColor: '#5e72e4',
                                 backgroundColor: 'rgba(94, 114, 228, 0.1)',
                                 borderWidth: 2,

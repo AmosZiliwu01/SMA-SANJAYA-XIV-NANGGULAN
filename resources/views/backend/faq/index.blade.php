@@ -399,14 +399,11 @@
                         <p class="text-muted mb-4">Silakan hubungi administrator sekolah atau tim IT untuk bantuan lebih lanjut</p>
                         <div class="row g-2 justify-content-center">
                             <div class="col-sm-6">
-                                <a href="{{ asset('assets/manual/manual-book-sekolah.pdf') }}"
-                                   class="btn btn-primary w-100"
-                                   download="Manual-Book-Sistem-Sekolah.pdf">
-                                    <i class="bi bi-download me-1"></i> Download Manual Book
-                                </a>
+                                <a href="https://publuu.com/flip-book/4001/1970795/page/1?cover" class="show-publuu-viewer" style="width: auto; height: 240px; position: relative; display: inline-block;">
+                                    <img src="https://p6aqvvqp5i.execute-api.us-east-2.amazonaws.com/images/cover/4001/1970795" style="height: 100%;"></a>
+                                <script src="https://publuu.com/account/js/embed-viewer.js"></script>
                             </div>
                         </div>
-
                         <div class="alert alert-light mt-4 text-start">
                             <h6 class="alert-heading">
                                 <i class="bi bi-headset me-2 text-primary"></i>Untuk Bantuan Sistem:

@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @if(isset($post))
-        <title>SMA Sanjaya XIV Nanggulan</title>
+
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/icon-sma-sanjaya.png') }}">
         <link rel="icon" type="image/png" href="{{ asset('assets/img/logo-sma-sanjaya.jpg') }}">
-
+    
+    @if(isset($post))
+        <title>SMA Sanjaya XIV Nanggulan</title>
         <!-- Primary Meta Tags -->
         <meta name="title" content="{{ $post->title }} | SMA Sanjaya Nanggulan">
         <meta name="description" content="{{ Str::limit(strip_tags($post->content), 160) }}">
@@ -299,7 +300,7 @@
         icon: "success",
         title: "{{ session('success') }}",
         showConfirmButton: false,
-        timer: 2500,
+        timer: 5000,
         toast: true,
         width: '30rem'
     });

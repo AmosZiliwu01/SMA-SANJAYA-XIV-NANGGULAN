@@ -241,6 +241,12 @@
                             <div class="mb-3">
                                 <label for="importFile" class="form-label">Pilih File Excel</label>
                                 <input type="file" name="file-import" class="form-control" id="importFile" required>
+                                <!-- Tombol untuk melihat format Excel -->
+                                <a href="{{ asset('assets/img/format-excel-siswa.png') }}"
+                                   target="_blank"
+                                   class="btn btn-info mt-2">
+                                    Lihat Format Excel
+                                </a>
                             </div>
                             <div class="text-end">
                                 <button type="submit" class="btn btn-primary">Import</button>

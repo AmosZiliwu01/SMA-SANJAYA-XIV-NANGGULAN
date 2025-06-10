@@ -399,14 +399,11 @@
                         <p class="text-muted mb-4">Silakan hubungi administrator sekolah atau tim IT untuk bantuan lebih lanjut</p>
                         <div class="row g-2 justify-content-center">
                             <div class="col-sm-6">
-                                <a href="{{ asset('assets/manual/manual-book-sekolah.pdf') }}"
-                                   class="btn btn-primary w-100"
-                                   download="Manual-Book-Sistem-Sekolah.pdf">
-                                    <i class="bi bi-download me-1"></i> Download Manual Book
-                                </a>
+                                <a href="https://publuu.com/flip-book/4001/1970770/page/1?cover" class="show-publuu-viewer" style="width: auto; height: 240px; position: relative; display: inline-block;">
+                                    <img src="https://p6aqvvqp5i.execute-api.us-east-2.amazonaws.com/images/cover/4001/1970770" style="height: 100%;"></a>
+                                <script src="https://publuu.com/account/js/embed-viewer.js"></script>
                             </div>
                         </div>
-
                         <div class="alert alert-light mt-4 text-start">
                             <h6 class="alert-heading">
                                 <i class="bi bi-headset me-2 text-primary"></i>Untuk Bantuan Sistem:
@@ -423,62 +420,4 @@
             </div>
         </div>
     </div>
-
-    <style>
-        /* Accordion Styling */
-        .accordion-button:not(.collapsed) {
-            background-color: rgba(13, 110, 253, 0.1);
-            border-color: rgba(13, 110, 253, 0.25);
-            color: #0d6efd;
-        }
-
-        .accordion-button:focus {
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-            border-color: rgba(13, 110, 253, 0.5);
-        }
-
-        .accordion-button {
-            font-weight: 500;
-            padding: 1rem 1.25rem;
-        }
-
-        .accordion-body {
-            padding: 1.5rem;
-            line-height: 1.6;
-        }
-
-        /* Sticky Sidebar */
-        .sticky-top {
-            z-index: 1020;
-        }
-
-        /* Card Hover Effects */
-        .card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-        }
-
-        /* Alert Styling */
-        .alert {
-            border: none;
-            border-radius: 0.5rem;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .sticky-top {
-                position: relative !important;
-                top: auto !important;
-            }
-
-            .accordion-button {
-                font-size: 0.9rem;
-                padding: 0.75rem 1rem;
-            }
-        }
-    </style>
 @endsection

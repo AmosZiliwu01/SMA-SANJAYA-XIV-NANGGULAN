@@ -93,7 +93,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="graduation_year" class="form-label">Tahun Lulus</label>
-                                <input type="number" name="graduation_year" class="form-control" id="graduation_year" placeholder="Contoh: 2024" min="1900" max="{{ date('Y') }}" required>
+                                <input type="number" name="graduation_year" class="form-control" id="graduation_year" placeholder="Contoh: 2024" min="1900" max="{{ date('Y') }}">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -139,7 +139,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="edit_graduation_year" class="form-label">Tahun Lulus</label>
-                                    <input type="number" name="graduation_year" class="form-control" id="edit_graduation_year" value="{{ $row->graduation_year }}" min="1900" max="{{ date('Y') }}" required>
+                                    <input type="number" name="graduation_year" class="form-control" id="edit_graduation_year" value="{{ $row->graduation_year }}" min="1900" max="{{ date('Y') }}">
                                 </div>
                             </div>
                             <div class="row mb-3">

@@ -7,7 +7,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/icon-sma-sanjaya.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logo-sma-sanjaya.jpg') }}">
     <title>
-        SMA Sanjaya XIV Nanggulan
+        SMA Sanjaya - Dashboard
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />

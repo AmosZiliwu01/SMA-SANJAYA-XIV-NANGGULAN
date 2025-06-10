@@ -20,7 +20,7 @@ class TestimonialController extends Controller
         try {
             $validate = $request->validate([
                 'name' => 'required|string|max:255',
-                'graduation_year' => 'required|string|max:4',
+                'graduation_year' => 'nullable|string|max:4',
                 'message' => 'required|string',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
@@ -51,7 +51,7 @@ class TestimonialController extends Controller
         try {
             $validate = $request->validate([
                 'name' => 'required|string|max:255',
-                'graduation_year' => 'required|string|max:4',
+                'graduation_year' => 'nullable|string|max:4',
                 'message' => 'required|string',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
