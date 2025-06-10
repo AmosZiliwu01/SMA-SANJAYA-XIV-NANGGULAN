@@ -48,7 +48,7 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-3 px-2">
                             <p class="text-muted small mb-0">
-                                Menampilkan {{ $categories->firstItem() }} - {{ $categories->lastItem() }} dari total {{ $categories->total() }} kategori
+                                Menampilkan {{ $categories->firstItem() }} - {{ $categories->lastItem() }} dari total {{ $categories->total() }} user
                             </p>
                             {{ $categories->links('pagination::bootstrap-5') }}
                             </div>

@@ -201,14 +201,24 @@
                 </li>
 
                 <!-- Message -->
-                <li class="nav-item">
+                @php
+                    $unreadMessageCount = \App\Models\Message::where('is_read', 0)->count();
+                @endphp
+                <li class="nav-item position-relative">
                     <a class="nav-link {{ request()->routeIs('message.*') ? 'active' : '' }}"
                        href="{{ route('message.index') }}">
-                        <div
-                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-email-83 text-dark text-sm opacity-10"></i>
                         </div>
-                        <span class="nav-link-text ms-1">Message</span>
+                        <span class="nav-link-text position-relative">
+                                Message
+                                @if($unreadMessageCount > 0)
+                                <span class="badge bg-danger text-white position-absolute top-0 start-100 translate-middle px-1 py-0 rounded-pill"
+                                      style="font-size: 8px; min-width: 14px; height: 14px; line-height: 14px; top: -8px; right: -12px; display: flex; align-items: center; justify-content: center;">
+                                    {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
+                                </span>
+                            @endif
+                        </span>
                     </a>
                 </li>
 
@@ -319,15 +329,29 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4"
                                     aria-labelledby="settingsDropdown">
-                                    <li class="mb-2">
+                                    <li>
                                         <a class="dropdown-item border-radius-md" href="{{ route('profile.index') }}">
                                             <div class="d-flex py-1">
                                                 <div class="my-auto">
-                                                    <i class="fa fa-user-circle me-3 text-primary"></i>
+                                                    <i class="fa fa-user me-3 text-primary"></i>
                                                 </div>
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <h6 class="text-sm font-weight-normal mb-0">
-                                                        Profile
+                                                        Profil Saya
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item border-radius-md" href="{{ route('faq.index') }}">
+                                            <div class="d-flex py-1">
+                                                <div class="my-auto">
+                                                    <i class="fa fa-question-circle me-3 text-primary"></i>
+                                                </div>
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="text-sm font-weight-normal mb-0">
+                                                        FAQ & Bantuan
                                                     </h6>
                                                 </div>
                                             </div>
@@ -350,6 +374,7 @@
                                 </ul>
                             </li>
 
+                            @can('admin')
                             <!-- Notifications Dropdown dengan badge -->
                             <li class="nav-item dropdown pe-2 d-flex align-items-center position-relative">
                                 <a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton"
@@ -380,11 +405,14 @@
 
                                     <!-- Loop pesan dari database -->
                                     @php
-                                        $messages = \App\Models\Message::orderBy('created_at', 'desc')->limit(5)->get();
+                                        $messages = \App\Models\Message::where('is_read', false)
+                                                                      ->orderBy('created_at', 'desc')
+                                                                      ->limit(5)
+                                                                      ->get();
                                     @endphp
                                     @forelse($messages as $message)
                                         <li class="mb-2">
-                                            <a class="dropdown-item border-radius-md {{ $message->is_read ? '' : 'bg-light' }}"
+                                            <a class="dropdown-item border-radius-md bg-light"
                                                href="javascript:;" onclick="markAsRead({{ $message->id }})">
                                                 <div class="d-flex py-1">
                                                     <div class="my-auto">
@@ -411,7 +439,7 @@
                                             <div class="dropdown-item">
                                                 <div class="text-center py-3">
                                                     <i class="fa fa-inbox text-muted mb-2" style="font-size: 2rem;"></i>
-                                                    <p class="text-muted mb-0">No messages yet</p>
+                                                    <p class="text-muted mb-0">No unread messages</p>
                                                 </div>
                                             </div>
                                         </li>
@@ -428,6 +456,7 @@
                                     @endif
                                 </ul>
                             </li>
+                            @endcan
                         </ul>
                     </div>
                 </div>

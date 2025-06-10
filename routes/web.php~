@@ -209,7 +209,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     });
 
     //faq Routes
-    Route::prefix('faq')->group(function () {
+    Route::prefix('faq')->middleware('role:administrator')->group(function () {
         Route::view('/', 'backend.faq.index')->name('faq.index');
     });
 });
