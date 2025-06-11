@@ -399,8 +399,8 @@
                         <p class="text-muted mb-4">Silakan hubungi administrator sekolah atau tim IT untuk bantuan lebih lanjut</p>
                         <div class="row g-2 justify-content-center">
                             <div class="col-sm-6">
-                                <a href="https://publuu.com/flip-book/4001/1970795/page/1?cover" class="show-publuu-viewer" style="width: auto; height: 240px; position: relative; display: inline-block;">
-                                    <img src="https://p6aqvvqp5i.execute-api.us-east-2.amazonaws.com/images/cover/4001/1970795" style="height: 100%;"></a>
+                                <a href="https://publuu.com/flip-book/4001/1972691/page/1?cover" class="show-publuu-viewer" style="width: auto; height: 240px; position: relative; display: inline-block;">
+                                    <img src="https://p6aqvvqp5i.execute-api.us-east-2.amazonaws.com/images/cover/4001/1972691" style="height: 100%;"></a>
                                 <script src="https://publuu.com/account/js/embed-viewer.js"></script>
                             </div>
                         </div>
